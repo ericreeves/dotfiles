@@ -1,0 +1,147 @@
+session:
+  name: "db"
+  windows:
+    - name: "alpha"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-alpha-master"
+        - cmd: "ssh root@db-alpha-master"
+    - name: "esjobs"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-esjobs-master"
+        - cmd: "ssh root@db-esjobs-master"
+    - name: "eventproxy"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-eventproxy-master"
+        - cmd: "ssh root@db-eventproxy-master"
+    - name: "lmclyde"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-lmclyde-master"
+        - cmd: "ssh root@db-lmclyde-master"
+    - name: "lmstats"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-lmstats-master"
+        - cmd: "ssh root@db-lmstats-master"
+    - name: "lmsummary"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-lmsummary-master"
+        - cmd: "ssh root@db-lmsummary-master"
+    - name: "marker3"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-marker3-master"
+        - cmd: "ssh root@db-marker3-master"
+    - name: "marker4"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-marker4-master"
+        - cmd: "ssh root@db-marker4-master"
+    - name: "marker5"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-marker5-master"
+        - cmd: "ssh root@db-marker5-master"
+    - name: "markerloc"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-markerloc-master"
+        - cmd: "ssh root@db-markerloc-master"
+    - name: "meta"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-meta-master"
+        - cmd: "ssh root@db-meta-master"
+    - name: "payload"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-payload-master"
+        - cmd: "ssh root@db-payload-master"
+    - name: "pdfreport"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-pdfreport-master"
+        - cmd: "ssh root@db-pdfreport-master"
+    - name: "reportoutput"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-reportoutput-master"
+        - cmd: "ssh root@db-reportoutput-master"
+    - name: "scan"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-scan-master"
+        - cmd: "ssh root@db-scan-master"
+    - name: "ssdlmsg"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-ssdlmsg-master"
+        - cmd: "ssh root@db-ssdlmsg-master"
+    - name: "tmclyde"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-tmclyde-master"
+        - cmd: "ssh root@db-tmclyde-master"
+    - name: "tmstats"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-tmstats-master"
+        - cmd: "ssh root@db-tmstats-master"
+    - name: "tmqueue"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-tmqueue-master"
+        - cmd: "ssh root@db-tmqueue-master"
+    - name: "tmstats"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-tmstats-master"
+        - cmd: "ssh root@db-tmstats-master"
+    - name: "tmsummary"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-tmsummary-master"
+        - cmd: "ssh root@db-tmsummary-master"
+    - name: "useraction"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-useraction-master"
+        - cmd: "ssh root@db-useraction-master"
+    - name: "wsmclyde"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-wsmclyde-master"
+        - cmd: "ssh root@db-wsmclyde-master"
+    - name: "wsmsummary"
+      root: "~"
+      layout: even-vertical
+      panes:
+        - cmd: "myt db-wsmsummary-master"
+        - cmd: "ssh root@db-wsmsummary-master"

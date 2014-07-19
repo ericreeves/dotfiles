@@ -1,0 +1,6 @@
+  - name: "dbname"
+    root: "~"
+    layout: even-vertical
+    panes:
+      - cmd: "myt db-dbname-master"
+      - cmd: "ssh root@db-dbname-master"

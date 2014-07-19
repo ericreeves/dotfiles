@@ -32,9 +32,29 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git brew ruby rbenv rsync thor vagrant vi-mode autojump history-substring-search sublime knife)
+#plugins=(git brew ruby rbenv rsync thor vagrant vi-mode autojump history-substring-search sublime smux iterm2)
+plugins=(git vi-mode autojump history-substring-search smux iterm2 sublime rbenv)
 
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=/usr/local/heroku/bin:~/bin:~/.rbenv/shims:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/usr/local/git/bin
+export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/usr/local/git/bin:~/bin:~/.rbenv/shims/
+
+# zsh_nocorrect
+if [ -f ~/.zsh_nocorrect ]; then
+    while read -r COMMAND; do
+        alias $COMMAND="nocorrect $COMMAND"
+    done < ~/.zsh_nocorrect
+fi
+
+alias scp='noglob scp'
+alias git='noglob /usr/local/bin/git'
+alias sshn='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+alias be='bundle exec'
+alias vi='vim'
+
+export CONFIGURE_ARGS="--with-ldflags='-Wno-error=unused-command-line-argument-hard-error-in-future'"
+
+DISABLE_CORRECTION="true"
+
+eval "$(rbenv init -)"

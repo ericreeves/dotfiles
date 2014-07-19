@@ -163,3 +163,5 @@ function parse_git_branch {
 export EDITOR="vim"
 set -o vi
 
+tab_blue
+title "localhost"
