@@ -56,11 +56,14 @@ function prompt_litex_setup {
     )
   else
     _prompt_litex_colors=(
-      "%F{cyan}"
-      "%F{yellow}"
+      "%F{grey}"
+      "%F{white}"
+      "%F{grey}"
+      "%F{darkblue}"
       "%F{blue}"
-      "%F{red}"
       "%F{green}"
+      "%F{red}"
+      "%F{yellow}"
     )
   fi
 

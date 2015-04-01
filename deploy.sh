@@ -2,7 +2,12 @@
 
 # Install zpresto
 if [ ! -d ~/.zprezto ]; then
-  echo "*** ~/.zprezto does not exist.  Aborting..."
+  echo "*** ~/.zprezto does not exist.  Cloning for you..."
+  git clone --recursive https://github.com/sorin-ionescu/prezto.git ~/.zprezto
+  exit 1
+fi
+if [ ! -d ~/.zprezto ]; then
+  echo "*** ~/.zprezto create failed.  Aborting..."
   exit 1
 fi
 

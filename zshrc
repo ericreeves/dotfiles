@@ -18,6 +18,9 @@ eval "$(rbenv init -)"
  
 # Add homebrew to the completion path
 fpath=("/usr/local/bin/" $fpath)
+
+# Sane defaults for less
+export LESS=-Xr
  
 # why would you type 'cd dir' if you could just type 'dir'?
 setopt AUTO_CD
