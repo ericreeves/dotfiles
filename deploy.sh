@@ -22,3 +22,16 @@ ln -sf ~/dotfiles/prompts/prompt_litex_setup ~/.zprezto/modules/prompt/functions
 ln -sf ~/dotfiles/zshrc ~/.zshrc
 ln -sf ~/dotfiles/zpreztorc ~/.zpreztorc
 ln -sf ~/dotfiles/tmux.conf ~/.tmux.conf
+
+# Install spf13
+if [ ! -d ~/.spf13-vim-3 ]; then
+	curl http://j.mp/spf13-vim3 -L -o - | sh
+fi
+
+# VIM configs
+ln -sf ~/dotfiles/vim/vimrc.before.local ~/.vimrc.before.local
+ln -sf ~/dotfiles/vim/vimrc.bundles.local ~/.vimrc.bundles.local
+ln -sf ~/dotfiles/vim/vimrc.local ~/.vimrc.local
+ln -sf ~/dotfiles/vim/gvimrc ~/.gvimrc
+# Install VIM plugins
+#vim +BundleInstall! +BundleClean +q

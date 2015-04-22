@@ -14,7 +14,10 @@ fi
  
 # Start rbenv
 export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
+which rbenv >/dev/null 2>&1
+if [ $? -eq 0 ]; then
+	eval "$(rbenv init -)"
+fi
  
 # Add homebrew to the completion path
 fpath=("/usr/local/bin/" $fpath)

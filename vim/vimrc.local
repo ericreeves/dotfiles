@@ -1,0 +1,56 @@
+" colorscheme grb256
+colorscheme peaksea
+
+set nospell
+set conceallevel=0 concealcursor=i
+set conceallevel=0
+
+" Navigate Buffers
+map <S-H> :bprevious<CR>
+map <S-L> :bnext<CR>
+
+" Navigate Panes
+map <C-J> <C-W>j<C-W>_
+map <C-K> <C-W>k<C-W>_
+map <C-H> <C-W>h<C-W>_
+map <C-L> <C-W>l<C-W>_
+
+" Navigate Tabs
+"map <C-H> gT
+"map <C-L> gt
+
+" move tabs to the end for new, single buffers (exclude splits)
+autocmd BufNew * if winnr('$') == 1 | tabmove99 | endif"
+
+set shiftwidth=2                " Use indents of 2 spaces
+set tabstop=2                   " An indentation every 2 columns
+set softtabstop=2               " Let backspace delete indent"
+
+set wildignore+=*/checksums/*   " Ignore checksums dirs
+
+" NERDTree shouldn't close after opening a file"
+let NERDTreeQuitOnOpen = 0
+let NERDTreeShowBookmarks=0
+
+" Map <Leader># to quick switch buffers
+nnoremap <Leader>1 :1b<CR>
+nnoremap <Leader>2 :2b<CR>
+nnoremap <Leader>3 :3b<CR>
+nnoremap <Leader>4 :4b<CR>
+nnoremap <Leader>5 :5b<CR>
+nnoremap <Leader>6 :6b<CR>
+nnoremap <Leader>7 :7b<CR>
+nnoremap <Leader>8 :8b<CR>
+nnoremap <Leader>9 :9b<CR>
+nnoremap <Leader>0 :10b<CR>
+
+" Map #gb to 'go to buffer #'
+let c = 1
+while c <= 99
+    execute "nnoremap " . c . "gb :" . c . "b\<CR>"
+    let c += 1
+endwhile
+
+let g:NERDTreeWinSize = 40
+
+au BufRead,BufNewFile *.json set filetype=json
