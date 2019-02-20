@@ -71,3 +71,4 @@ zplug load --verbose
 
 # Include Eric's Aliases and Environment
 source ~/.zshrc.eric
+source ~/.zshrc.token

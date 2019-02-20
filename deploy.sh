@@ -22,6 +22,8 @@ ln -sf ~/dotfiles/prompts/prompt_litex_setup ~/.zprezto/modules/prompt/functions
 ln -sf ~/dotfiles/zshrc ~/.zshrc
 ln -sf ~/dotfiles/zpreztorc ~/.zpreztorc
 ln -sf ~/dotfiles/tmux.conf ~/.tmux.conf
+ln -sf ~/dotfiles/zshrc.eric ~/.zshrc.eric
+ln -sf ~/dotfiles/zshrc.token ~/.zshrc.token
 
 # Install spf13
 if [ ! -d ~/.spf13-vim-3 ]; then
