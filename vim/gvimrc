@@ -1,4 +1,4 @@
 macmenu &File.Close key=<nop>
 nmap <D-w> :CommandW<CR>
 imap <D-w> <Esc>:CommandW<CR>
-:set guifont=Bitstream\ Vera\ Sans\ Mono:h10
+:set guifont=Hack:h12

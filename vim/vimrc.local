@@ -54,3 +54,9 @@ endwhile
 let g:NERDTreeWinSize = 40
 
 au BufRead,BufNewFile *.json set filetype=json
+
+filetype plugin indent on
+
+if $TMUX == ''
+  set clipboard+=unnamed
+endif

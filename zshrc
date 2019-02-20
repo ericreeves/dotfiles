@@ -1,102 +1,73 @@
-#
-# Executes commands at the start of an interactive session.
-#
-# Authors:
-# Sorin Ionescu <sorin.ionescu@gmail.com>
-#
- 
-# Source Prezto.
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+# Check if zplug is installed
+if [[ ! -d ~/.zplug ]]; then
+    git clone https://github.com/zplug/zplug ~/.zplug
+    source ~/.zplug/init.zsh && zplug update --self
 fi
- 
-# Customize to your needs...
- 
-# Start rbenv
-export PATH="$HOME/.rbenv/bin:$PATH"
-which rbenv >/dev/null 2>&1
-if [ $? -eq 0 ]; then
-	eval "$(rbenv init -)"
-fi
- 
-# Add homebrew to the completion path
-fpath=("/usr/local/bin/" $fpath)
 
-# Sane defaults for less
-export LESS=-Xr
- 
-# why would you type 'cd dir' if you could just type 'dir'?
-setopt AUTO_CD
- 
-# Now we can pipe to multiple outputs!
-setopt MULTIOS
- 
-# This makes cd=pushd
-setopt AUTO_PUSHD
- 
-# This will use named dirs when possible
-setopt AUTO_NAME_DIRS
- 
-# If we have a glob this will expand it
-setopt GLOB_COMPLETE
-setopt PUSHD_MINUS
- 
-# No more annoying pushd messages...
-# setopt PUSHD_SILENT
- 
-# blank pushd goes to home
-setopt PUSHD_TO_HOME
- 
-# this will ignore multiple directories for the stack. Useful? I dunno.
-setopt PUSHD_IGNORE_DUPS
- 
-# 10 second wait if you do something that will delete everything. I wish I'd had this before...
-setopt RM_STAR_WAIT
- 
-# use magic (this is default, but it can't hurt!)
-setopt ZLE
- 
-setopt NO_HUP
- 
-# only fools wouldn't do this ;-)
-export EDITOR="vim"
- 
-setopt IGNORE_EOF
- 
-# If I could disable Ctrl-s completely I would!
-setopt NO_FLOW_CONTROL
- 
-# Keep echo "station" > station from clobbering station
-setopt NO_CLOBBER
- 
-# Case insensitive globbing
-setopt NO_CASE_GLOB
- 
-# Be Reasonable!
-setopt NUMERIC_GLOB_SORT
- 
-# I don't know why I never set this before.
-setopt EXTENDED_GLOB
- 
-# hows about arrays be awesome? (that is, frew${cool}frew has frew surrounding all the variables, not just first and last
-setopt RC_EXPAND_PARAM
- 
-# Who doesn't want home and end to work?
-bindkey '\e[1~' beginning-of-line
-bindkey '\e[4~' end-of-line
- 
-# Incremental search is elite!
-bindkey -M vicmd "/" history-incremental-search-backward
-bindkey -M vicmd "?" history-incremental-search-forward
- 
-# Search based on what you typed in already
-bindkey -M vicmd "//" history-beginning-search-backward
-bindkey -M vicmd "??" history-beginning-search-forward
- 
-bindkey "\eOP" run-help
- 
-# oh wow! This is killer... try it!
-bindkey -M vicmd "q" push-line
- 
-# it's like, space AND completion. Gnarlbot.
-bindkey -M viins ' ' magic-space
+# Enable VI mode
+bindkey -v
+export KEYTIMEOUT=1
+
+# Enable Zplug
+source ~/.zplug/init.zsh
+
+# What does this do?
+zplug "junegunn/fzf-bin", \
+    from:gh-r, \
+    at:0.11.0, \
+    as:command, \
+    use:"*darwin*amd64*", \
+    rename-to:fzf
+# It grabs the binary of fzf-bin version 0.11.0 from GitHub Release and uses
+# the file that matches "*darwin*amd64" as a command called fzf!
+
+#zplug "denysdovhan/spaceship-zsh-theme", use:spaceship.zsh, from:github, as:theme
+
+zplug mafredri/zsh-async, from:github
+zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
+
+#zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme
+
+zplug "zsh-users/zsh-syntax-highlighting"
+
+# History Search
+zplug "zsh-users/zsh-history-substring-search"
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
+
+# History Settings
+HISTFILE=$HOME/.zhistory
+HISTSIZE=100000
+SAVEHIST=100000
+setopt append_history
+setopt extended_history
+setopt hist_expire_dups_first
+setopt hist_ignore_dups # ignore duplication command history list
+setopt hist_ignore_space
+setopt hist_verify
+setopt inc_append_history
+setopt share_history # share command history data
+
+zplug "zsh-users/zsh-completions"
+
+export PATH="/usr/local/opt/python/libexec/bin:$PATH"
+#VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
+
+#zplug "MichaelAquilina/zsh-autoswitch-virtualenv"
+#source =virtualenvwrapper.sh
+
+### Actually Install zPlug Plugins
+if ! zplug check --verbose; then
+  printf "Install? [y/N]: "
+  if read -q; then
+    echo; zplug install
+  fi
+fi
+
+zplug load --verbose
+
+# Check initial directory for any .venv file
+#check_venv
+
+# Include Eric's Aliases and Environment
+source ~/.zshrc.eric

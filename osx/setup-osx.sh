@@ -8,13 +8,13 @@ fi
 echo "--- Installin brew-cask"
 brew install caskroom/cask/brew-cask
 
-BREW_PACKAGES='git git-flow hub tmux wget'
+BREW_PACKAGES='git git-flow hub tmux wget oauthtool'
 echo "--- Installing Brew packages ($BREW_PACKAGES)"
 for b in $BREW_PACKAGES; do 
 	brew install $b
 done
 
-CASKS='adium bartender caffeine evernote flux github google-chrome hipchat iterm2 vim macvim spectacle vagrant virtualbox'
+CASKS='caffeine iterm2 spectacle the-unarchiver'
 echo "--- Installing Brew Casks ($CASKS)"
 for c in $CASKS; do
 	brew cask install $c
@@ -30,7 +30,7 @@ echo "Disable the 'Are you sure you want to open this application?' dialog"
 defaults write com.apple.LaunchServices LSQuarantine -bool false
 
 echo "Disable Notification Center and remove the menu bar icon"
-launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist
+#launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist
 
 echo "Expand save panel by default"
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true

@@ -21,6 +21,8 @@ function prompt_litex_precmd {
     branch_format="${_prompt_litex_colors[3]}[%f%u%c${_prompt_litex_colors[3]}][${_prompt_litex_colors[1]}%b${_prompt_litex_colors[3]}]"
   fi
 
+  local mfa=`/usr/local/bin/mfa`
+
   zstyle ':vcs_info:*:prompt:*' formats "${branch_format}"
 
   vcs_info 'prompt'
@@ -93,7 +95,7 @@ function prompt_litex_setup {
 
   # Define prompts.
   #
-  PROMPT="${_prompt_litex_colors[3]}[${_prompt_litex_colors[1]}%n%f${_prompt_litex_colors[3]}@${_prompt_litex_colors[2]}%m%f${_prompt_litex_colors[3]}:${_prompt_litex_colors[2]}%~%f${_prompt_litex_colors[3]}] ${_prompt_litex_colors[3]}[${_prompt_litex_colors[1]}%*${_prompt_litex_colors[3]}] "'$python_info[virtualenv]'"
+  PROMPT="${_prompt_litex_colors[3]}[${_prompt_litex_colors[1]}%n%f${_prompt_litex_colors[3]}@${_prompt_litex_colors[2]}%m%f${_prompt_litex_colors[3]}:${_prompt_litex_colors[2]}%~%f${_prompt_litex_colors[3]}] ${_prompt_litex_colors[3]}[${_prompt_litex_colors[1]}%*${_prompt_litex_colors[3]}] ${_prompt_litex_colors[3]}[${_prompt_litex_colors[1]}"'$python_info[virtualenv]'"${_prompt_litex_colors[3]}]
 "'${vcs_info_msg_0_}'"${_prompt_litex_colors[4]}$ ${_prompt_litex_colors[1]}"
 
   RPROMPT=""
