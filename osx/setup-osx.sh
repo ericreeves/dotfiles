@@ -21,10 +21,10 @@ for c in $CASKS; do
 done
 
 echo "Setup computer name"
-sudo scutil --set ComputerName "Cygnus"
-sudo scutil --set HostName "Cygnus"
-sudo scutil --set LocalHostName "Cygnus"
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "Cygnus"
+#sudo scutil --set ComputerName "Cygnus"
+#sudo scutil --set HostName "Cygnus"
+#sudo scutil --set LocalHostName "Cygnus"
+#sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "Cygnus"
 
 echo "Disable the 'Are you sure you want to open this application?' dialog"
 defaults write com.apple.LaunchServices LSQuarantine -bool false
