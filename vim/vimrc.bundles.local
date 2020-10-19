@@ -1,9 +1,0 @@
-Bundle "daylerees/colour-schemes", { "rtp": "vim/" }
-Bundle "zeis/vim-kolor", { "rtp": "vim/" }
-Bundle 'nathanaelkane/vim-command-w'
-Bundle 'bufkill.vim'
-Bundle 'sjbach/lusty'
-Bundle 'jceb/vim-orgmode'
-Bundle 'tpope/vim-speeddating'
-Bundle 'vim-scripts/utl.vim'
-Bundle 'Konfekt/FastFold'

@@ -1,4 +1,0 @@
-let g:spf13_no_conceal = 1
-let g:spf13_no_easyWindows = 1
-let g:spf13_no_fastTabs = 1
-let g:vim_json_syntax_conceal = 0

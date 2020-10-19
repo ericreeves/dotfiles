@@ -1,4 +1,0 @@
-macmenu &File.Close key=<nop>
-nmap <D-w> :CommandW<CR>
-imap <D-w> <Esc>:CommandW<CR>
-:set guifont=Hack:h12
