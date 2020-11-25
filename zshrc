@@ -30,14 +30,14 @@ zinit light-mode for \
 ### End of Zinit's installer chunk
 ################################################################################
 
-export PATH="~/bin:/usr/local/sbin:$PATH"
+export PATH="~/bin:/home/linuxbrew/.linuxbrew/bin/:/usr/local/sbin:$PATH"
 
 # Enable VI mode
 bindkey -v
 
 zinit ice wait'!' lucid atload'true; _p9k_precmd' nocd
 zinit ice wait'!' lucid atload'source ~/.p10k.zsh; _p9k_precmd' nocd
-zinit light romkatv/powerlevel10k
+zinit load romkatv/powerlevel10k
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
