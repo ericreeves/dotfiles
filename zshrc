@@ -35,9 +35,10 @@ export PATH="~/bin:/home/linuxbrew/.linuxbrew/bin/:/usr/local/sbin:$PATH"
 # Enable VI mode
 bindkey -v
 
-zinit ice wait'!' lucid atload'true; _p9k_precmd' nocd
-zinit ice wait'!' lucid atload'source ~/.p10k.zsh; _p9k_precmd' nocd
-zinit load romkatv/powerlevel10k
+zinit ice depth=1; zinit light romkatv/powerlevel10k
+#zinit ice wait'!' lucid atload'true; _p9k_precmd' nocd
+#zinit ice wait'!' lucid atload'source ~/.p10k.zsh; _p9k_precmd' nocd
+#zinit load romkatv/powerlevel10k
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -119,4 +120,7 @@ zinit ice wait lucid
 zinit load blimmer/zsh-aws-vault
 
 source ~/.zshrc.config
-source ~/.zshrc.token
+
+if [ -f ~/.zshrc.token ]; then
+	source ~/.zshrc.token
+fi
