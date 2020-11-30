@@ -27,7 +27,8 @@ CASKS="hyper slack visual-studio-code steam 1password \
 macdown aws-vault bartender boom-3d caffeine disk-inventory-x \
 docker dropbox google-chrome google-drive-file-stream \
 jira-client karabiner-elements macpass spectacle stellarium \
-steermouse the-unarchiver zoomus font-hack-nerd-font discord"
+steermouse the-unarchiver zoomus font-hack-nerd-font discord \
+vlc"
 
 for c in ${CASKS}; do
     echo "Installing ${c}..."
