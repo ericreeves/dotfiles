@@ -30,7 +30,7 @@ zinit light-mode for \
 ### End of Zinit's installer chunk
 ################################################################################
 
-export PATH="~/bin:/usr/local/sbin:/home/linuxbrew/.linuxbrew/bin/:/Users/ericreeves/Library/Python/3.9/bin:/usr/local/opt/helm@2/bin:$PATH"
+export PATH="~/bin:/usr/local/sbin:/home/linuxbrew/.linuxbrew/bin/:/home/linuxbrew/.linuxbrew/sbin/:/Users/ericreeves/Library/Python/3.9/bin:/usr/local/opt/helm@2/bin:$PATH"
 
 # Enable VI mode
 bindkey -v
