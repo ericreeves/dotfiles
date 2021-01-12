@@ -12,7 +12,7 @@ PACKAGES="git hub tmux bat fzf ctags \
 readline awscli aws-iam-authenticator aws-sam-cli \
 awless cfn-lint helm htop iftop jq kops lame nmap \
 python sops terraform watch wget zsh ack coreutils fluxctl \
-eksctl"
+eksctl aws-es-proxy yaml2json"
 
 for p in ${PACKAGES}; do 
     echo "Installing ${p}..."
