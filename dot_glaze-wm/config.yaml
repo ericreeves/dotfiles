@@ -11,10 +11,10 @@ bar:
   position: "top"
   opacity: 1.0
   background: "#1c2122cc"
-    #  background: "#20242cc4"
   foreground: "#ffffff"
   font_family: "Segoe UI"
-  font_size: "14px"
+  font_size: "12px"
+  font_weight: "450"
   padding: "4px 6px"
   offset_x: "0"
   offset_y: "0"
@@ -154,18 +154,18 @@ keybindings:
 
   # Launch CMD terminal (alternatively `exec wt` or `exec %ProgramFiles%/Git/git-bash.exe`
   # to start Windows Terminal and Git Bash respectively.
-  - command: "exec wt"
+  - command: "exec wezterm-gui"
     binding: "Alt+Enter"
 
   # Focus the workspace that last had focus.
-  - command: "focus workspace recent"
-    binding: "Alt+Y"
+  # - command: "focus workspace recent"
+  #   binding: "Alt+Y"
 
   # Focus the next/previous workspace defined in `workspaces` config.
-  - command: "focus workspace next"
-    binding: "Alt+T"
-  - command: "focus workspace prev"
-    binding: "Alt+Control+T"
+  # - command: "focus workspace next"
+  #   binding: "Alt+T"
+  # - command: "focus workspace prev"
+  #   binding: "Alt+Control+T"
 
   # Change focus to a workspace defined in `workspaces` config.
   - command: "focus workspace 1"
