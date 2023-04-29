@@ -14,7 +14,7 @@ bar:
     #  background: "#20242cc4"
   foreground: "#ffffff"
   font_family: "Segoe UI"
-  font_size: "13px"
+  font_size: "14px"
   padding: "4px 6px"
   offset_x: "0"
   offset_y: "0"
@@ -142,7 +142,7 @@ keybindings:
 
   # Close focused window.
   - command: "close"
-    binding: "Alt+Shift+Q"
+    binding: "Alt+Q"
 
   # Kill GlazeWM process safely.
   - command: "exit wm"
@@ -154,7 +154,7 @@ keybindings:
 
   # Launch CMD terminal (alternatively `exec wt` or `exec %ProgramFiles%/Git/git-bash.exe`
   # to start Windows Terminal and Git Bash respectively.
-  - command: "exec cmd"
+  - command: "exec wt"
     binding: "Alt+Enter"
 
   # Focus the workspace that last had focus.
