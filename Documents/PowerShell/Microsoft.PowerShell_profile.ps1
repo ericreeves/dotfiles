@@ -16,7 +16,8 @@ if ($host.Name -eq 'ConsoleHost')
   Set-PSReadlineKeyHandler -Key Tab -Function Complete
 
   #Style
-  Set-PSReadlineOption -PredictionViewStyle InlineView
+  #Set-PSReadlineOption -PredictionViewStyle InlineView
+  Set-PSReadlineOption -PredictionViewStyle ListView
 
 # Autocompletion for arrow keys
   Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
