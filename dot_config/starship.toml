@@ -24,17 +24,19 @@
 format = """
 [╭╴](fg:#505050)\
 $os\
-$username\
-(fg:white)@\
-$hostname\
 $sudo\
 $directory\
+$terraform\
 $git_branch$git_commit$git_state$git_metrics$git_status\
 $jobs\
 $memory_usage\
 [ ](fg:#242424)\
 $cmd_duration\
 $fill\
+$username\
+[@](fg:bright-black)\
+$hostname\
+$time\
 $line_break\
 [╰╴](fg:#505050)\
 [$status\
@@ -42,9 +44,12 @@ $localip\
 $character]($style)\
 """
 
+right_format = """
+[<──╯](fg:#505050)
+"""
 
 # Inserts a blank line between shell prompts:
-add_newline = false
+add_newline = true
 
 # Customization and activation of some modules:
 # Listed in the order of their position in the module row above
@@ -94,14 +99,14 @@ Unknown = ""
 Windows = ""
 
 [username]
-format = '[ ](fg:green bold)[$user]($style)[ ]()'
-style_user = 'fg:green bold'
+format = '[  ](fg:#505050)[$user]($style)[]()'
+style_user = 'fg:white'
 style_root = 'fg:red bold'
 show_always = true
 disabled = false
 
 [hostname]
-format = '[$ssh_symbol ](fg:green bold)[$hostname](fg:green bold)[ ]()'
+format = '[$ssh_symbol](fg:white)[$hostname](fg:white)[ ]()'
 ssh_only = false
 ssh_symbol = '' # '⇒' # ' ' # 'ﬁ⇒'
 #trim_at = '.companyname.com'
@@ -114,42 +119,42 @@ symbol = ' ' # ' ❯ '
 disabled = false
 
 [directory]
-format = '[ ](fg:cyan bold)[$read_only]($read_only_style)[$repo_root]($repo_root_style)[$path]($style)'
-style = 'fg:cyan bold'
+format = '[ ](fg:#A17FEF)[$read_only]($read_only_style)[$repo_root]($repo_root_style)[$path]($style)'
+style = 'fg:#A17FEF'
 home_symbol = ' ~'
 read_only = ' ' # ' ' # ' ''
 read_only_style = 'fg:cyan'
 truncation_length = 3
 truncation_symbol = '…/'
-truncate_to_repo = true
-repo_root_format = '[ ](fg:cyan bold)[$read_only]($read_only_style)[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[ ]()'
-repo_root_style	= 'fg:cyan bold'
+truncate_to_repo = false
+repo_root_format = '[ ](fg:#A17FEF)[$read_only]($read_only_style)[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[ ]()'
+repo_root_style	= 'fg:#A17FEF'
 use_os_path_sep = true
 disabled = false
 
 [git_branch]
-format = '[❯ $symbol $branch(:$remote_branch)]($style)[ ]()'
-style = 'fg:#E04D27'
+format = '[ $symbol $branch(:$remote_branch)]($style)[ ]()'
+style = 'fg:#3C95F3'
 symbol = ''
 #ignore_branches = ['master', 'main']
 
 [git_commit]
 format = '[\($hash$tag\)]($style)[ ]()'
-style = 'fg:#E04D27'
+style = 'fg:#3C95F3'
 commit_hash_length = 8
 tag_symbol = ' ' # ' ''
 disabled = false
 
 [git_metrics]
 format = '[\[+$added/]($added_style)[-$deleted\]]($deleted_style)[ ]()'
-added_style = 'fg:#E04D27'
-deleted_style = 'fg:#E04D27'
+added_style = 'fg:#3C95F3'
+deleted_style = 'fg:#3C95F3'
 disabled = false
 
 [git_status]
 # place symbols before '$count'
 format = '([$all_status$ahead_behind]($style))'
-style = 'fg:#E04D27'
+style = 'fg:#3C95F3'
 conflicted = '[${count} ](fg:red)'
 ahead = '[⇡${count} ](fg:yellow)'
 behind = '[⇣${count} ](fg:yellow)'
@@ -180,7 +185,7 @@ disabled = false
 
 [cmd_duration]
 format = '[  $duration ]($style)'
-style = 'fg:yellow'
+style = 'fg:white'
 min_time = 500
 disabled = false
 
@@ -198,3 +203,12 @@ disabled = false
 format = '[$localipv4 ](fg:green bold)'
 ssh_only = true
 disabled = false
+
+[time]
+disabled = false
+style = "bold bright-black"
+format = "[ $time](fg:bright-blue)[ ───╮](fg:#505050)"
+
+[terraform]
+format = '[ $workspace@$version]($style) '
+style = "fg:#69429f"
