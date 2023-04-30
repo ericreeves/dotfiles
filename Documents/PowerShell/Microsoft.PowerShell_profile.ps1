@@ -4,12 +4,18 @@ function rehash {
                 [System.Environment]::GetEnvironmentVariable("Path","User")
 }
 
+# Prompt
+if (Get-Command "starship" -ErrorAction SilentlyContinue) {
+  $ENV:STARSHIP_CONFIG = "$( $HOME )/.config/starship.toml"
+  # $ENV:STARSHIP_DISTRO = "SKY"
+  Invoke-Expression (&starship init powershell)
+}
+
+
 if ($host.Name -eq 'ConsoleHost')
 {
   Import-Module PSReadLine
   Import-Module -Name Terminal-Icons
-
-  Invoke-Expression (&starship init powershell)
 
 # PSReadLine
   Set-PSReadlineOption -EditMode vi
@@ -26,6 +32,13 @@ if ($host.Name -eq 'ConsoleHost')
   Set-PSReadLineOption -PredictionSource History
 }
 
+# Prompt
+if (Get-Command "starship" -ErrorAction SilentlyContinue) {
+  $ENV:STARSHIP_CONFIG = "$( $HOME )/.config/starship.toml"
+  # $ENV:STARSHIP_DISTRO = "SKY"
+  Invoke-Expression (&starship init powershell)
+}
+
 # dir w/ fzf
 # fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'
 
@@ -36,4 +49,44 @@ $Env:PATH = [System.Environment]::ExpandEnvironmentVariables([System.Environment
 Set-Alias -Name lvim -Value "$HOME\.local\bin\lvim.ps1"
 Set-Alias -Name vim -Value "$HOME\.local\bin\lvim.ps1"
 Set-Alias -Name l -Value "lsd -l"
+
+
+function Get-Process-Command {
+  param (
+      [Parameter(Mandatory=$true)]
+      [string]$Name
+  )
+  Get-WmiObject Win32_Process -Filter "name = '$Name.exe'" -ErrorAction SilentlyContinue | Select-Object CommandLine,ProcessId
+}
+
+function Wait-For-Process {
+  param (
+      [Parameter(Mandatory=$true)]
+      [string]$Name,
+
+      [Switch]$IgnoreExistingProcesses
+  )
+
+  if ($IgnoreExistingProcesses) {
+      $NumberOfProcesses = (Get-Process -Name $Name -ErrorAction SilentlyContinue).Count
+  } else {
+      $NumberOfProcesses = 0
+  }
+
+  while ( (Get-Process -Name $Name -ErrorAction SilentlyContinue).Count -eq $NumberOfProcesses ) {
+      Start-Sleep -Milliseconds 400
+  }
+}
+
+## Which
+function which {
+  param(
+      [Parameter(Mandatory=$true)]
+      [string]$Command
+  )
+
+  Get-Command -Name $Command -ErrorAction SilentlyContinue |
+  Select-Object -ExpandProperty Path -ErrorAction SilentlyContinue
+}
+
 
