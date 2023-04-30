@@ -29,8 +29,11 @@ if ($host.Name -eq 'ConsoleHost')
 # dir w/ fzf
 # fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'
 
+$Env:KOMOREBI_CONFIG_HOME = 'C:\Users\LGUG2Z\.config\komorebi'
 
-$env:Path = [System.Environment]::ExpandEnvironmentVariables([System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User"))
+$Env:PATH = [System.Environment]::ExpandEnvironmentVariables([System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User"))
 
 Set-Alias -Name lvim -Value "$HOME\.local\bin\lvim.ps1"
+Set-Alias -Name vim -Value "$HOME\.local\bin\lvim.ps1"
+Set-Alias -Name l -Value "lsd -l"
 
