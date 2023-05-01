@@ -1,5 +1,7 @@
 # Environment 
-$Env:XDG_CONFIG_HOME = "$( $HOME )\.config"
+$Env:XDG_CACHE_HOME  = "$( $HOME )\AppData\Local\Temp"
+$Env:XDG_CONFIG_HOME = "$( $HOME )\AppData\Local"
+$Env:XDG_DATA_HOME   = "$( $HOME )\AppData\Roaming"
 $Env:PATH = [System.Environment]::ExpandEnvironmentVariables([System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User"))
 
 # Aliases
