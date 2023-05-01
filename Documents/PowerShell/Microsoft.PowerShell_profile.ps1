@@ -1,30 +1,40 @@
+#
 # Environment 
-$Env:XDG_CACHE_HOME  = "$( $HOME )\AppData\Local\Temp"
-$Env:XDG_CONFIG_HOME = "$( $HOME )\AppData\Local"
-$Env:XDG_DATA_HOME   = "$( $HOME )\AppData\Roaming"
-$Env:PATH = [System.Environment]::ExpandEnvironmentVariables([System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User"))
+# 
+[Environment]::SetEnvironmentVariable("XDG_CACHE_HOME", "$($HOME)\AppData\Local\Temp", "User")
+[Environment]::SetEnvironmentVariable("XDG_CONFIG_HOME", "$($HOME)\AppData\Local", "User")
+[Environment]::SetEnvironmentVariable("XDG_DATA_HOME", "$($HOME)\AppData\Roaming", "User")
+[Environment]::SetEnvironmentVariable("KOMOREBI_CONFIG_HOME", "$($HOME)\.config\komorebi", "User")
+[Environment]::SetEnvironmentVariable("KOMOREBI_AHK_EXE", "$($HOME)\scoop\apps\autohotkey\current\v2\AutoHotkey64.exe", "User")
+$Env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") +
+            ";" +
+            [System.Environment]::GetEnvironmentVariable("Path","User")
 
+#
 # Aliases
+#
 Set-Alias -Name lvim -Value "$( $HOME )\.local\bin\lvim.ps1"
 Set-Alias -Name vim -Value "$( $HOME )\.local\bin\lvim.ps1"
 Set-Alias -Name l -Value "lsd -l"
 Set-Alias -Name cm -Value "chezmoi"
 
-
+#
 # Prompt
+#
 if (Get-Command "starship" -ErrorAction SilentlyContinue) {
   $ENV:STARSHIP_CONFIG = "$( $HOME )/.config/starship.toml"
   # $ENV:STARSHIP_DISTRO = "SKY"
   Invoke-Expression (&starship init powershell)
 }
 
-
 if ($host.Name -eq 'ConsoleHost')
 {
   Import-Module PSReadLine
   Import-Module -Name Terminal-Icons
 
+#
 # PSReadLine
+#
   Set-PSReadlineOption -EditMode vi
   Set-PSReadlineKeyHandler -Key Tab -Function Complete
   #Set-PSReadlineOption -PredictionViewStyle InlineView
@@ -37,13 +47,9 @@ if ($host.Name -eq 'ConsoleHost')
 # dir w/ fzf
 # fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'
 
-# This function rehashes the environment variable Path by combining the Machine and User paths. 
-function rehash {
-  $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") +
-              ";" +
-              [System.Environment]::GetEnvironmentVariable("Path","User")
-}
-
+#
+# Get-Process-Command
+#
 function Get-Process-Command {
   param (
     [Parameter(Mandatory=$true)]
@@ -98,8 +104,6 @@ function which {
 
 # Komorebi
 if (Get-Command "komorebic" -ErrorAction SilentlyContinue) {
-    $ENV:KOMOREBI_CONFIG_HOME = "$( $HOME )/.config/komorebi"
-    $ENV:KOMOREBI_AHK_EXE = "$( $HOME )/scoop/apps/autohotkey/current/v2/AutoHotkey64.exe"
 
     function start-tiling {
         Write-Host "[komorebi] Killing prior komorebi.exe Processes"
