@@ -31,8 +31,6 @@ if ($host.Name -eq 'ConsoleHost')
   Set-PSReadlineOption -PredictionViewStyle ListView
   Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
   Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
-  Set-PSReadlineKeyHandler -Key k -Function HistorySearchBackward
-  Set-PSReadlineKeyHandler -Key j -Function HistorySearchForward
   Set-PSReadLineOption -PredictionSource History
 }
 
@@ -70,6 +68,24 @@ function Wait-For-Process {
   }
 }
 
+function Execute-Command ($FilePath, $ArgumentList, $WorkingDirectory) {
+    $pinfo = New-Object System.Diagnostics.ProcessStartInfo
+    $pinfo.FileName = $FilePath
+    $pinfo.RedirectStandardError = $true
+    $pinfo.RedirectStandardOutput = $true
+    $pinfo.UseShellExecute = $false
+    $pinfo.Arguments = $ArgumentList
+    $pinfo.WorkingDirectory = $WorkingDirectory
+    $p = New-Object System.Diagnostics.Process
+    $p.StartInfo = $pinfo
+    $p.Start() | Out-Null
+    $p.WaitForExit()
+    # [pscustomobject]@{
+    #     stdout = $p.StandardOutput.ReadToEnd()
+    #     stderr = $p.StandardError.ReadToEnd()
+    #     ExitCode = $p.ExitCode
+    # }
+}
 ## Which
 function which {
   param(
@@ -95,7 +111,7 @@ if (Get-Command "komorebic" -ErrorAction SilentlyContinue) {
         Start-Sleep 3
 
         Write-Host "[ahk] Starting AutoHotKey"
-        Execute-Command -FilePath "$( $HOME )/scoop/apps/autohotkey/current/AutoHotkey64.exe" -ArgumentList "$( $HOME )/.config/komorebi/komorebi.ahk" -WorkingDirectory "$( $HOME )/.config/komorebi" -ErrorAction SilentlyContinue
+        Execute-Command -FilePath "$( $HOME )/scoop/apps/autohotkey/current/v2/AutoHotkey64.exe" -ArgumentList "$( $HOME )/.config/komorebi/komorebi.ahk" -WorkingDirectory "$( $HOME )/.config/komorebi" -ErrorAction SilentlyContinue
     }
 
     function stop-tiling {
