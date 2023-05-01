@@ -90,3 +90,40 @@ function which {
 }
 
 
+if (Get-Command "komorebic" -ErrorAction SilentlyContinue) {
+  $ENV:KOMOREBI_CONFIG_HOME = "$( $HOME )/.config/komorebi"
+  $ENV:KOMOREBI_AHK_EXE = "$( $HOME )/scoop/apps/autohotkey/current/AutoHotkey64.exe"
+
+  function start-tiling {
+      Write-Host "[komorebi] Killing prior komorebi.exe Processes"
+      Get-Process -Name "komorebi" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+
+      Write-Host "[komorebi] Running komorebic.exe start"
+      Execute-Command -FilePath "$( $HOME )/scoop/apps/komorebi/current/komorebic.exe" -ArgumentList "start" -WorkingDirectory "$( $HOME )/.config/komorebi" -ErrorAction SilentlyContinue
+      Wait-For-Process -Name "komorebi"
+      Start-Sleep 3
+
+      Write-Host "[ahk] Starting AutoHotKey"
+      Execute-Command -FilePath "$( $HOME )/scoop/apps/autohotkey/current/AutoHotkey64.exe" -ArgumentList "$( $HOME )/.config/komorebi/komorebi.ahk" -WorkingDirectory "$( $HOME )/.config/komorebi" -ErrorAction SilentlyContinue
+  }
+
+  function stop-tiling {
+      Write-Host "[komorebi] Issuing komorebic stop"
+
+      Execute-Command -FilePath "$( $HOME )/scoop/apps/komorebi/current/komorebic.exe" -ArgumentList "stop" -WorkingDirectory "$( $HOME )/.config/komorebi" -ErrorAction SilentlyContinue
+      Write-Host "[komorebi] Terminating Remaining komorebi Processes"
+      Get-Process -Name "komorebi" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+      Wait-Process -Name "komorebi" -ErrorAction SilentlyContinue
+
+      Write-Host "[komorebi] Checking for Processes"
+      Get-Process-Command -Name "komorebi" -ErrorAction SilentlyContinue
+
+      Write-Host "[ahk] Killing Process"
+      Get-Process -Name "AutoHotKey" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+      Wait-Process -Name "AutoHotKey" -ErrorAction SilentlyContinue
+  }
+
+}
+
+# Fix Prompt
+Clear-Host
