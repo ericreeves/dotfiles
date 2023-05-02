@@ -1,11 +1,12 @@
 #SingleInstance Force
 
 ; Load library
-#Include komorebic.lib.ahk
+#Include %A_ScriptDir%\komorebic.lib.ahk
 ; Load configuration
-#Include komorebi.generated.ahk
+#Include %A_ScriptDir%\komorebi.generated.ahk
 
 workspaceCount := 9
+
 
 ; Function to list workspaces given a count
 ArrayFromZero(Length){
@@ -69,7 +70,7 @@ init(){
   InvisibleBorders(7, 0, 14, 7)
 
   ; Uncomment the next lines if you want a visual border around the active window
-  ActiveWindowBorder("enable")
+  ActiveWindowBorder("disable")
   ActiveWindowBorderColour(66, 165, 245, "single")
   ActiveWindowBorderColour(256, 165, 66, "stack")
   ActiveWindowBorderColour(255, 51, 153, "monocle")
@@ -178,4 +179,4 @@ For ws in workspaces {
   init()
 }
 
-!Enter::Run("wezterm-gui",,"Hide")
+!Enter::Run("wezterm-gui")
