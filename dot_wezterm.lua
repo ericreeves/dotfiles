@@ -108,8 +108,8 @@ return {
 	},
 	disable_default_key_bindings = true,
 	keys = {
-		{ key = "t", mods = "CTRL", action = act({ SpawnTab = "DefaultDomain" }) },
-		{ key = "w", mods = "CTRL", action = act({ CloseCurrentTab = { confirm = false } }) },
+		{ key = "t", mods = "CTRL|SHIFT", action = act({ SpawnTab = "DefaultDomain" }) },
+		{ key = "w", mods = "CTRL|SHIFT", action = act({ CloseCurrentTab = { confirm = false } }) },
 		{ key = "Tab", mods = "CTRL", action = act({ ActivateTabRelative = 1 }) },
 		{ key = "Tab", mods = "CTRL|SHIFT", action = act({ ActivateTabRelative = -1 }) },
 		{ key = "c", mods = "ALT", action = act({ CopyTo = "Clipboard" }) },
