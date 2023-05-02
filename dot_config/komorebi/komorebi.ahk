@@ -106,10 +106,10 @@ init()
 !]::CycleStack("next")
 
 ; Resize
-!+l::ResizeAxis("horizontal", "increase")
-!+h::ResizeAxis("horizontal", "decrease")
-!+k::ResizeAxis("vertical", "increase")
-!+j::ResizeAxis("vertical", "decrease")
+!f::ResizeAxis("horizontal", "increase")
+!s::ResizeAxis("horizontal", "decrease")
+!e::ResizeAxis("vertical", "increase")
+!d::ResizeAxis("vertical", "decrease")
 
 ; Manipulate windows
 !t::ToggleFloat()
@@ -117,7 +117,7 @@ init()
 
 ; Window manager options
 !+r::Retile()
-; !^p::TogglePause()
+!^;::TogglePause()
 
 !o::ReloadConfiguration()
 
