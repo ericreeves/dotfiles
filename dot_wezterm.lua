@@ -84,7 +84,7 @@ return {
 
 	front_end = "WebGpu",
 	font = wezterm.font("FiraCode NF"),
-	font_size = 12,
+	font_size = 11,
 	default_cursor_style = "BlinkingBar",
 	cursor_blink_rate = 800,
 	line_height = 1.3,
