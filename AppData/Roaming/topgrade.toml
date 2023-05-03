@@ -114,6 +114,8 @@ cleanup = true
 #open_remotes_in_new_terminal = true
 #wsl_update_pre_release = true
 #wsl_update_use_web_download = true
+enable_winget = true
+
 
 # Causes Topgrade to rename itself during the run to allow package managers
 # to upgrade it. Use this only if you installed Topgrade by using a package
