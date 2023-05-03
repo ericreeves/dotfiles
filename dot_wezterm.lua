@@ -80,7 +80,7 @@ return {
 	initial_rows = 30,
 
 	tab_bar_at_bottom = true,
-	-- window_decorations = "RESIZE",
+	window_decorations = "RESIZE",
 
 	front_end = "WebGpu",
 	font = wezterm.font("FiraCode NF"),
