@@ -82,7 +82,7 @@ return {
 	tab_bar_at_bottom = true,
 	window_decorations = "RESIZE",
 
-	front_end = "WebGpu",
+	front_end = "OpenGL",
 	font = wezterm.font("FiraCode NF"),
 	font_size = 11,
 	default_cursor_style = "BlinkingBar",
@@ -131,5 +131,8 @@ return {
 		{ key = "p", mods = "SHIFT|CTRL", action = act.AdjustPaneSize({ "Right", 5 }) },
 		{ key = "o", mods = "SHIFT|CTRL", action = act.AdjustPaneSize({ "Up", 5 }) },
 		{ key = "i", mods = "SHIFT|CTRL", action = act.AdjustPaneSize({ "Down", 5 }) },
+		{ key = "=", mods = "CTRL", action = act.IncreaseFontSize },
+		{ key = "-", mods = "CTRL", action = act.DecreaseFontSize },
+		{ key = "0", mods = "CTRL", action = act.ResetFontSize },
 	},
 }
