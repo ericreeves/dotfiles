@@ -1,11 +1,9 @@
 #
 # Environment 
 # 
-[Environment]::SetEnvironmentVariable("XDG_CACHE_HOME", "$($HOME)\AppData\Local\Temp", "User")
-[Environment]::SetEnvironmentVariable("XDG_CONFIG_HOME", "$($HOME)\AppData\Local", "User")
-[Environment]::SetEnvironmentVariable("XDG_DATA_HOME", "$($HOME)\AppData\Roaming", "User")
-[Environment]::SetEnvironmentVariable("KOMOREBI_CONFIG_HOME", "$($HOME)\.config\komorebi", "User")
-[Environment]::SetEnvironmentVariable("KOMOREBI_AHK_EXE", "$($HOME)\scoop\apps\autohotkey\current\v2\AutoHotkey64.exe", "User")
+# [Environment]::SetEnvironmentVariable("XDG_CACHE_HOME", "$($HOME)\AppData\Local\Temp", "User")
+# [Environment]::SetEnvironmentVariable("XDG_CONFIG_HOME", "$($HOME)\AppData\Local", "User")
+# [Environment]::SetEnvironmentVariable("XDG_DATA_HOME", "$($HOME)\AppData\Roaming", "User")
 $Env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") +
             ";" +
             [System.Environment]::GetEnvironmentVariable("Path","User")
@@ -17,6 +15,7 @@ Set-Alias -Name lvim -Value "$( $HOME )\.local\bin\lvim.ps1"
 Set-Alias -Name vim -Value "$( $HOME )\.local\bin\lvim.ps1"
 Set-Alias -Name l -Value "lsd -l"
 Set-Alias -Name cm -Value "chezmoi"
+Set-Alias -Name grep -Value "Select-String "
 
 #
 # Prompt
@@ -100,40 +99,6 @@ function which {
   )
   Get-Command -Name $Command -ErrorAction SilentlyContinue |
   Select-Object -ExpandProperty Path -ErrorAction SilentlyContinue
-}
-
-# Komorebi
-if (Get-Command "komorebic" -ErrorAction SilentlyContinue) {
-
-    function start-tiling {
-        Write-Host "[komorebi] Killing prior komorebi.exe Processes"
-        Get-Process -Name "komorebi" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
-
-        Write-Host "[komorebi] Running komorebic.exe start"
-        Execute-Command -FilePath "$( $HOME )/scoop/apps/komorebi/current/komorebic.exe" -ArgumentList "start" -WorkingDirectory "$( $HOME )/.config/komorebi" -ErrorAction SilentlyContinue
-        Wait-For-Process -Name "komorebi"
-        Start-Sleep 3
-
-        Write-Host "[ahk] Starting AutoHotKey"
-        Execute-Command -FilePath "$( $HOME )/scoop/apps/autohotkey/current/v2/AutoHotkey64.exe" -ArgumentList "$( $HOME )/.config/komorebi/komorebi.ahk" -WorkingDirectory "$( $HOME )/.config/komorebi" -ErrorAction SilentlyContinue
-    }
-
-    function stop-tiling {
-        Write-Host "[komorebi] Issuing komorebic stop"
-
-        Execute-Command -FilePath "$( $HOME )/scoop/apps/komorebi/current/komorebic.exe" -ArgumentList "stop" -WorkingDirectory "$( $HOME )/.config/komorebi" -ErrorAction SilentlyContinue
-        Write-Host "[komorebi] Terminating Remaining komorebi Processes"
-        Get-Process -Name "komorebi" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
-        Wait-Process -Name "komorebi" -ErrorAction SilentlyContinue
-
-        Write-Host "[komorebi] Checking for Processes"
-        Get-Process-Command -Name "komorebi" -ErrorAction SilentlyContinue
-
-        Write-Host "[ahk] Killing Process"
-        Get-Process -Name "AutoHotKey" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
-        Wait-Process -Name "AutoHotKey" -ErrorAction SilentlyContinue
-    }
-
 }
 
 # Fix Prompt
