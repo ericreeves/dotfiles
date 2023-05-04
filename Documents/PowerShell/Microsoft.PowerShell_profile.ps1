@@ -30,7 +30,10 @@ if ($host.Name -eq 'ConsoleHost')
 {
   Import-Module PSReadLine
   Import-Module -Name Terminal-Icons
-
+  Invoke-Expression (& {
+      $hook = if ($PSVersionTable.PSVersion.Major -lt 6) { 'prompt' } else { 'pwd' }
+      (zoxide init --hook $hook powershell | Out-String)
+  })
 #
 # PSReadLine
 #
