@@ -16,7 +16,7 @@ Set-Alias -Name vim -Value "$( $HOME )\.local\bin\lvim.ps1"
 Set-Alias -Name l -Value "lsd -l"
 Set-Alias -Name cm -Value "chezmoi"
 Set-Alias -Name grep -Value "Select-String "
-
+Invoke-Expression (&scoop-search --hook) # Replace 'scoop search' with much faster 'scoop-search'
 #
 # Prompt
 #
