@@ -29,8 +29,10 @@ end
 -- end)
 
 return {
-	-- color_scheme = "Builtin Tango Dark",
+	-- color_scheme = "BlulocoDark",
 	color_scheme = "Hardcore",
+	-- color_scheme = "Ayu Mirage",
+	-- color_scheme = "Builtin Tango Dark",
 	--  color_scheme = 'Tangoesque (terminal.sexy)',
 	-- color_scheme = 'Tomorrow Night Bright',
 
