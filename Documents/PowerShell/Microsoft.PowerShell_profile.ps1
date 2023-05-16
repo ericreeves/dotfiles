@@ -13,8 +13,10 @@ $Env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") +
 #
 Set-Alias -Name lvim -Value "$( $HOME )\.local\bin\lvim.ps1"
 Set-Alias -Name vim -Value "$( $HOME )\.local\bin\lvim.ps1"
-Set-Alias -Name l -Value "lsd -l"
+Set-Alias -Name l -Value "ls"
 Set-Alias -Name cm -Value "chezmoi"
+Set-Alias -Name lg -Value "lazygit"
+Set-Alias -Name gs -Value "git status"
 Set-Alias -Name grep -Value "Select-String "
 Invoke-Expression (&scoop-search --hook) # Replace 'scoop search' with much faster 'scoop-search'
 #

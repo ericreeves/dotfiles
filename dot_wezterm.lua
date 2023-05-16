@@ -29,14 +29,17 @@ end
 -- end)
 
 return {
-	-- color_scheme = "Builtin Tango Dark",
+	-- color_scheme = "BlulocoDark",
 	color_scheme = "Hardcore",
+	-- color_scheme = "Ayu Mirage",
+	-- color_scheme = "Builtin Tango Dark",
 	--  color_scheme = 'Tangoesque (terminal.sexy)',
 	-- color_scheme = 'Tomorrow Night Bright',
 
 	--  color_scheme = 'Tango (terminal.sexy)',
 
 	colors = {
+		visual_bell = "#202020",
 		tab_bar = {
 			background = TabBackground,
 			active_tab = {
@@ -75,6 +78,7 @@ return {
 		fade_out_duration_ms = 75,
 		target = "CursorColor",
 	},
+	audible_bell = "Disabled",
 
 	initial_cols = 100,
 	initial_rows = 30,
