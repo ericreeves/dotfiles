@@ -88,8 +88,9 @@ return {
 
 	-- front_end = "Software",
 	front_end = "WebGpu",
+	-- font = wezterm.font("VictorMono NF"),
 	font = wezterm.font("JetBrainsMono NF"),
-	-- font = wezterm.font("FuraMono NF"),
+	-- font = wezterm.font("FiraCode NF"),
 	-- font = wezterm.font("CaskaydiaCove NF"),
 	-- font = wezterm.font("SauceCodePro NF"),
 	font_size = 11,
