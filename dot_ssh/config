@@ -5,3 +5,7 @@ Host conad-server-?
 Host conad-client-?
   User debian
   Hostname %h.vpn.alluvium.cloud
+
+Host pve?
+  User debian
+  Hostname %h.vpn.alluvium.cloud
