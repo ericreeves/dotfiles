@@ -1,3 +1,7 @@
+Host cube
+  User eric
+  Hostname %h.vpn.alluvium.cloud
+
 Host conad-server-?
   User debian
   Hostname %h.vpn.alluvium.cloud
