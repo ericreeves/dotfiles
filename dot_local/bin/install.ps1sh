@@ -1,0 +1,148 @@
+# and powershell. See README.md for installation.
+# This is a pre-setup script for a new user environment that works for both bash
+#
+# kudos:
+#
+#   @chrisfcarroll for ps1+sh trick: https://gist.github.com/chrisfcarroll/636458b42793cd453a68b529ff53b469)
+#   Jimit Dholakia on vanity git.io: https://towardsdatascience.com/github-url-shortener-f1e0aeaf83b6
+
+echo @'
+' > /dev/null
+
+#  _               _
+# | |             | |
+# | |__   __ _ ___| |__
+# | '_ \ / _` / __| '_ \
+# | |_) | (_| \__ \ | | |
+# |_.__/ \__,_|___/_| |_|
+
+set -Eeuo pipefail
+
+if [[ ! $(type -p git) ]]; then
+    sudo apt install git
+fi
+
+if [[ ! -e ~/.dotfiles ]]; then
+    git clone --recursive https://github.com/ericreeves/dotfiles-windows ~/.dotfiles
+fi
+
+# TODO: https://github.com/TsekNet/dotfiles/blob/main/install.sh
+
+# -==-  -==-  -==-  -==-  -==-  -==-  -==-  -==-  -==-  -==-  -==-  -==-  -==-
+echo > /dev/null <<"out-null" ###
+'@ | out-null
+
+#                                   _          _ _
+#                                  | |        | | |
+#  _ __   _____      _____ _ __ ___| |__   ___| | |
+# | '_ \ / _ \ \ /\ / / _ \ '__/ __| '_ \ / _ \ | |
+# | |_) | (_) \ V  V /  __/ |  \__ \ | | |  __/ | |
+# | .__/ \___/ \_/\_/ \___|_|  |___/_| |_|\___|_|_|
+# | |
+# |_|
+
+# to test locally: `iex (cat -raw install.ps1sh)`
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+# CHECK POWERSHELL
+
+if ($PSVersionTable.PSVersion.Major -lt 7) {
+    throw "`nPowershell is way out of date! (yours=$($PSVersionTable.PSVersion)`nGo get a new one at https://aka.ms/powershell-release?tag=stable"
+}
+
+Write-Host @"
+   ___  ___  _______
+  / _ \/ _ \/ __/ _ \
+ / ___/ , _/ _// ___/
+/_/  /_/|_/___/_/
+
+"@
+
+# FUNCTIONS
+
+function Invoke-Exe($command) {
+    Invoke-Expression "& $command"
+    if ($LASTEXITCODE) { throw "'$command' returned error $LASTEXITCODE" }
+}
+
+function Install-ScoopPackage($Command, $Package, $BucketAlias, $BucketUrl) {
+    if (!$Package) {
+        $Package = $Command
+    }
+
+    if (!(Get-Command $Command -ErrorAction SilentlyContinue)) {
+        if ($BucketAlias) {
+            $buckets = Invoke-Exe 'scoop bucket list | % name'
+            if ($buckets -notcontains $BucketAlias) {
+                Write-Output "Adding bucket $BucketAlias..."
+                Invoke-Exe "scoop bucket add $BucketAlias $BucketUrl"
+            }
+        }
+        Write-Output "Installing $Package..."
+        Invoke-Exe "scoop install $Package"
+    } else {
+        Write-Output "$Package ok"
+    }
+}
+
+# INSTALL SCOOP
+
+if (!(Get-Command scoop -ErrorAction SilentlyContinue)) {
+    Write-Output 'Installing scoop...'
+    # this new script may eventually migrate to get.scoop.sh
+    Invoke-WebRequest -UseBasicParsing https://raw.githubusercontent.com/scoopinstaller/install/master/install.ps1 | Invoke-Expression
+} else {
+    Write-Output 'Scoop ok'
+}
+
+# ENABLE DEVELOPER MODE
+
+Install-ScoopPackage gsudo
+
+# need dev mode for (at least) not requiring sudo on symlinks
+$devMode = $false
+try { $devMode = (Get-WindowsDeveloperLicense).IsValid } catch {}
+if (!$devMode) {
+    Write-Host
+    Write-Host '>>> == Setting Developer Mode! =='
+    Write-Host '>>>'
+    Write-Host '>>> 1. Allow the UAC that comes up'
+    Write-Host '>>> 2. Developer Settings will come up next'
+    Write-Host '>>> 3. Apply everything except "Change settings to show empty drives"'
+    Write-Host -NoNewline '>>> Press ENTER to start doing ^ this: '
+    [Console]::ReadKey() | Out-Null
+    sudo pwsh -Command (
+        'Set-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock AllowDevelopmentWithoutDevLicense 1;'+
+        'Show-WindowsDeveloperLicenseRegistration')
+    Write-Host
+} else {
+    Write-Output 'Developer mode ok'
+}
+
+# INSTALL CHEZMOI
+
+Install-ScoopPackage git
+Install-ScoopPackage chezmoi -BucketAlias twpayne -BucketUrl https://github.com/twpayne/scoop-bucket
+
+# APPLY DOTFILES
+
+if (!(Test-Path ~/.dotfiles)) {
+    Invoke-Exe 'chezmoi init --config-format toml --apply --keep-going ericreeves/dotfiles-windows --source ~/.dotfiles'
+}
+
+# SETUP
+
+Write-Output @"
+   ________________  _____
+  / __/ __/_  __/ / / / _ \
+ _\ \/ _/  / / / /_/ / ___/
+/___/___/ /_/  \____/_/
+
+"@
+
+~/Documents/PowerShell/setup.ps1 -Upgrade
+
+# -==-  -==-  -==-  -==-  -==-  -==-  -==-  -==-  -==-  -==-  -==-  -==-  -==-
+out-null
