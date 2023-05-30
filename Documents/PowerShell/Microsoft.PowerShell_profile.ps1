@@ -4,21 +4,34 @@
 # [Environment]::SetEnvironmentVariable("XDG_CACHE_HOME", "$($HOME)\AppData\Local\Temp", "User")
 # [Environment]::SetEnvironmentVariable("XDG_CONFIG_HOME", "$($HOME)\AppData\Local", "User")
 # [Environment]::SetEnvironmentVariable("XDG_DATA_HOME", "$($HOME)\AppData\Roaming", "User")
+# [Environment]::SetEnvironmentVariable("HASHI_AWS_ACCOUNT_ID", "535833188600", "User")
 $Env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") +
             ";" +
             [System.Environment]::GetEnvironmentVariable("Path","User")
 
+$Env:HASHI_AWS_ACCOUNT_ID = "535833188600"
+
 #
 # Aliases
 #
-Set-Alias -Name lvim -Value "$( $HOME )\.local\bin\lvim.ps1"
-Set-Alias -Name vim -Value "$( $HOME )\.local\bin\lvim.ps1"
-Set-Alias -Name l -Value "ls"
-Set-Alias -Name cm -Value "chezmoi"
-Set-Alias -Name lg -Value "lazygit"
-Set-Alias -Name gs -Value "git status"
-Set-Alias -Name grep -Value "Select-String "
 Invoke-Expression (&scoop-search --hook) # Replace 'scoop search' with much faster 'scoop-search'
+
+Set-ProfileAlias lvim "lvim.ps1 #{*}" -Bash -Force
+Set-ProfileAlias vim "lvim.ps1 #{*}" -Bash -Force
+Set-ProfileAlias vi "lvim.ps1 #{*}" -Bash -Force
+Set-ProfileAlias lg "lazygit #{*}" -Bash -Force
+Set-ProfileAlias cm "chezmoi #{*}" -Bash -Force
+Set-ProfileAlias cmup "chezmoi update" -Bash -Force
+Set-ProfileAlias cmdiff "chezmoi git pull -- --rebase && chezmoi diff" -Bash -Force
+
+Set-ProfileAlias gs "git status" -Bash -Force
+Set-ProfileAlias grep "Select-String #{*}" -Force
+Set-ProfileAlias l "lsd -l" -Bash -Force
+Set-ProfileAlias dml "doormat login -f" -Bash -Force
+Set-ProfileAlias dmc "doormat aws console --account $( $Env:HASHI_AWS_ACCOUNT_ID )" -Bash -Force
+Set-ProfileAlias dmv "doormat login --validate" -Bash -Force
+Set-ProfileAlias dmcf "doormat aws cred-file add-profile --set-default --account $( $Env:HASHI_AWS_ACCOUNT_ID )" -Bash -Force
+
 #
 # Prompt
 #
@@ -35,8 +48,8 @@ if ($host.Name -eq 'ConsoleHost')
   Invoke-Expression (& {
       $hook = if ($PSVersionTable.PSVersion.Major -lt 6) { 'prompt' } else { 'pwd' }
       (zoxide init --hook $hook powershell | Out-String)
-  })
 #
+  })
 # PSReadLine
 #
   Set-PSReadlineOption -EditMode vi
@@ -107,4 +120,8 @@ function which {
 }
 
 # Fix Prompt
-Clear-Host
+#Clear-Host
+
+Import-Module -Name HackF5.ProfileAlias -Force -Global -ErrorAction SilentlyContinue
+# region profile alias initialize
+# end region
