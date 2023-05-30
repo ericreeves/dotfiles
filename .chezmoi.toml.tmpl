@@ -2,3 +2,7 @@ sourceDir = "{{ .chezmoi.homeDir }}/.dotfiles"
 [git]
     autoPush = true
     autoCommit = true
+
+[interpreters.ps1]
+    command = "pwsh"
+    args = ["-NoLogo"]
