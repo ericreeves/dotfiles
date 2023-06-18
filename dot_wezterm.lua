@@ -29,8 +29,10 @@ end
 -- end)
 
 return {
+	-- color_scheme = "Catppuccin Mocha", -- or Macchiato, Frappe, Latte
+	color_scheme = "Catppuccin Mocha", -- or Macchiato, Frappe, Latte
 	-- color_scheme = "BlulocoDark",
-	color_scheme = "Hardcore",
+	-- color_scheme = "Hardcore",
 	-- color_scheme = "Ayu Mirage",
 	-- color_scheme = "Builtin Tango Dark",
 	--  color_scheme = 'Tangoesque (terminal.sexy)',
@@ -87,12 +89,25 @@ return {
 	window_decorations = "RESIZE",
 
 	-- front_end = "Software",
+	-- font = wezterm.font("JetBrainsMono NF"),
 	front_end = "WebGpu",
+	font = wezterm.font("JetBrainsMonoNL Nerd Font Propo"),
 	-- font = wezterm.font("VictorMono NF"),
-	font = wezterm.font("JetBrainsMono NF"),
 	-- font = wezterm.font("FiraCode NF"),
 	-- font = wezterm.font("CaskaydiaCove NF"),
+	-- font = wezterm.font("JetBrains Mono"),
 	-- font = wezterm.font("SauceCodePro NF"),
+	-- font = wezterm.font_with_fallback({
+	-- {
+	-- 	family = "JetBrainsMonoNL Nerd Font Propo",
+	-- 	weight = "Regular",
+	-- },
+	-- {
+	-- 	-- Fallback font with all the Netd Font Symbols
+	-- 	family = "Symbols NFM",
+	-- 	scale = 0.9,
+	-- },
+	-- }),
 	font_size = 11,
 	freetype_load_target = "Light",
 	freetype_render_target = "HorizontalLcd",
@@ -106,7 +121,8 @@ return {
 	adjust_window_size_when_changing_font_size = false,
 	hide_tab_bar_if_only_one_tab = true,
 	use_fancy_tab_bar = false,
-	window_background_opacity = 0.97,
+	window_background_opacity = 0.9,
+	text_background_opacity = 0.9,
 	default_prog = { "C:/Program Files/PowerShell/7/pwsh.exe", "-NoLogo" },
 	alternate_buffer_wheel_scroll_speed = 1,
 	window_padding = {
