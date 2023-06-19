@@ -20,6 +20,15 @@
             "keys": "ctrl+shift+f"
         },
         {
+            "command": 
+            {
+                "action": "splitPane",
+                "split": "auto",
+                "splitMode": "duplicate"
+            },
+            "keys": "alt+shift+d"
+        },
+        {
             "command": "unbound",
             "keys": "ctrl+insert"
         },
@@ -34,15 +43,6 @@
         {
             "command": "unbound",
             "keys": "ctrl+v"
-        },
-        {
-            "command": 
-            {
-                "action": "splitPane",
-                "split": "auto",
-                "splitMode": "duplicate"
-            },
-            "keys": "alt+shift+d"
         }
     ],
     "alwaysShowTabs": false,
@@ -66,7 +66,7 @@
             "experimental.retroTerminalEffect": false,
             "font": 
             {
-                "face": "JetBrainsMonoNL Nerd Font Propo"
+                "face": "JetBrainsMonoNL Nerd Font"
             },
             "opacity": 90,
             "scrollbarState": "hidden",
@@ -100,6 +100,12 @@
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "hidden": false,
                 "name": "Command Prompt"
+            },
+            {
+                "guid": "{17bf3de4-5353-5709-bcf9-835bd952a95e}",
+                "hidden": true,
+                "name": "Ubuntu-22.04",
+                "source": "Windows.Terminal.Wsl"
             }
         ]
     },
