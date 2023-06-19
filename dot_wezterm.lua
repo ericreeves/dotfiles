@@ -85,6 +85,7 @@ return {
 	initial_cols = 100,
 	initial_rows = 30,
 
+	enable_tab_bar = false,
 	tab_bar_at_bottom = true,
 	window_decorations = "RESIZE",
 
@@ -142,6 +143,7 @@ return {
 		{ key = "Tab", mods = "CTRL|SHIFT", action = act({ ActivateTabRelative = -1 }) },
 		{ key = "c", mods = "ALT", action = act({ CopyTo = "Clipboard" }) },
 		{ key = "v", mods = "ALT", action = act({ PasteFrom = "Clipboard" }) },
+		{ key = "v", mods = "CTRL", action = act({ PasteFrom = "Clipboard" }) },
 		{ key = "1", mods = "CTRL", action = act({ ActivateTab = 0 }) },
 		{ key = "2", mods = "CTRL", action = act({ ActivateTab = 1 }) },
 		{ key = "3", mods = "CTRL", action = act({ ActivateTab = 2 }) },
