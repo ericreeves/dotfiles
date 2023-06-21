@@ -193,7 +193,7 @@ return {
 	-- front_end = "Software",
 	-- font = wezterm.font("JetBrainsMono NF"),
 	front_end = "WebGpu",
-	font = wezterm.font("JetBrainsMonoNL Nerd Font Propo"),
+	font = wezterm.font("JetBrains Mono"),
 	-- font = wezterm.font("VictorMono NF"),
 	-- font = wezterm.font("FiraCode NF"),
 	-- font = wezterm.font("CaskaydiaCove NF"),
