@@ -7,8 +7,8 @@ local act = term.action
 local gui = term.gui
 local mux = term.mux
 
-local windows = require("windows") -- file located at ~/.config/wezterm/windows.lua
-local linux = require("linux") -- file located at ~/.config/wezterm/linux.lua
+local windows = require("windows") -- file located at ~/.wezterm/windows.lua
+local linux = require("linux") -- file located at ~/.wezterm/linux.lua
 local terminal = require("terminal")
 local keymaps = require("keymaps")
 
@@ -142,26 +142,26 @@ term.on("update-right-status", function(window, pane)
 		[04] = "",
 		[05] = "",
 		[06] = "",
-		[07] = "",
-		[08] = "",
-		[09] = "",
-		[10] = "󰗲",
+		[07] = "󰗲",
+		[08] = "",
+		[09] = "",
+		[10] = "",
 		[11] = "",
-		[12] = "",
-		[13] = "",
+		[12] = "",
+		[13] = "",
 		[14] = "",
 		[15] = "",
-		[16] = "",
+		[16] = "",
 		[17] = "",
-		[18] = "",
-		[19] = "󰗲",
-		[20] = "",
+		[18] = "󰗲",
+		[19] = "",
+		[20] = "",
 		[21] = "",
 		[22] = "",
 		[23] = "",
 	}
 	local date = term.strftime("%H:%M:%S %a %b %d ")
-	local date_time = time[current_time] .. " " .. date
+	local date_time = time[current_time] .. "  " .. date
 	table.insert(cells, date_time)
 	local text_fg = terminal.colors.transparent
 	-- local SEPERATOR = " █"
