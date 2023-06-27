@@ -1,0 +1,4 @@
+[".slimzsh"]
+    type = "git-repo"
+    url = "https://github.com/changs/slimzsh.git"
+    refreshPeriod = "168h"
