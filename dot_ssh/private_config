@@ -13,3 +13,9 @@ Host conad-client-?
 Host pve?
   User root
   Hostname %h.vpn.alluvium.cloud
+
+Host github.com
+    User git
+    Hostname github.com
+    PreferredAuthentications publickey
+    IdentityFile ~/.ssh/id_ed25519_chezmoi
