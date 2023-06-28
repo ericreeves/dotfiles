@@ -13,6 +13,7 @@ function M.options(config)
 		act.ShowLauncherArgs({ title = "  Find Domains", flags = "FUZZY|LAUNCH_MENU_ITEMS|DOMAINS" })
 	local fuzzy_tabs = act.ShowLauncherArgs({ title = " Tabs", flags = "FUZZY|WORKSPACES|TABS" })
 	config.keys = {
+    -- { key = ",", mods = "LEADER", action = act({PromptInputLine { description = 'Enter new name for tab', action = term.action_callback(function(window, pane, line) if line then window:active_tab():set_title(line) end end), }, }), },
 		{ key = "c", mods = "CTRL|SHIFT", action = act({ CopyTo = "ClipboardAndPrimarySelection" }) },
 		{ key = "v", mods = "CTRL|SHIFT", action = act({ PasteFrom = "Clipboard" }) },
 		{ key = "F11", action = act.ToggleFullScreen },
