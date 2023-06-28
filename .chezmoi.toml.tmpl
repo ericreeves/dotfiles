@@ -3,6 +3,9 @@ sourceDir = "{{ .chezmoi.homeDir }}/.dotfiles"
     autoPush = true
     autoCommit = true
 
-[interpreters.ps1]
-    command = "pwsh"
-    args = ["-NoLogo"]
+encryption = "age"
+
+[age]
+    identity = "/home/eric/.ssh/id_rsa_chezmoi"
+    symmetric = true
+
