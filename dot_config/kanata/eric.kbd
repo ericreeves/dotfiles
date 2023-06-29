@@ -24,11 +24,6 @@
   lctl lmet lalt           spc            ralt rmet rctl
 )
 
-;; The first layer defined is the layer that will be active by default when
-;; kanata starts up. This layer is the standard QWERTY layout except for the
-;; backtick/grave key (@grl) which is an alias for a tap-hold key.
-;;
-;; There are currently a maximum of 25 layers allowed.
 (deflayer qwerty
   esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
@@ -36,6 +31,15 @@
   @esc a    s    d    f    g    h    j    k    l    ;    '    ret
   lsft z    x    c    v    b    n    m    ,    .    /    @rsr
   lctl lmet lalt           spc            ralt rmet rctl
+)
+
+(deflayer movement
+  _    _    _    _    _    _    _    _    _    _    _   
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    end  pgdn pgup home _    _    _    _
+  _    _    _    _    _    _    left down up   rght _    _    _
+  _    _    _    _    _    _    mbck mfwd _    _    _    _
+  _    _    _              _              _    _    _
 )
 
 (deflayer template
@@ -47,13 +51,7 @@
   _    _    _              _              _    _    _
 )
 
-;; defalias is used to declare a shortcut for a more complicated action to keep
-;; the deflayer declarations clean and aligned. The alignment in deflayers is not
-;; necessary, but is strongly recommended for ease of understanding visually.
-;;
-;; Aliases are referred to by `@<alias_name>`.
 (defalias
-
   ;; double tab esc to live reload configuration
   rsr  (tap-dance 200 (rsft lrld))
 
@@ -61,14 +59,5 @@
   esc (tap-hold-press 200 200 esc lctl)
 
   tab (tap-hold-press 200 200 tab (layer-while-held movement))
-)
-
-(deflayer movement
-  _    _    _    _    _    _    _    _    _    _    _   
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    end  pgdn pgup home _    _    _    _
-  _    _    _    _    _    _    left down up   rght _    _    _
-  _    _    _    _    _    _    mbck mfwd _    _    _    _
-  _    _    _              _              _    _    _
 )
 
