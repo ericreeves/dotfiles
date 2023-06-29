@@ -33,7 +33,7 @@ M.colors = {
 	surface0 = "#313244",
 	base = "#1e1e2e",
 	mantle = "#181825",
-	crust = "rgba(36,40,59,0.618)",
+	crust = "rgba(36,40,59,0.8)",
 	transparent = "rgba(0,0,0,0)",
 	tab_active = "#7aa2f7",
 	tab_inactive = "#1f2335",
@@ -59,8 +59,8 @@ function M.options(config)
 	})
 	config.font_size = 11
 	config.window_decorations = "RESIZE"
-	-- config.text_background_opacity = 0.7
-	-- config.window_background_opacity = 0.618
+	-- config.text_background_opacity = 1.5
+	-- config.window_background_opacity = 1.5
 	config.window_frame = {
 		border_left_width = "10px",
 		border_right_width = "10px",
