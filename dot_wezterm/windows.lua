@@ -6,17 +6,17 @@ function M.options(config)
 	local wsl_domains = term.default_wsl_domains()
 	local ssh_domains = term.default_ssh_domains() -- Load SSH Domains from ~/.ssh/config
 
-	local extra_ssh = {
-		{
-			name = "cube",
-			remote_address = "192.168.1.4",
-			username = "eric",
-		},
-	}
+	-- local extra_ssh = {
+	-- 	{
+	-- 		name = "cube",
+	-- 		remote_address = "192.168.1.4",
+	-- 		username = "eric",
+	-- 	},
+	-- }
 
-	for _, domain in ipairs(extra_ssh) do
-		table.insert(ssh_domains, domain)
-	end
+	-- for _, domain in ipairs(extra_ssh) do
+	-- 	table.insert(ssh_domains, domain)
+	-- end
 
 	config.ssh_domains = ssh_domains
 

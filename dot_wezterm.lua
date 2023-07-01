@@ -25,19 +25,19 @@ if term.target_triple == "x86_64-unknown-linux-gnu" then
 end
 
 --Startup settings
-term.on("gui-startup", function(cmd)
-	local tab, pane, window = term.mux.spawn_window(cmd or {})
-	-- window:gui_window():set_inner_size(1440, 900)
-	-- window:gui_window():set_position("main:50%:50%")
-	-- window:maximize()
-	-- pane:split({ direction = "Bottom", size = 0.25 })
-end)
+-- term.on("gui-startup", function(cmd)
+-- 	local tab, pane, window = term.mux.spawn_window(cmd or {})
+-- 	-- window:gui_window():set_inner_size(1440, 900)
+-- 	-- window:gui_window():set_position("main:50%:50%")
+-- 	-- window:maximize()
+-- 	-- pane:split({ direction = "Bottom", size = 0.25 })
+-- end)
 
-term.on("mux-startup", function()
-	local tab, pane, window = mux.spawn_window({})
-	-- window:gui_window():set_position(980, 59)
-	-- pane:split({ direction = "Bottom", size = 0.25 })
-end)
+-- term.on("mux-startup", function()
+-- 	local tab, pane, window = mux.spawn_window({})
+-- 	-- window:gui_window():set_position(980, 59)
+-- 	-- pane:split({ direction = "Bottom", size = 0.25 })
+-- end)
 
 terminal.options(config)
 keymaps.options(config)

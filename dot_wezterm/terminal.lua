@@ -44,8 +44,8 @@ function M.options(config)
 	config.status_update_interval = 1000
 	config.color_scheme = "catppuccin-mocha"
 
-	config.animation_fps = 240
-	config.max_fps = 240
+	config.animation_fps = 60
+	config.max_fps = 60
 
 	config.initial_cols = 115
 	config.initial_rows = 28
