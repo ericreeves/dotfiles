@@ -15,7 +15,7 @@ disable = ["wsl", "wsl_update"]
 #no_retry = true
 
 # Sudo command to be used
-sudo_command = "sudo"
+# sudo_command = "sudo"
 
 # Run `sudo -v` to cache credentials at the start of the run; this avoids a
 # blocking password prompt in the middle of a possibly-unattended run.
