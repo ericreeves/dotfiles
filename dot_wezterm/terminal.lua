@@ -108,6 +108,7 @@ function M.options(config)
 	config.show_new_tab_button_in_tab_bar = false
 	config.allow_win32_input_mode = true
 	config.disable_default_key_bindings = true
+	config.quit_when_all_windows_are_closed = false
 end
 
 return M
