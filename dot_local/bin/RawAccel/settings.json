@@ -1,0 +1,188 @@
+{
+  "### Accel modes ###": "classic | jump | natural | motivity | power | lut | noaccel",
+  "### Cap modes ###": "in_out | input | output",
+  "version": "1.6.1",
+  "defaultDeviceConfig": {
+    "disable": false,
+    "DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)": 0,
+    "Polling rate Hz (keep at 0 for automatic adjustment)": 0
+  },
+  "profiles": [
+    {
+      "name": "default",
+      "Whole/combined accel (set false for 'by component' mode)": true,
+      "lpNorm": 2.0,
+      "Stretches domain for horizontal vs vertical inputs": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "Stretches accel range for horizontal vs vertical inputs": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "Whole or horizontal accel parameters": {
+        "mode": "classic",
+        "Gain / Velocity": true,
+        "inputOffset": 1.3,
+        "outputOffset": 0.0,
+        "acceleration": 0.5,
+        "decayRate": 0.1,
+        "growthRate": 1.0,
+        "motivity": 1.5,
+        "exponentClassic": 2.0,
+        "scale": 1.0,
+        "exponentPower": 0.05,
+        "limit": 1.5,
+        "midpoint": 5.0,
+        "smooth": 0.5,
+        "Cap / Jump": {
+          "x": 15.0,
+          "y": 4.0
+        },
+        "Cap mode": "output",
+        "data": []
+      },
+      "Vertical accel parameters": {
+        "mode": "noaccel",
+        "Gain / Velocity": true,
+        "inputOffset": 0.0,
+        "outputOffset": 0.0,
+        "acceleration": 0.005,
+        "decayRate": 0.1,
+        "growthRate": 1.0,
+        "motivity": 1.5,
+        "exponentClassic": 2.0,
+        "scale": 1.0,
+        "exponentPower": 0.05,
+        "limit": 1.5,
+        "midpoint": 5.0,
+        "smooth": 0.5,
+        "Cap / Jump": {
+          "x": 15.0,
+          "y": 1.5
+        },
+        "Cap mode": "output",
+        "data": []
+      },
+      "Sensitivity multiplier": 1.3,
+      "Y/X sensitivity ratio (vertical sens multiplier)": 1.0,
+      "L/R sensitivity ratio (left sens multiplier)": 1.0,
+      "U/D sensitivity ratio (up sens multiplier)": 1.0,
+      "Degrees of rotation": 0.0,
+      "Degrees of angle snapping": 0.0,
+      "Input Speed Cap": 0.0
+    }
+  ],
+  "devices": [
+    {
+      "name": "Nordic 2.4G Wireless Receiver",
+      "profile": "default",
+      "id": "HID\\VID_260D&PID_1001&MI_01&Col01",
+      "config": {
+        "disable": false,
+        "DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)": 0,
+        "Polling rate Hz (keep at 0 for automatic adjustment)": 0
+      }
+    },
+    {
+      "name": "- Trackball Interface",
+      "profile": "default",
+      "id": "HID\\VID_0782&PID_001B&MI_00",
+      "config": {
+        "disable": false,
+        "DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)": 0,
+        "Polling rate Hz (keep at 0 for automatic adjustment)": 0
+      }
+    },
+    {
+      "name": "Apple Inc. Apple Wireless Trackpad",
+      "profile": "default",
+      "id": "HID\\{00001124-0000-1000-8000-00805f9b34fb}_VID&000205ac_PID&030e",
+      "config": {
+        "disable": false,
+        "DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)": 400,
+        "Polling rate Hz (keep at 0 for automatic adjustment)": 90
+      }
+    },
+    {
+      "name": "Logitech USB Receiver",
+      "profile": "default",
+      "id": "HID\\VID_046D&PID_C548&MI_01&Col01",
+      "config": {
+        "disable": false,
+        "DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)": 0,
+        "Polling rate Hz (keep at 0 for automatic adjustment)": 0
+      }
+    },
+    {
+      "name": "Telink Wireless Gaming Mouse",
+      "profile": "default",
+      "id": "HID\\VID_320F&PID_221D&MI_00",
+      "config": {
+        "disable": false,
+        "DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)": 0,
+        "Polling rate Hz (keep at 0 for automatic adjustment)": 0
+      }
+    },
+    {
+      "name": "Razer Basilisk Ultimate Dongle",
+      "profile": "default",
+      "id": "HID\\VID_1532&PID_0088&MI_00",
+      "config": {
+        "disable": false,
+        "DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)": 0,
+        "Polling rate Hz (keep at 0 for automatic adjustment)": 0
+      }
+    },
+    {
+      "name": "Compx 2.4G Receiver",
+      "profile": "default",
+      "id": "HID\\VID_25A7&PID_FA61&MI_01&Col01",
+      "config": {
+        "disable": false,
+        "DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)": 0,
+        "Polling rate Hz (keep at 0 for automatic adjustment)": 0
+      }
+    },
+    {
+      "name": "Logitech USB Receiver",
+      "profile": "default",
+      "id": "HID\\VID_046D&PID_C53E&MI_01&Col01",
+      "config": {
+        "disable": false,
+        "DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)": 0,
+        "Polling rate Hz (keep at 0 for automatic adjustment)": 0
+      }
+    },
+    {
+      "name": "",
+      "profile": "default",
+      "id": "HID\\{00001812-0000-1000-8000-00805f9b34fb}_Dev_VID&021915_PID&0040_REV&0001_dbef61e25fa5&Col01",
+      "config": {
+        "disable": false,
+        "DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)": 0,
+        "Polling rate Hz (keep at 0 for automatic adjustment)": 0
+      }
+    },
+    {
+      "name": "",
+      "profile": "default",
+      "id": "HID\\{00001812-0000-1000-8000-00805f9b34fb}_Dev_VID&021915_PID&0040_REV&0001_dbef61e25fa7&Col01",
+      "config": {
+        "disable": false,
+        "DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)": 0,
+        "Polling rate Hz (keep at 0 for automatic adjustment)": 0
+      }
+    },
+    {
+      "name": "Apple Inc. Trackpad / Boot",
+      "profile": "default",
+      "id": "HID\\VID_05AC&PID_0265&MI_01&Col01",
+      "config": {
+        "disable": true,
+        "DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)": 0,
+        "Polling rate Hz (keep at 0 for automatic adjustment)": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+InteropException: Raw Accel is not installed, run installer.exe
+   at VersionHelper.ValidOrThrow()
+   at grapher.RawAcceleration..ctor()
+   at grapher.Program.Main()
