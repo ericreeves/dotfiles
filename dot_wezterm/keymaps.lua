@@ -16,6 +16,8 @@ function M.options(config)
 		-- { key = ",", mods = "LEADER", action = act({PromptInputLine { description = 'Enter new name for tab', action = term.action_callback(function(window, pane, line) if line then window:active_tab():set_title(line) end end), }, }), },
 		{ key = "c", mods = "CTRL|SHIFT", action = act({ CopyTo = "ClipboardAndPrimarySelection" }) },
 		{ key = "v", mods = "CTRL|SHIFT", action = act({ PasteFrom = "Clipboard" }) },
+		{ key = "c", mods = "ALT", action = act({ CopyTo = "ClipboardAndPrimarySelection" }) },
+		{ key = "v", mods = "ALT", action = act({ PasteFrom = "Clipboard" }) },
 		{ key = "F11", action = act.ToggleFullScreen },
 		{ key = "F12", action = fuzzy_commands },
 		{ key = "F9", action = fuzzy_tabs },
