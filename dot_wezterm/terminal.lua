@@ -51,6 +51,7 @@ function M.options(config)
 	config.initial_rows = 28
 	config.font = term.font({
 		family = "JetBrains Mono",
+		-- family = "IosevkaTerm NF",
 		weight = "Regular",
 		stretch = "Normal",
 		style = "Normal",
@@ -109,6 +110,7 @@ function M.options(config)
 	config.allow_win32_input_mode = true
 	config.disable_default_key_bindings = true
 	config.quit_when_all_windows_are_closed = false
+	config.selection_word_boundary = "{}[]()\"'`.,;:="
 end
 
 return M
