@@ -1,0 +1,280 @@
+# Config Values 
+############################################################
+############################################################
+
+# Rust / Cargo
+if [ -f $HOME/.cargo/env ]; then
+     source $HOME/.cargo/env
+fi
+
+# FFF Configuration
+ff() {
+    fff "$@"
+    cd "$(cat "${XDG_CACHE_HOME:=${HOME}/.cache}/fff/.fff_d")"
+}
+
+# fasd Configuration
+if [ -x "$(command -v fasd)" ]; then
+    eval "$(fasd --init auto)"
+fi
+
+# Old Docker Build Output
+export DOCKER_BUILDKIT=0
+#[ -d /mnt/wsl ] && export DOCKER_HOST="unix:///mnt/wsl/shared-docker/docker.sock"
+
+# Launch Keychain if it's installed
+if [ -x "$(command -v keychain)" ]; then
+    eval $(keychain --eval --quiet id_rsa)
+fi
+
+#
+# AWS Vault Config
+# Vault Backend
+if pgrep kwallet >/dev/null; then
+    export AWS_VAULT_BACKEND=kwallet
+fi
+if [ -n $(grep -i microsoft /proc/sys/kernel/osrelease) ]; then 
+    export AWS_VAULT_BACKEND=file
+fi
+# Auto-completion for aws-vault
+if [ -x "$(command -v aws-vault)" ]; then
+    eval "$(aws-vault --completion-script-zsh)"
+fi
+# Alias
+alias ave='aws-vault exec'
+
+# Set Editor Variable
+# First try vim/vi so we can setup the vim alias
+if [ -x "$(command -v lvim)" ]; then
+	export EDITOR="lvim"
+	alias vim=lvim
+	alias vi=lvim
+	alias v=lvim
+elif [ -x "$(command -v nvim)" ]; then
+	export EDITOR="nvim"
+    alias vim=nvim
+	alias vi=nvim
+	alias v=nvim
+elif [ -x "$(command -v vim)" ]; then 
+	export EDITOR="vim"
+	alias vi=vim
+	alias v=vim
+elif [ -x "$(command -v vi)" ]; then
+	export EDITOR="vi"
+	alias v=vi
+fi
+
+############################################################
+# Paths
+############################################################
+# Define XDG Paths
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_STATE_HOME="$HOME/.local/state"
+export XDG_CACHE_HOME="$HOME/.cache"
+
+# Tmux Plugin Manager
+export TMUX_PLUGIN_MANAGER_PATH="$HOME/.config/tmux/plugins"
+
+# Executable Paths
+# Any Paths Here That Exist Will Be Added To $PATH
+for P in \
+    /usr/local/bin \
+    /usr/local/sbin \
+	/home/linuxbrew/.linuxbrew/bin \
+	/home/linuxbrew/.linuxbrew/sbin \
+	$HOME/Library/Python/3.9/bin \
+	$HOME/.config/rofi/bin \
+	$HOME/AppImages \
+	$HOME/.local/bin \
+	$HOME/bin \
+	$HOME/.dotnet \
+	$HOME/.dotnet/tools \
+	; do
+		if [ -d "$P" ]; then
+			export PATH=$P:$PATH
+		fi
+done
+
+
+
+############################################################
+# DotNet
+############################################################
+export DOTNET_ROOT=$HOME/.dotnet
+
+############################################################
+# HomeBrew
+############################################################
+if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    alias brewup='brew update && brew upgrade && brew upgrade --cask && brew cleanup; brew doctor; brew cleanup --prune 30'
+fi
+
+
+############################################################
+# Chezmoi
+############################################################
+alias cm=chezmoi
+alias cmdiff="chezmoi git pull -- --rebase && chezmoi diff"
+alias cmu="chezmoi update"
+alias cma="chezmoi add"
+alias cmf="chezmoi forget"
+alias cmc="chezmoi cd"
+
+############################################################
+# Terminal
+############################################################
+#if [[ -z "${SSH_CONNECTION}" ]]; then
+#	export TERM=screen-256color
+#fi
+export TERM=xterm-256color
+bindkey -v
+
+
+############################################################
+# Aliases
+############################################################
+alias l='ls -l'
+
+############################################################
+# Git Aliases
+############################################################
+# alias gs='git status'
+# alias ga='git add'
+# alias gb='git branch'
+# alias gc='git commit'
+# alias gco='git checkout'
+# alias gl='git log'
+# alias gd='git diff'
+# alias gp='git push'
+# alias gg='git grep'
+# alias gf='git fetch'
+# alias gfa='git fetch --all'
+# alias g='grep'
+
+
+############################################################
+# AWS/Kubernetes
+############################################################
+alias kt='ktail'
+alias kc='kubectl'
+alias kns='kubens'
+alias kct='kubectx'
+alias kl='kubectl logs'
+alias kgp='kubectl get pod'
+alias kga='kubectl get all'
+alias kcx='kubectx'
+alias kns='kubens'
+alias awl='awless'
+
+#export BROWSER="powershell.exe /C start"
+
+
+############################################################
+# System Tools (brew, etc)
+############################################################
+
+
+############################################################
+# Python
+############################################################
+# Virtualenvwrapper things
+# export WORKON_HOME=$HOME/.virtualenvs
+# export PROJECT_HOME=$HOME/Development
+# export VIRTUALENVWRAPPER_SCRIPT=/usr/bin/virtualenvwrapper.sh
+# source /usr/local/bin/virtualenvwrapper_lazy.sh
+
+
+############################################################
+# 1Password
+############################################################
+alias opl='eval $(op signin my)'
+alias mfokta="op get totp 'Okta - Hashi' | pbcopy"
+alias pwokta="op get item --fields 'Password' 'Okta - Hashi' | pbcopy"
+alias mfaws="op get totp 'AWS - Alluvium - eric IAM User' | pbcopy"
+
+
+############################################################
+# Nonsense
+############################################################
+#alias excuse='curl -s http://pages.cs.wisc.edu/~ballard/bofh/bofhserver.pl | awk -F '\''>'\'' '\''/is:/ { print $10 }'\'''
+alias excuse=bofhexcuse
+bofhexcuse() {
+  curl -s http://pages.cs.wisc.edu//\~ballard/bofh/bofhserver.pl | awk -F'>' '/is:/ { print $10 }'
+}
+alias fallacy=fallacygenerator
+fallacygenerator() {
+  echo -n $(shuf -n 1 ~/Dropbox/fallacies.txt) 'Fallacy' | awk '{print toupper(substr($0,0,1))tolower(substr($0,2))}' | sed -i 's/\r$//g' | pbcopy
+}
+# Bash insulter, lolol
+if [ -f $HOME/.local/etc/bash.command-not-found ]; then
+    . $HOME/.local/etc/bash.command-not-found
+fi
+# use Windows' git when working under C:\ drive
+function git() {
+  if $(pwd -P | grep -q "^\/mnt\/c\/*"); then
+    git.exe "$@"
+  else
+    command git "$@"
+  fi
+} 
+
+############################################################
+# Node.JS
+############################################################
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export PNPM_HOME="/home/eric/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+
+
+############################################################
+# HashiCorp
+############################################################
+alias tf='terraform'
+alias tfp='terraform plan'
+alias tfa='terraform apply'
+alias tfaa='terraform apply -auto-approve'
+alias tfd='terraform destroy'
+alias tfdd='terraform destroy -auto-approve'
+alias hstat="echo '--- Vault ---'; vault operator members; echo; echo '--- Consul ---'; consul members; echo; echo '--- Nomad ---'; nomad server members"
+# Authenticate to doormat
+alias dmlog='doormat login --force'
+
+# Fetch AWS credentials and store them in ~/.aws/credentials as the default profile
+alias dmcred="doormat aws cred-file add-profile --set-default --account ${HASHI_AWS_ACCOUNT_ID}"
+
+# Open the AWS console in your default internet browser
+alias dmcon="doormat aws console --account ${HASHI_AWS_ACCOUNT_ID}"
+
+# Check if credentials are still valid
+alias dmval='doormat login --validate'
+
+# Connect to an AWS instance via session manager
+alias dmsess="doormat session --account ${HASHI_AWS_ACCOUNT_ID} --region $AWS_REGION"
+
+# Push AWS credentials to TFC
+#alias dmtfc="doormat aws --account ${HASHI_AWS_ACCOUNT_ID} tf-push --workspace <workspace_name> --organization ${TFE_ORGANIZATION}"
+
+
+############################################################
+# Stuff!
+############################################################
+eval "$(direnv hook zsh)"
+eval "$(zoxide init zsh)"
+
+
+############################################################
+# PDSH
+############################################################
+export PDSH_RCMD_TYPE=ssh
+export PDSH_SSH_ARGS_APPEND="-i $HOME/.ssh/proxmox -l debian -o StrictHostKeyChecking=accept-new"
+
+############################################################
+# ColorScript
+############################################################
+## $HOME/.local/bin/colors-banner
+
