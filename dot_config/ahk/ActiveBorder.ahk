@@ -6,42 +6,39 @@
 ; https://discord.com/channels/898554690126630914/898556726108901386/1053662963585781760  # Komorebi Discord
 ;
 
-#NoEnv
-#SingleInstance, Force
-#Persistent
-SendMode, Input
-SetBatchLines, -1
-SetWorkingDir, %A_ScriptDir%
+#Requires AutoHotkey v2.0
+#SingleInstance Force
 
-Gui +LastFound
+myGui := Gui()
+myGui.Opt("+LastFound")
 hWnd := WinExist()
-DllCall("RegisterShellHookWindow", UInt,hWnd)
-MsgNum := DllCall("RegisterWindowMessage", Str,"SHELLHOOK")
-OnMessage(MsgNum, "ShellMessage")
-Return
+DllCall("RegisterShellHookWindow", "UInt", hWnd)
+MsgNum := DllCall("RegisterWindowMessage", "Str", "SHELLHOOK")
+OnMessage(MsgNum, ShellMessage)
+Persistent
 
-ShellMessage(wParam,lParam) {
-    Local k
+ShellMessage(wParam,lParam, msg, hwnd) {
     if (wParam = 32772){
-        SetTimer, DrawActive, -1
+        SetTimer(DrawActive,-1)
     }
 }
 
-DrawActive:
+DrawActive()
+{
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ; Border Color Configuration
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     border_color := "0xd0c2ff"
     ; Start by removing the borders from all windows, since we do not know which window was previously active
-    WinGet, WindowHandles, List
-    loop % WindowHandles
+    windowHandles := WinGetList(,,,)
+    For handle in windowHandles
     {
-        DrawBorder(WindowHandles%A_Index%, , 0)
+        DrawBorder(handle, , 0)
     }
     ; Draw the border around the active window
     hwnd := WinExist("A")
     DrawBorder(hwnd, border_color, 1)
-Return
+}
 
 DrawBorder(hwnd, color:=0xFF0000, enable:=1) {
     static DWMWA_BORDER_COLOR := 34
