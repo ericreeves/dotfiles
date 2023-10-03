@@ -108,8 +108,8 @@ CreateDesktop() {
 
 ; SetDesktopName(0, "It works! 🐱")
 ; How to listen to desktop changes
-DllCall(RegisterPostMessageHookProc, "Ptr", A_ScriptHwnd, "Int", 0x1400 + 30, "Int")
-OnMessage(0x1400 + 30, OnChangeDesktop)
+; DllCall(RegisterPostMessageHookProc, "Ptr", A_ScriptHwnd, "Int", 0x1400 + 30, "Int")
+; OnMessage(0x1400 + 30, OnChangeDesktop)
 
 OnChangeDesktop(wParam, lParam, msg, hwnd) {
     Critical(100)
