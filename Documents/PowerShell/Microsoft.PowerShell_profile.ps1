@@ -125,3 +125,5 @@ function which {
 Import-Module -Name HackF5.ProfileAlias -Force -Global -ErrorAction SilentlyContinue
 # region profile alias initialize
 # end region
+#
+Import-Module gsudoModule
