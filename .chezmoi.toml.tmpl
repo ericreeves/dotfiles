@@ -3,9 +3,9 @@ sourceDir = "{{ .chezmoi.homeDir }}/.dotfiles"
     autoPush = true
     autoCommit = true
 
-encryption = "age"
+## encryption = "age"
 
-[age]
-    identity = "/home/eric/.ssh/id_rsa_chezmoi"
-    symmetric = true
+## [age]
+##     identity = "{{ .chezmoi.homeDir }}/.ssh/id_rsa_chezmoi"
+##     symmetric = true
 
