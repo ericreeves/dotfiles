@@ -10,7 +10,7 @@ SetWorkingDir(A_ScriptDir)
 
 
 ; Insert the ID's of the FancyZones Layouts to Cycle (as an array of strings)
-arr := ["0", "9", "8", "1", "2", "3", "4", "5", "6", "7"]
+arr := ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 idx := 0
 
 ; Cycle Forward through Layouts
