@@ -1,6 +1,11 @@
 ;
 ; FancyZones Layout Cycle (AHKv2)
 ; 
+; # Win (Windows logo key)
+; ! Alt
+; ^ Control
+; + Shift
+; & An ampersand may be used between any two keys or mouse buttons to combine them into a custom hotkey.; # Win (Windows logo key)
 
 #Requires AutoHotkey v2.0
 
@@ -14,7 +19,7 @@ arr := ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 idx := 0
 
 ; Cycle Forward through Layouts
-!x::
+!+x::
 {
   global idx += 1
   if ( idx > (arr.Length - 1))
@@ -24,7 +29,7 @@ idx := 0
 }
 
 ; Cycle Backward through Layouts
-!z::
+!+z::
 {
   global idx -= 1
   if (idx < 1)
