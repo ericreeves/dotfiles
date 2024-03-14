@@ -3,7 +3,7 @@
   "### Cap modes ###": "in_out | input | output",
   "version": "1.6.1",
   "defaultDeviceConfig": {
-    "disable": false,
+    "disable": true,
     "DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)": 0,
     "Polling rate Hz (keep at 0 for automatic adjustment)": 0
   },
@@ -23,7 +23,7 @@
       "Whole or horizontal accel parameters": {
         "mode": "classic",
         "Gain / Velocity": true,
-        "inputOffset": 3.5,
+        "inputOffset": 5.0,
         "outputOffset": 0.0,
         "acceleration": 0.8,
         "decayRate": 0.1,
@@ -180,6 +180,56 @@
       "id": "HID\\VID_05AC&PID_0265&MI_01&Col01",
       "config": {
         "disable": true,
+        "DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)": 0,
+        "Polling rate Hz (keep at 0 for automatic adjustment)": 0
+      }
+    },
+    {
+      "name": "",
+      "profile": "default",
+      "id": "HID\\HID&Col03",
+      "config": {
+        "disable": true,
+        "DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)": 0,
+        "Polling rate Hz (keep at 0 for automatic adjustment)": 0
+      }
+    },
+    {
+      "name": "HP, Inc HyperX Pulsefire Haste Wireless",
+      "profile": "default",
+      "id": "HID\\VID_03F0&PID_028E&MI_00",
+      "config": {
+        "disable": false,
+        "DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)": 0,
+        "Polling rate Hz (keep at 0 for automatic adjustment)": 0
+      }
+    },
+    {
+      "name": "COOLER MASTER Cooler Master Mice Dongle",
+      "profile": "default",
+      "id": "HID\\VID_2516&PID_01B7&MI_01",
+      "config": {
+        "disable": false,
+        "DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)": 0,
+        "Polling rate Hz (keep at 0 for automatic adjustment)": 0
+      }
+    },
+    {
+      "name": "COOLER MASTER MM712 Hybrid Mouse",
+      "profile": "default",
+      "id": "HID\\VID_2516&PID_0169&MI_01",
+      "config": {
+        "disable": false,
+        "DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)": 0,
+        "Polling rate Hz (keep at 0 for automatic adjustment)": 0
+      }
+    },
+    {
+      "name": "ROCCAT Kone Pro Air Dongle",
+      "profile": "default",
+      "id": "HID\\VID_1E7D&PID_2C8E&MI_00",
+      "config": {
+        "disable": false,
         "DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)": 0,
         "Polling rate Hz (keep at 0 for automatic adjustment)": 0
       }
