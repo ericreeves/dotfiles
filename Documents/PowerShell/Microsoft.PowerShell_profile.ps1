@@ -24,6 +24,13 @@ Set-ProfileAlias cm "chezmoi #{*}" -Bash -Force
 Set-ProfileAlias cmup "chezmoi update" -Bash -Force
 Set-ProfileAlias cmdiff "chezmoi git pull -- --rebase && chezmoi diff" -Bash -Force
 
+Set-ProfileAlias tf "terraform" -Bash -Force
+Set-ProfileAlias tfp "terraform plan" -Bash -Force
+Set-ProfileAlias tfa "terraform apply" -Bash -Force
+Set-ProfileAlias tfaa "terraform apply -auto-approve" -Bash -Force
+Set-ProfileAlias tfi "terraform init" -Bash -Force
+Set-ProfileAlias tfiu "terraform init -upgrade" -Bash -Force
+
 Set-ProfileAlias gs "git status" -Bash -Force
 Set-ProfileAlias grep "Select-String #{*}" -Force
 Set-ProfileAlias l "lsd -l" -Bash -Force
@@ -127,3 +134,11 @@ Import-Module -Name HackF5.ProfileAlias -Force -Global -ErrorAction SilentlyCont
 # end region
 #
 Import-Module gsudoModule
+
+# region profile alias initialize
+Import-Module -Name HackF5.ProfileAlias -Force -Global -ErrorAction SilentlyContinue
+# end region
+
+# region profile alias initialize
+Import-Module -Name HackF5.ProfileAlias -Force -Global -ErrorAction SilentlyContinue
+# end region
