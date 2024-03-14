@@ -1,6 +1,7 @@
 # Run the following commands in an Administrator powershell prompt. 
 # Be sure to specify the correct path to your desktop_switcher.ahk file. 
 
+Stop-ScheduledTask DesktopSwitcher 
 Unregister-ScheduledTask DesktopSwitcher -Confirm:$false
 $A = New-ScheduledTaskAction -Execute "$HOME\scoop\apps\nircmd\current\nircmd.exe" -Argument "execmd $HOME\scoop\shims\autohotkey.exe $HOME\.config\ahk\init.ahk"
 $T = New-ScheduledTaskTrigger -AtLogon
