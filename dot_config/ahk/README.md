@@ -1,10 +1,11 @@
 # Keyboard Configs For Windows
 
 Eric's Fork of [jeebak/keyboard-windows](https://github.com/jeebak/keyboard-windows).
+
 - Based around [komorebi](https://github.com/LGUG2Z/komorebi)
   - Configurations split up into multiple includes  
 
-# Original README
+## Original README
 
 An attempt to match my [personal mappings](https://pqrs.org/osx/karabiner/complex_modifications/#personal_jeebak) for [Karabiner-Elements](https://pqrs.org/osx/karabiner/) under macOS, for Windows.
 
