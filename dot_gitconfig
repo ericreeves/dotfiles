@@ -11,9 +11,9 @@
 [core]
 	autocrlf = input
       pager = delta
-{{ if eq .chezmoi.os "windows" }}
+
 	sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
-{{ end }}
+
 
 [interactive]
     diffFilter = delta --color-only
@@ -27,3 +27,5 @@
 
 [diff]
     colorMoved = default
+[credential "helperselector"]
+	selected = wincred
