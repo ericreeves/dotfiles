@@ -24,7 +24,7 @@ palette = "catppuccin_mocha"
 
 # Customizing the prompt (and placing desired modules at desired position and sequence):
 format = """
-[╭╴](fg:#505050)\
+[╭╴](fg:surface2)\
 $os\
 $sudo\
 $directory\
@@ -32,7 +32,7 @@ $terraform\
 $git_branch$git_commit$git_state$git_metrics$git_status\
 $jobs\
 $memory_usage\
-[ ](fg:#242424)\
+[ ](fg:white)\
 $cmd_duration\
 $fill\
 $username\
@@ -40,14 +40,14 @@ $username\
 $hostname\
 $time\
 $line_break\
-[╰╴](fg:#505050)\
+[╰╴](fg:surface2)\
 [$status\
 $localip\
 $character]($style)\
 """
 
 right_format = """
-[<──╯](fg:#505050)
+[<──╯](fg:surface2)
 """
 
 # Inserts a blank line between shell prompts:
@@ -57,7 +57,7 @@ add_newline = true
 # Listed in the order of their position in the module row above
 [os]
 format = "[$symbol ]($style)[ ]()"
-style = "fg:#AAAAAA"
+style = "fg:white"
 disabled = false
 
 [os.symbols]
@@ -121,50 +121,50 @@ symbol = ' ' # ' ❯ '
 disabled = false
 
 [directory]
-format = '[ ](fg:#A17FEF)[$read_only]($read_only_style)[$repo_root]($repo_root_style)[$path]($style)'
-style = 'fg:#A17FEF'
+format = '[ ](fg:mauve)[$read_only]($read_only_style)[$repo_root]($repo_root_style)[$path]($style)'
+style = 'fg:mauve'
 home_symbol = ' ~'
 read_only = ' ' # ' ' # ' ''
 read_only_style = 'fg:cyan'
 truncation_length = 3
 truncation_symbol = '…/'
 truncate_to_repo = false
-repo_root_format = '[ ](fg:#A17FEF)[$read_only]($read_only_style)[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[ ]()'
-repo_root_style	= 'fg:#A17FEF'
+repo_root_format = '[ ](fg:mauve)[$read_only]($read_only_style)[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[ ]()'
+repo_root_style	= 'fg:mauve'
 use_os_path_sep = true
 disabled = false
 
 [git_branch]
 format = '[ $symbol $branch(:$remote_branch)]($style)[ ]()'
-style = 'fg:#3C95F3'
+style = 'fg:blue'
 symbol = ''
 #ignore_branches = ['master', 'main']
 
 [git_commit]
 format = '[\($hash$tag\)]($style)[ ]()'
-style = 'fg:#3C95F3'
+style = 'fg:blue'
 commit_hash_length = 8
 tag_symbol = ' ' # ' ''
 disabled = false
 
 [git_metrics]
 format = '[\[+$added/]($added_style)[-$deleted\]]($deleted_style)[ ]()'
-added_style = 'fg:#3C95F3'
-deleted_style = 'fg:#3C95F3'
+added_style = 'fg:blue'
+deleted_style = 'fg:blue'
 disabled = false
 
 [git_status]
 # place symbols before '$count'
 format = '([$all_status$ahead_behind]($style))'
-style = 'fg:#3C95F3'
+style = 'fg:blue'
 conflicted = '[${count} ](fg:red)'
 ahead = '[⇡${count} ](fg:yellow)'
 behind = '[⇣${count} ](fg:yellow)'
 diverged = '[⇕${ahead_count}⇡${behind_count}⇣ ](fg:yellow)' # ⇕ ↕ ⇳ 󰹹 󰹺 󰧈 
 up_to_date = '[✓ ](fg:green)'
 untracked = '[ﳇ${count} ](fg:red)' # ' ' # '? '
-stashed = '[${count} ](fg:#A52A2A)' # '📦 '# ' ' # ' ' # ' ' # ' ' 
-modified = '[󰷉${count} ](fg:#C8AC00)' # '📝' # '! ' #  #  # 
+stashed = '[${count} ](fg:red)' # '📦 '# ' ' # ' ' # ' ' # ' ' 
+modified = '[󰷉${count} ](fg:yellow)' # '📝' # '! ' #  #  # 
 staged = '[${count} ](fg:green)' # '+ '
 renamed = '[${count} ](fg:yellow)' # ' ' # '﫦' # ᴂ #  #  #  # ﳳ
 deleted = '[﯊${count} ](fg:orange)' # '🗑 ' '- '
@@ -192,7 +192,7 @@ min_time = 500
 disabled = false
 
 [fill]
-style = 'fg:#505050'
+style = 'fg:surface2'
 symbol = '─'
 
 [status]
@@ -209,11 +209,11 @@ disabled = false
 [time]
 disabled = false
 style = "bold bright-black"
-format = "[ $time](fg:bright-blue)[ ───╮](fg:#505050)"
+format = "[ $time](fg:bright-blue)[ ───╮](fg:surface2)"
 
 [terraform]
 format = '[ $workspace@$version]($style) '
-style = "fg:#69429f"
+style = "fg:mauve"
 
 [palettes.catppuccin_mocha]
 rosewater = "#f5e0dc"
