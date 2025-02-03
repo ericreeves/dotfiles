@@ -25,10 +25,10 @@ ShellMessage(wParam,lParam, msg, hwnd) {
 
 DrawActive()
 {
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ; Border Color Configuration
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    border_color := "0xd0c2ff"
+    border_color := "0xcba6f7"
     ; Start by removing the borders from all windows, since we do not know which window was previously active
     windowHandles := WinGetList(,,,)
     For handle in windowHandles

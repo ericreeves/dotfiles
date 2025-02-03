@@ -6,8 +6,9 @@
 #Include %A_ScriptDir%\Browser.ah2
 #Include %A_ScriptDir%\AppLauncher.ah2
 
-#Include %A_ScriptDir%\VirtualDesktopAccessor.ah2
-; #Include %A_ScriptDir%\VD.ah
+; #Include %A_ScriptDir%\AppSwitcher\Code\App.ahk
+; #Include %A_ScriptDir%\VirtualDesktopAccessor.ah2
+#Include %A_ScriptDir%\VD.ah2 
 
 +^A::WinMove(1280,0,2560,1440,'A')
 +^D::Send("edd{Tab}{Tab}{Tab}{Tab}{Enter}")

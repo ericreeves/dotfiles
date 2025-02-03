@@ -1,0 +1,14 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+[remote "origin"]
+	url = https://github.com/FuPeiJiang/VD.ahk.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "v2_port"]
+	remote = origin
+	merge = refs/heads/v2_port
+	vscode-merge-base = origin/class_VD
