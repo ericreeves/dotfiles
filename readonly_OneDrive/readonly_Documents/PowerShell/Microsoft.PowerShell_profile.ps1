@@ -66,11 +66,19 @@ if ($host.Name -eq 'ConsoleHost')
 #
   Set-PSReadlineOption -EditMode vi
   Set-PSReadlineKeyHandler -Key Tab -Function Complete
-  #Set-PSReadlineOption -PredictionViewStyle InlineView
   Set-PSReadlineOption -PredictionViewStyle ListView
   Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
   Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
   Set-PSReadLineOption -PredictionSource History
+  # https://gist.github.com/wilsnat/b51d2211c94d39536d6e84b59cb659bf
+  Set-PSReadLineOption -HistoryNoDuplicates
+  Set-PSReadLineOption -HistorySearchCursorMovesToEnd
+  Set-PSReadLineOption -HistorySaveStyle SaveIncrementally
+  Set-PSReadLineOption -MaximumHistoryCount 2000
+  Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
+  Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
+  Set-PSReadLineKeyHandler -Chord 'Shift+Tab' -Function Complete
+  Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
 }
 
 # dir w/ fzf
