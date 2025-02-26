@@ -27,7 +27,6 @@ zcomet load romkatv/powerlevel10k
 #zcomet load bigH/git-fuzzy bin/git-fuzzy
 zcomet load paoloantinori/hhighlighter h.sh
 
-
 # history-search-multi-word
 zcomet load zdharma-continuum/history-search-multi-word
 

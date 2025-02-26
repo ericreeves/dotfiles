@@ -27,5 +27,6 @@
 
 [diff]
     colorMoved = default
+
 [credential "helperselector"]
 	selected = wincred

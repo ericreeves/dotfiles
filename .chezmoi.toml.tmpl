@@ -1,11 +1,4 @@
-sourceDir = "{{ .chezmoi.homeDir }}/.dotfiles"
+sourceDir = "{{ .chezmoi.homeDir }}/.local/share/chezmoi"
 [git]
     autoPush = true
     autoCommit = true
-
-## encryption = "age"
-
-## [age]
-##     identity = "{{ .chezmoi.homeDir }}/.ssh/id_rsa_chezmoi"
-##     symmetric = true
-
