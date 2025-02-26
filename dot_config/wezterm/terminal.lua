@@ -2,10 +2,6 @@ local wezterm = require("wezterm")
 
 local M = {}
 
--- custom.tab_bar.background = "#040404"
--- custom.tab_bar.inactive_tab.bg_color = "#0f0f0f"
--- custom.tab_bar.new_tab.bg_color = "#080808"
-
 function M.options(config)
 	config.status_update_interval = 1000
 
@@ -33,15 +29,10 @@ function M.options(config)
 	-- config.text_background_opacity = 1.5
 	-- config.window_background_opacity = 1.5
 	config.window_frame = {
-		border_left_width = "1px",
-		border_right_width = "1px",
-		border_bottom_height = "1px",
-		border_top_height = "1px",
-		-- border_left_color = M.colors.background,
-		-- border_right_color = M.colors.background,
-		-- border_bottom_color = M.colors.background,
-		-- border_top_color = M.colors.background,
-		-- font_size = 16,
+		border_left_width = "3px",
+		border_right_width = "3px",
+		border_bottom_height = "3px",
+		border_top_height = "3px",
 	}
 	config.enable_scroll_bar = false
 	config.default_cursor_style = "BlinkingBar"
@@ -51,7 +42,7 @@ function M.options(config)
 
 	----- Misc
 	-- config.warn_about_missing_glyphs = false
-	-- config.adjust_window_size_when_changing_font_size = false
+	config.adjust_window_size_when_changing_font_size = false
 	-- config.audible_bell = "Disabled"
 	-- config.exit_behavior = "Close"
 	-- config.window_close_confirmation = "NeverPrompt"
