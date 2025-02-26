@@ -1,0 +1,15 @@
+# pack-refs with: peeled fully-peeled sorted 
+11a2fb424e8e51f8113130219b1531d2f5d9f412 refs/remotes/origin/MoveWindowToRelativeDesktopNum()
+2a4ea0ee2706e47ec801b450c9a7a0a91b2118b1 refs/remotes/origin/class_VD
+b4bf4e3993a57e65c8e33ba060b19aeac23ee39c refs/remotes/origin/debug39
+ed16f89654bfa69a96b8f50fa33c773e8db04d2e refs/remotes/origin/for_diff
+6fc1b2b7ff9ab53c8530c0d9a2e01a6617c064f4 refs/remotes/origin/global_functions
+cf5d659ce5a8ab50da3d78d4f922d013e9a8fe32 refs/remotes/origin/how_to_know_if_all_desktops
+6d2c10b62a2956a8ead8d52a5a60d6843f78e004 refs/remotes/origin/manually-init
+6fc1b2b7ff9ab53c8530c0d9a2e01a6617c064f4 refs/remotes/origin/master
+be394a4a2e345eaa7eefcb64b275845fbb06cf6d refs/remotes/origin/run_in_VD
+7540f8fa5db2babe2e3b3fe991ed2c7e99027f0b refs/remotes/origin/save2
+db0c8e806b0c9313957f683fcb242a108260a299 refs/remotes/origin/saves
+60ffecff83948202a85de198a281b31a81deb524 refs/remotes/origin/tooltip-debug
+0eebaf7215dddaa00bc7ffbce64ccc378ae27f69 refs/remotes/origin/transfer
+14c03eb8ccdb4dfd01ae245cbf88c31572457229 refs/remotes/origin/v2_port
