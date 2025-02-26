@@ -1,11 +1,7 @@
-
 local wezterm = require("wezterm")
 
 local M = {}
-local custom = {}
 
-custom = wezterm.color.get_builtin_schemes()["catppuccin-mocha"]
-custom.background = "#ffffff"
 -- custom.tab_bar.background = "#040404"
 -- custom.tab_bar.inactive_tab.bg_color = "#0f0f0f"
 -- custom.tab_bar.new_tab.bg_color = "#080808"
@@ -13,11 +9,7 @@ custom.background = "#ffffff"
 function M.options(config)
 	config.status_update_interval = 1000
 
-	config.color_schemes = {
-		['custom'] = custom
-	}
-	config.color_scheme = "custom"
-	-- config.color_scheme = "catppuccin-mocha"
+	config.color_scheme = "catppuccin-mocha"
 
 	config.animation_fps = 60
 	config.max_fps = 60
@@ -33,18 +25,22 @@ function M.options(config)
 		-- scale = 1.0
 	})
 	config.font_size = 11
+	config.freetype_load_flags = "NO_HINTING"
+	-- config.freetype_load_target = "Light"
+	-- config.freetype_render_target = "HorizontalLcd"
+	config.front_end = "WebGpu"
 	config.window_decorations = "RESIZE"
 	-- config.text_background_opacity = 1.5
 	-- config.window_background_opacity = 1.5
 	config.window_frame = {
-		border_left_width = "10px",
-		border_right_width = "10px",
-		border_bottom_height = "10px",
-		border_top_height = "10px",
+		border_left_width = "1px",
+		border_right_width = "1px",
+		border_bottom_height = "1px",
+		border_top_height = "1px",
 		-- border_left_color = M.colors.background,
 		-- border_right_color = M.colors.background,
 		-- border_bottom_color = M.colors.background,
-	  -- border_top_color = M.colors.background,
+		-- border_top_color = M.colors.background,
 		-- font_size = 16,
 	}
 	config.enable_scroll_bar = false
@@ -63,12 +59,12 @@ function M.options(config)
 	-- config.tab_max_width = 9999
 	-- config.hide_tab_bar_if_only_one_tab = false
 	-- config.tab_bar_at_bottom = false
-	-- config.use_fancy_tab_bar = false
+	-- config.use_fancy_tab_bar = true
 	-- config.show_new_tab_button_in_tab_bar = false
 	-- config.allow_win32_input_mode = true
 	-- config.disable_default_key_bindings = true
 	-- config.quit_when_all_windows_are_closed = false
 end
-	-- config.selection_word_boundary = "{}[]()\"'`.,;:="
+-- config.selection_word_boundary = "{}[]()\"'`.,;:="
 
 return M

@@ -9,14 +9,11 @@ if wezterm.config_builder then
 	config = wezterm.config_builder()
 end
 
-
-
 local windows = require("windows") -- file located at ~/.wezterm/windows.lua
 local linux = require("linux") -- file located at ~/.wezterm/linux.lua
 local keymaps = require("keymaps")
 local terminal = require("terminal")
-local bar = wezterm.plugin.require "https://github.com/adriankarlen/bar.wezterm"
-
+local bar = wezterm.plugin.require("https://github.com/adriankarlen/bar.wezterm")
 
 -- For windows host custom configuration
 if wezterm.target_triple == "x86_64-pc-windows-msvc" then
@@ -31,17 +28,14 @@ end
 keymaps.options(config)
 terminal.options(config)
 
+bar.apply_to_config(config)
 -- Add spotify to bar
-bar.apply_to_config(
-  config,
-  {
-    modules = {
-      spotify = {
-        enabled = true,
-      },
-    },
-  }
-)
-
+-- bar.apply_to_config(config, {
+-- 	modules = {
+-- 		spotify = {
+-- 			enabled = true,
+-- 		},
+-- 	},
+-- })
 
 return config
