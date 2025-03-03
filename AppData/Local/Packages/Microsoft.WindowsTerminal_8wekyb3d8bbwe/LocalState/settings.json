@@ -1,75 +1,8 @@
 {
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "actions": 
-    [
-        {
-            "command": 
-            {
-                "action": "copy",
-                "singleLine": false
-            },
-            "id": "User.copy.644BA8F2"
-        },
-        {
-            "command": "paste",
-            "id": "User.paste"
-        },
-        {
-            "command": "find",
-            "id": "User.find"
-        },
-        {
-            "command": 
-            {
-                "action": "splitPane",
-                "split": "auto",
-                "splitMode": "duplicate"
-            },
-            "id": "User.splitPane.A6751878"
-        }
-    ],
-    "alwaysShowTabs": true,
-    "centerOnLaunch": true,
-    "copyFormatting": "none",
-    "copyOnSelect": false,
-    "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
-    "keybindings": 
-    [
-        {
-            "id": null,
-            "keys": "ctrl+insert"
-        },
-        {
-            "id": "User.paste",
-            "keys": "alt+v"
-        },
-        {
-            "id": null,
-            "keys": "shift+insert"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+c"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+v"
-        },
-        {
-            "id": "User.find",
-            "keys": "ctrl+shift+f"
-        },
-        {
-            "id": "User.copy.644BA8F2",
-            "keys": "alt+c"
-        },
-        {
-            "id": "User.splitPane.A6751878",
-            "keys": "alt+shift+d"
-        }
-    ],
-    "launchMode": "focus",
+    "actions": [],
+    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
     "newTabMenu": 
     [
         {
@@ -78,39 +11,11 @@
     ],
     "profiles": 
     {
-        "defaults": 
-        {
-            "antialiasingMode": "grayscale",
-            "colorScheme": "Catppuccin Mocha",
-            "experimental.retroTerminalEffect": false,
-            "font": 
-            {
-                "face": "JetBrainsMonoNL Nerd Font"
-            },
-            "opacity": 90,
-            "scrollbarState": "hidden",
-            "useAcrylic": true
-        },
+        "defaults": {},
         "list": 
         [
             {
-                "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
-                "hidden": false,
-                "name": "PowerShell",
-                "opacity": 100,
-                "source": "Windows.Terminal.PowershellCore"
-            },
-            {
-                "colorScheme": "Campbell",
-                "commandline": "\"C:\\Program Files\\PowerShell\\7\\pwsh.exe\"",
-                "elevate": true,
-                "guid": "{b30b39c7-0fbe-433b-b4d1-2ddd1587fa2c}",
-                "hidden": false,
-                "icon": "ms-appx:///ProfileIcons/pwsh.png",
-                "name": "PowerShell (Admin)",
-                "startingDirectory": "%USERPROFILE%"
-            },
-            {
+                "commandline": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
                 "hidden": false,
                 "name": "Windows PowerShell"
@@ -119,160 +24,9 @@
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "hidden": false,
                 "name": "Command Prompt"
-            },
-            {
-                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
-                "hidden": false,
-                "name": "Azure Cloud Shell",
-                "source": "Windows.Terminal.Azure"
-            },
-            {
-                "guid": "{2ece5bfe-50ed-5f3a-ab87-5cd4baafed2b}",
-                "hidden": false,
-                "name": "Git Bash",
-                "source": "Git"
-            },
-            {
-                "guid": "{d8e96812-b789-5068-a5ae-10b2fb53e95f}",
-                "hidden": false,
-                "name": "Ubuntu 24.04.1 LTS",
-                "source": "CanonicalGroupLimited.Ubuntu24.04LTS_79rhkp1fndgsc"
-            },
-            {
-                "guid": "{51855cb2-8cce-5362-8f54-464b92b32386}",
-                "hidden": false,
-                "name": "Ubuntu",
-                "source": "CanonicalGroupLimited.Ubuntu_79rhkp1fndgsc"
-            },
-            {
-                "guid": "{47302f9c-1ac4-566c-aa3e-8cf29889d6ab}",
-                "hidden": false,
-                "name": "Nushell",
-                "source": "nu"
             }
         ]
     },
-    "schemes": 
-    [
-        {
-            "background": "#11111B",
-            "black": "#45475A",
-            "blue": "#89B4FA",
-            "brightBlack": "#585B70",
-            "brightBlue": "#89B4FA",
-            "brightCyan": "#94E2D5",
-            "brightGreen": "#A6E3A1",
-            "brightPurple": "#F5C2E7",
-            "brightRed": "#F38BA8",
-            "brightWhite": "#A6ADC8",
-            "brightYellow": "#F9E2AF",
-            "cursorColor": "#F5E0DC",
-            "cyan": "#94E2D5",
-            "foreground": "#CDD6F4",
-            "green": "#A6E3A1",
-            "name": "Catppuccin Mocha",
-            "purple": "#F5C2E7",
-            "red": "#F38BA8",
-            "selectionBackground": "#585B70",
-            "white": "#BAC2DE",
-            "yellow": "#F9E2AF"
-        },
-        {
-            "background": "#000000",
-            "black": "#000000",
-            "blue": "#6CA4F8",
-            "brightBlack": "#4D4D4D",
-            "brightBlue": "#6CA4F8",
-            "brightCyan": "#2B7489",
-            "brightGreen": "#56D364",
-            "brightPurple": "#DB61A2",
-            "brightRed": "#F78166",
-            "brightWhite": "#FFFFFF",
-            "brightYellow": "#E3B341",
-            "cursorColor": "#C9D1D9",
-            "cyan": "#2B7489",
-            "foreground": "#8B949E",
-            "green": "#56D364",
-            "name": "GitHub Dark - Eric",
-            "purple": "#DB61A2",
-            "red": "#F78166",
-            "selectionBackground": "#3B5070",
-            "white": "#FFFFFF",
-            "yellow": "#E3B341"
-        },
-        {
-            "background": "#1C1E26",
-            "black": "#0C0C0C",
-            "blue": "#26BBD9",
-            "brightBlack": "#767676",
-            "brightBlue": "#3FC4DE",
-            "brightCyan": "#6BE4E6",
-            "brightGreen": "#3FDAA4",
-            "brightPurple": "#F075B5",
-            "brightRed": "#EC6A88",
-            "brightWhite": "#F2F2F2",
-            "brightYellow": "#FBC3A7",
-            "cursorColor": "#6C6F93",
-            "cyan": "#59E1E3",
-            "foreground": "#D5D8DA",
-            "green": "#29D398",
-            "name": "Horizon Dark",
-            "purple": "#EE64AC",
-            "red": "#E95678",
-            "selectionBackground": "#6C6F93",
-            "white": "#CCCCCC",
-            "yellow": "#FAB795"
-        },
-        {
-            "background": "#300A24",
-            "black": "#171421",
-            "blue": "#0037DA",
-            "brightBlack": "#767676",
-            "brightBlue": "#08458F",
-            "brightCyan": "#2C9FB3",
-            "brightGreen": "#26A269",
-            "brightPurple": "#A347BA",
-            "brightRed": "#C01C28",
-            "brightWhite": "#F2F2F2",
-            "brightYellow": "#A2734C",
-            "cursorColor": "#FFFFFF",
-            "cyan": "#3A96DD",
-            "foreground": "#FFFFFF",
-            "green": "#26A269",
-            "name": "Ubuntu-22.04-ColorScheme",
-            "purple": "#881798",
-            "red": "#C21A23",
-            "selectionBackground": "#FFFFFF",
-            "white": "#CCCCCC",
-            "yellow": "#A2734C"
-        }
-    ],
-    "showTabsInTitlebar": false,
-    "themes": 
-    [
-        {
-            "name": "Catppuccin Mocha",
-            "tab": 
-            {
-                "background": "#1E1E2EFF",
-                "iconStyle": "default",
-                "showCloseButton": "always",
-                "unfocusedBackground": null
-            },
-            "tabRow": 
-            {
-                "background": "#181825FF",
-                "unfocusedBackground": "#11111BFF"
-            },
-            "window": 
-            {
-                "applicationTheme": "dark",
-                "experimental.rainbowFrame": false,
-                "frame": null,
-                "unfocusedFrame": null,
-                "useMica": false
-            }
-        }
-    ],
-    "useAcrylicInTabRow": true
+    "schemes": [],
+    "themes": []
 }
