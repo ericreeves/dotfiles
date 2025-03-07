@@ -12,18 +12,20 @@ function M.options(config)
 
 	config.initial_cols = 115
 	config.initial_rows = 28
-	config.font = wezterm.font({
-		family = "JetBrainsMono Nerd Font",
-		weight = "Regular",
-		stretch = "Normal",
-		style = "Normal",
-		harfbuzz_features = { "calt=0", "clig=0", "liga=0" },
-		-- scale = 1.0
-	})
+	-- config.font = wezterm.font("FiraCode Nerd Font", { weight = "Regular" })
+	config.font = wezterm.font("FiraCode Nerd Font", { weight = 450 })
+	-- config.font = wezterm.font("RobotoMono Nerd Font", { weight = "Regular" })
+	-- config.font = wezterm.font("SpaceMono Nerd Font", { weight = "Regular" })
+	-- config.font = wezterm.font("Hack Nerd Font", { weight = "Regular" })
+	-- config.font = wezterm.font("CaskaydiaCove Nerd Font", { weight = "Regular" })
+	-- config.font = wezterm.font("EnvyCodeR Nerd Font", { weight = "Regular" })
+	-- config.font = wezterm.font("JetBrainsMono Nerd Font", { weight = "Regular" })
+	-- config.font = wezterm.font("Iosevka Nerd Font", { weight = "Regular" })
+	-- config.font = wezterm.font("Iosevka Nerd Font", { weight = "Medium" })
+	-- config.line_height = 1.1
 	config.font_size = 11
 	config.freetype_load_flags = "NO_HINTING"
-	-- config.freetype_load_target = "Light"
-	-- config.freetype_render_target = "HorizontalLcd"
+	-- config.freetype_load_target = "HorizontalLcd"
 	config.front_end = "WebGpu"
 	config.window_decorations = "RESIZE"
 	-- config.text_background_opacity = 1.5
