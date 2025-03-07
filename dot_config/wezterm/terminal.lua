@@ -25,7 +25,8 @@ function M.options(config)
 	-- config.line_height = 1.1
 	config.font_size = 11
 	config.freetype_load_flags = "NO_HINTING"
-	-- config.freetype_load_target = "HorizontalLcd"
+	-- config.freetype_load_target = "Light"
+	-- config.freetype_render_target = "HorizontalLcd"
 	config.front_end = "WebGpu"
 	config.window_decorations = "RESIZE"
 	-- config.text_background_opacity = 1.5
