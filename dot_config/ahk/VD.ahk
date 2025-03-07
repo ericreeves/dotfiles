@@ -38,7 +38,7 @@ return
 
 !^+#`::VD.TogglePinWindow("A")
 
-# To Move Window and Switch
+; To Move Window and Switch
 ; !^+#5::VD.MoveWindowToDesktopNum("A",5).follow()
 
 ; ;just move window
