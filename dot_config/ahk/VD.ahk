@@ -14,7 +14,6 @@ ProcessSetPriority "H"
 SetWinDelay -1
 SetControlDelay -1
 
-
 ;include the library
 #Include %A_LineFile%\..\VD\VD.ah2
 
@@ -31,11 +30,16 @@ return
 !^+4::VD.goToDesktopNum(4)
 !^+5::VD.goToDesktopNum(5)
 
-!^+#1::VD.MoveWindowToDesktopNum("A",1).follow()
-!^+#2::VD.MoveWindowToDesktopNum("A",2).follow()
-!^+#3::VD.MoveWindowToDesktopNum("A",3).follow()
-!^+#4::VD.MoveWindowToDesktopNum("A",4).follow()
-!^+#5::VD.MoveWindowToDesktopNum("A",5).follow()
+!^+#1::VD.MoveWindowToDesktopNum("A",1)
+!^+#2::VD.MoveWindowToDesktopNum("A",2)
+!^+#3::VD.MoveWindowToDesktopNum("A",3)
+!^+#4::VD.MoveWindowToDesktopNum("A",4)
+!^+#5::VD.MoveWindowToDesktopNum("A",5)
+
+!^+#`::VD.TogglePinWindow("A")
+
+# To Move Window and Switch
+; !^+#5::VD.MoveWindowToDesktopNum("A",5).follow()
 
 ; ;just move window
 ; numpad7::VD.MoveWindowToDesktopNum("A",1)
