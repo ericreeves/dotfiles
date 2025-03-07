@@ -1,8 +1,8 @@
 Import-Module gsudoModule
 Import-Module -Name HackF5.ProfileAlias -Force -Global -ErrorAction SilentlyContinue
 
-if ($host.Name -eq 'ConsoleHost')
-{
+# if ($host.Name -eq 'ConsoleHost')
+# {
   Import-Module PSReadLine
   Import-Module -Name Terminal-Icons
   # Invoke-Expression (& {
@@ -26,4 +26,4 @@ if ($host.Name -eq 'ConsoleHost')
   Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
   Set-PSReadLineKeyHandler -Chord 'Shift+Tab' -Function Complete
   Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
-}
+# }
