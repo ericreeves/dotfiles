@@ -78,6 +78,11 @@ function M.options(config)
 		{ key = "7", mods = "LEADER", action = act({ ActivateTab = 6 }) },
 		{ key = "8", mods = "LEADER", action = act({ ActivateTab = 7 }) },
 		{ key = "9", mods = "LEADER", action = act({ ActivateTab = 8 }) },
+		{ key = "1", mods = "CTRL", action = act({ ActivateTab = 0 }) },
+		{ key = "2", mods = "CTRL", action = act({ ActivateTab = 1 }) },
+		{ key = "3", mods = "CTRL", action = act({ ActivateTab = 2 }) },
+		{ key = "4", mods = "CTRL", action = act({ ActivateTab = 3 }) },
+		{ key = "5", mods = "CTRL", action = act({ ActivateTab = 4 }) },
 	}
 
 	-- copy_mode
@@ -144,11 +149,11 @@ function M.options(config)
 			mods = "CTRL",
 			action = act.DecreaseFontSize,
 		},
-    {
-      event = { Up = { streak = 1, button = "Left" } },
-      mods = "NONE",
-      action = term.action.Nop,
-    },
+		{
+			event = { Up = { streak = 1, button = "Left" } },
+			mods = "NONE",
+			action = term.action.Nop,
+		},
 		{
 			event = { Down = { streak = 1, button = "Right" } },
 			mods = "NONE",
