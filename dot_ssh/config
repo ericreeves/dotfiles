@@ -2,22 +2,10 @@ Host cube
   User eric
   Hostname %h.alluvium.cloud
 
-Host ops
-  User eric
+Host pve1
+  User root
   Hostname %h.alluvium.cloud
 
-Host vault-demo
-  User eric
-  Hostname %h.vpn.alluvium.cloud
-
-Host conad-server-?
-  User debian
-  Hostname %h.vpn.alluvium.cloud
-
-Host conad-client-?
-  User debian
-  Hostname %h.vpn.alluvium.cloud
-
-Host pve?
+Host cosmos
   User root
-  Hostname %h.vpn.alluvium.cloud
+  Hostname 192.168.1.10
