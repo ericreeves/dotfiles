@@ -1,6 +1,7 @@
 #Requires AutoHotkey v2.0
 
 #Include %A_ScriptDir%\F24_CapsLock_Off.ahk
+#Include %A_ScriptDir%\Macros.ahk 
 #Include %A_ScriptDir%\VD.ahk 
 
 +^A::WinMove(1280,0,2560,1440,'A')
@@ -22,3 +23,4 @@
 }
 
 !^+#r::Reload
+
