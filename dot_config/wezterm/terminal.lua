@@ -3,12 +3,12 @@ local wezterm = require("wezterm")
 local M = {}
 
 function M.options(config)
-	config.status_update_interval = 1000
+	-- config.status_update_interval = 1000
 
 	config.color_scheme = "catppuccin-mocha"
 
-	config.animation_fps = 60
-	config.max_fps = 60
+	config.animation_fps = 120
+	config.max_fps = 120
 
 	config.initial_cols = 115
 	config.initial_rows = 28
@@ -42,11 +42,12 @@ function M.options(config)
 	config.cursor_blink_rate = 333
 	config.inactive_pane_hsb = { saturation = 0.5, brightness = 1.0 }
 	config.window_padding = { left = "0px", right = "0px", top = 0, bottom = 0 }
+  config.window_background_opacity = 0.5
 
 	----- Misc
 	-- config.warn_about_missing_glyphs = false
 	config.adjust_window_size_when_changing_font_size = false
-	-- config.audible_bell = "Disabled"
+	config.audible_bell = "Disabled"
 	-- config.exit_behavior = "Close"
 	-- config.window_close_confirmation = "NeverPrompt"
 	-- config.scrollback_lines = 50000
