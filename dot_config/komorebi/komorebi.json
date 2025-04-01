@@ -1,0 +1,78 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/v0.1.35/schema.json",
+  "app_specific_configuration_path": "$Env:USERPROFILE/.config/komorebi/applications.json",
+  "window_hiding_behaviour": "Cloak",
+  "cross_monitor_move_behaviour": "Insert",
+  "display_index_preferences": {
+    "0": "SAME028-5&1339745c&0&UID4357",
+    "1": "MSR0418-5&11355af0&0&UID268"
+  },
+  "bar_configurations": [
+    "C:/Users/eric/.config/komorebi/komorebi.bar.0.json",
+    "C:/Users/eric/.config/komorebi/komorebi.bar.1.json"
+  ],
+  "transparency": true,
+  "transparency_alpha": 200,
+  "animation": {
+    "enabled": true,
+    "duration": 400,
+    "fps": 120,
+      "style": {
+          "movement": "EaseOutExpo",
+          "transparency": "Linear"
+      }
+  },
+  "default_workspace_padding": 4,
+  "default_container_padding": 4,
+  "border_style": "Square",
+  "border_width": 3,
+  "border": true,
+  "border_offset": -1,
+  "theme": {
+    "name": "Mocha",
+    "palette": "Catppuccin",
+    "accent": "Lavender",
+    "unfocused_border": "Mantle",
+    "bar_accent": "Lavender"
+  },
+  "stackbar": {
+    "height": 40,
+    "mode": "OnStack",
+    "tabs": {
+      "width": 300
+    }
+  },
+  "monitors": [
+    {
+      "workspaces": [
+        {
+          "name": "1",
+          "layout": "UltrawideVerticalStack"
+        },
+        {
+          "name": "2",
+          "layout": "UltrawideVerticalStack"
+        },
+        {
+          "name": "3",
+          "layout": "UltrawideVerticalStack"
+        },
+        {
+          "name": "4",
+          "layout": "UltrawideVerticalStack"
+        },
+        {
+          "name": "5",
+          "layout": "Rows"
+        }
+      ]
+    }
+  ],
+  "floating_applications": [
+    {
+      "kind": "Exe",
+      "id": "Switchbar.exe",
+      "matching_strategy": "Equals"
+    }
+  ]
+}
