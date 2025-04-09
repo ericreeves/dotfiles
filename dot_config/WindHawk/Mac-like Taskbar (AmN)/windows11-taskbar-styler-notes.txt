@@ -1,0 +1,3 @@
+If you want to show the Windows button in the dock, remove these lines
+"controlStyles[12].target": "Taskbar.ExperienceToggleButton#LaunchListButton",
+"controlStyles[12].styles[0]": "Visibility=Collapsed"
