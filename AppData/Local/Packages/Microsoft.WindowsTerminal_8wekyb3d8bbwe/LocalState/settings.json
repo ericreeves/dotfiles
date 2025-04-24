@@ -2,7 +2,10 @@
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
     "actions": [],
+    "alwaysShowTabs": false,
     "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+    "keybindings": [],
+    "launchMode": "focus",
     "newTabMenu": 
     [
         {
@@ -11,7 +14,20 @@
     ],
     "profiles": 
     {
-        "defaults": {},
+        "defaults": 
+        {
+            "antialiasingMode": "cleartype",
+            "bellStyle": "window",
+            "colorScheme": "Catppuccin Mocha",
+            "experimental.repositionCursorWithMouse": true,
+            "experimental.retroTerminalEffect": false,
+            "font": 
+            {
+                "face": "FiraCode Nerd Font"
+            },
+            "opacity": 90,
+            "useAcrylic": true
+        },
         "list": 
         [
             {
@@ -24,9 +40,94 @@
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "hidden": false,
                 "name": "Command Prompt"
+            },
+            {
+                "guid": "{7f4a887a-9328-5e7e-90c9-73d909a41396}",
+                "hidden": false,
+                "name": "Developer Command Prompt for VS 2022",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{88f0b200-8677-573d-95c8-f0e7897ee694}",
+                "hidden": false,
+                "name": "Developer PowerShell for VS 2022",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
+                "hidden": true,
+                "name": "Ubuntu",
+                "source": "Windows.Terminal.Wsl"
+            },
+            {
+                "commandline": "%WINDIR%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy ByPass -NoExit -Command \"& 'C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.1.1-2\\shell\\condabin\\conda-hook.ps1' ; conda activate 'C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.1.1-2' \"",
+                "guid": "{5c3ceb00-e346-5087-88a2-7ae1b0e6a990}",
+                "icon": "C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.1.1-2\\Menu\\anaconda_powershell_prompt.ico",
+                "name": "Anaconda PowerShell Prompt (25.1.1-2)",
+                "startingDirectory": "C:\\Users\\eric"
+            },
+            {
+                "commandline": "%WINDIR%\\System32\\cmd.exe \"/K\" C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.1.1-2\\Scripts\\activate.bat C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.1.1-2",
+                "guid": "{b3e2ff1f-7546-524b-8b88-75ce55f6c84b}",
+                "icon": "C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.1.1-2\\Menu\\anaconda_prompt.ico",
+                "name": "Anaconda Prompt (25.1.1-2)",
+                "startingDirectory": "C:\\Users\\eric"
             }
         ]
     },
-    "schemes": [],
-    "themes": []
+    "rendering.graphicsAPI": "direct3d11",
+    "schemes": 
+    [
+        {
+            "background": "#161621",
+            "black": "#45475A",
+            "blue": "#89B4FA",
+            "brightBlack": "#585B70",
+            "brightBlue": "#89B4FA",
+            "brightCyan": "#94E2D5",
+            "brightGreen": "#A6E3A1",
+            "brightPurple": "#F5C2E7",
+            "brightRed": "#F38BA8",
+            "brightWhite": "#A6ADC8",
+            "brightYellow": "#F9E2AF",
+            "cursorColor": "#F5E0DC",
+            "cyan": "#94E2D5",
+            "foreground": "#CDD6F4",
+            "green": "#A6E3A1",
+            "name": "Catppuccin Mocha",
+            "purple": "#F5C2E7",
+            "red": "#F38BA8",
+            "selectionBackground": "#585B70",
+            "white": "#BAC2DE",
+            "yellow": "#F9E2AF"
+        }
+    ],
+    "showTabsInTitlebar": true,
+    "themes": 
+    [
+        {
+            "name": "Catppuccin Mocha",
+            "tab": 
+            {
+                "background": "#161621FF",
+                "iconStyle": "default",
+                "showCloseButton": "always",
+                "unfocusedBackground": null
+            },
+            "tabRow": 
+            {
+                "background": "#161621FF",
+                "unfocusedBackground": "#161621FF"
+            },
+            "window": 
+            {
+                "applicationTheme": "dark",
+                "experimental.rainbowFrame": false,
+                "frame": null,
+                "unfocusedFrame": null,
+                "useMica": false
+            }
+        }
+    ],
+    "useAcrylicInTabRow": true
 }
