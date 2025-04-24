@@ -29,6 +29,7 @@ $os\
 $sudo\
 $directory\
 $terraform\
+$conda\
 $python\
 $git_branch$git_commit$git_state$git_metrics$git_status\
 $jobs\
@@ -111,21 +112,21 @@ disabled = false
 [hostname]
 format = '[$ssh_symbol](fg:white)[$hostname](fg:white)[ ]()'
 ssh_only = false
-ssh_symbol = '' # '⇒' # ' ' # 'ﬁ⇒'
+ssh_symbol = ''
 #trim_at = '.companyname.com'
 disabled = false
 
 [sudo]
 format = '[ ](fg:red bold)[as $symbol]($style)'
 style = 'fg:red bold'
-symbol = ' ' # ' ❯ '
+symbol = ' '
 disabled = false
 
 [directory]
 format = '[ ](fg:mauve)[$read_only]($read_only_style)[$repo_root]($repo_root_style)[$path]($style)'
 style = 'fg:mauve'
 home_symbol = ' ~'
-read_only = ' ' # ' ' # ' ''
+# read_only = ' ' # ' ' # ' ''
 read_only_style = 'fg:cyan'
 truncation_length = 3
 truncation_symbol = '…/'
@@ -138,7 +139,7 @@ disabled = false
 [git_branch]
 format = '[ $symbol $branch(:$remote_branch)]($style)[ ]()'
 style = 'fg:blue'
-symbol = ''
+# symbol = ''
 #ignore_branches = ['master', 'main']
 
 [git_commit]
@@ -163,18 +164,18 @@ ahead = '[⇡${count} ](fg:yellow)'
 behind = '[⇣${count} ](fg:yellow)'
 diverged = '[⇕${ahead_count}⇡${behind_count}⇣ ](fg:yellow)' # ⇕ ↕ ⇳ 󰹹 󰹺 󰧈 
 up_to_date = '[✓ ](fg:green)'
-untracked = '[ﳇ${count} ](fg:red)' # ' ' # '? '
-stashed = '[${count} ](fg:red)' # '📦 '# ' ' # ' ' # ' ' # ' ' 
-modified = '[󰷉${count} ](fg:yellow)' # '📝' # '! ' #  #  # 
-staged = '[${count} ](fg:green)' # '+ '
-renamed = '[${count} ](fg:yellow)' # ' ' # '﫦' # ᴂ #  #  #  # ﳳ
-deleted = '[﯊${count} ](fg:orange)' # '🗑 ' '- '
+untracked = '[ ${count} ](fg:red)'
+stashed = '[ ${count} ](fg:red)'
+modified = '[󰷉${count} ](fg:yellow)'
+staged = '[${count} ](fg:green)'
+renamed = '[${count} ](fg:yellow)'
+deleted = '[-${count} ](fg:orange)'
 disabled = false
 
 [jobs]
 format = '[  ](fg:blue bold)[$number$symbol]($style)'
 style = 'fg:blue'
-symbol = '省' # '廒' # '󰜎' # '' # '✦'
+symbol = '✦'
 symbol_threshold = 1
 number_threshold = 4
 disabled = false
@@ -182,7 +183,7 @@ disabled = false
 [memory_usage]
 format = '[  ](fg:purple bold)[$symbol ${ram} ${swap}]($style)'
 style = 'fg:purple'
-symbol = '﬙ 北' # '﬙ 痢' # '﬙ / 󰾵' # '󰍛 󰾵' # '﬙ 󰾴' # '﬙ 󰾶' # '﬙ 󰾷' '﬙ 󰣂'
+symbol = '󰾶'
 threshold = 75
 disabled = false
 
@@ -197,7 +198,7 @@ style = 'fg:surface2'
 symbol = '─'
 
 [status]
-format = '[$symbol$status $hex_status  $signal_number-$signal_name ]($style)'
+format = '[$symbol$status $signal_number-$signal_name ]($style)'
 style = 'fg:red'
 symbol = '✘ '
 disabled = false
