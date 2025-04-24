@@ -1,39 +1,63 @@
 {
   "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/v0.1.35/schema.json",
-  "app_specific_configuration_path": "$Env:USERPROFILE/.config/komorebi/applications.json",
+  "app_specific_configuration_path": [
+    "$Env:USERPROFILE/.config/komorebi/applications.json",
+    "$Env:USERPROFILE/.config/komorebi/applications-custom.json"
+  ],
   "window_hiding_behaviour": "Cloak",
   "cross_monitor_move_behaviour": "Insert",
+  "cross_boundary_behaviour": "Monitor",
   "display_index_preferences": {
     "0": "SAME028-5&1339745c&0&UID4357",
     "1": "MSR0418-5&11355af0&0&UID268"
   },
-  "bar_configurations": [
-    "C:/Users/eric/.config/komorebi/komorebi.bar.0.json",
-    "C:/Users/eric/.config/komorebi/komorebi.bar.1.json"
-  ],
   "transparency": true,
-  "transparency_alpha": 200,
+  "transparency_alpha": 230,
+  "transparency_ignore_rules": [
+    {
+      "kind": "Title",
+      "id": "YouTube",
+      "matching_strategy": "Contains"
+    },
+    {
+      "kind": "Title",
+      "id": "Picture",
+      "matching_strategy": "Contains"
+    },
+    {
+      "kind": "Title",
+      "id": "Media Player",
+      "matching_strategy": "Contains"
+    },
+    {
+      "kind": "Exe",
+      "id": "obs64.exe", 
+      "matching_strategy": "Equals"
+    }
+  ],
   "animation": {
-    "enabled": true,
-    "duration": 400,
+    "enabled": false,
     "fps": 120,
+    "duration": 400,
       "style": {
-          "movement": "EaseOutExpo",
-          "transparency": "Linear"
+        "movement":"EaseOutBack",
+        "transparency": "Linear"
       }
   },
-  "default_workspace_padding": 4,
-  "default_container_padding": 4,
-  "border_style": "Square",
-  "border_width": 3,
+  "default_workspace_padding": 10,
+  "default_container_padding": 10,
+  "border_style": "System",
+  "border_width": 1,
   "border": true,
-  "border_offset": -1,
+  "border_offset": 0,
   "theme": {
     "name": "Mocha",
     "palette": "Catppuccin",
     "accent": "Lavender",
-    "unfocused_border": "Mantle",
-    "bar_accent": "Lavender"
+    "bar_accent": "Lavender",
+    "unfocused_border": "Crust",
+    "floating_border": "Green",
+    "single_border": "Blue"
   },
   "stackbar": {
     "height": 40,
@@ -44,35 +68,115 @@
   },
   "monitors": [
     {
+      "window_based_work_area_offset_limit": 1,
+      "window_based_work_area_offset": {
+        "top": 0,
+        "left": 1280,
+        "right": 2560,
+        "bottom": 0
+      },
       "workspaces": [
         {
-          "name": "1",
+          "name": "Main",
+          "layout": "UltrawideVerticalStack",
+          "intial_workspace_rules": [
+            {
+              "id": "Chrome.exe",
+              "kind": "Exe",
+              "matching_strategy": "Equals"
+            },
+            {
+              "id": "Zoom.exeXXX",
+              "kind": "Exe",
+              "matching_strategy": "Equals"
+            },
+            {
+              "id": "ConfMultiTabContentWndClassXXX",
+              "kind": "Class",
+              "matching_strategy": "Equals"
+            }
+          ]
+        },
+        {
+          "name": "Personal",
+          "layout": "UltrawideVerticalStack",
+          "intial_workspace_rules": [
+            {
+              "id": "zen.exe",
+              "kind": "Exe",
+              "matching_strategy": "Equals"
+            }
+          ]
+        },
+        {
+          "name": "Code",
           "layout": "UltrawideVerticalStack"
         },
         {
-          "name": "2",
-          "layout": "UltrawideVerticalStack"
+          "name": "Music",
+          "layout": "UltrawideVerticalStack",
+          "intial_workspace_rules": [
+            {
+              "id": "Spotify.exe",
+              "kind": "Exe",
+              "matching_strategy": "Equals"
+            }
+          ]
         },
         {
-          "name": "3",
-          "layout": "UltrawideVerticalStack"
-        },
-        {
-          "name": "4",
-          "layout": "UltrawideVerticalStack"
-        },
-        {
-          "name": "5",
-          "layout": "Rows"
+          "name": "Gaming",
+          "intial_workspace_rules": [
+            {
+              "kind": "Path",
+              "id": "C:\\Program Files (x86)\\Steam",
+              "matching_strategy": "StartsWith"
+            },
+            {
+              "kind": "Path",
+              "id": "G:\\Games",
+              "matching_strategy": "StartsWith"
+            }
+          ]
         }
       ]
-    }
-  ],
-  "floating_applications": [
+    },
     {
-      "kind": "Exe",
-      "id": "Switchbar.exe",
-      "matching_strategy": "Equals"
+      "workspaces": [
+        {
+          "name": "Main",
+          "layout": "Grid",
+          "intial_workspace_rules": [
+            {
+              "id": "Slack.exe",
+              "kind": "Exe",
+              "matching_strategy": "Equals"
+            }
+          ]
+        },
+        {
+          "name": "Personal",
+          "layout": "Grid",
+          "intial_workspace_rules": [
+            {
+              "id": "Discord.exe",
+              "kind": "Exe",
+              "matching_strategy": "Contains"
+            }
+          ]
+        },
+        {
+          "name": "Utils",
+          "layout": "Grid"
+        },
+        {
+          "name": "Music",
+          "layout": "Grid"
+        },
+        {
+          "name": "Gaming",
+          "layout": "Grid"
+        }
+      ]
     }
   ]
 }

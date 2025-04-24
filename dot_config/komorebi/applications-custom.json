@@ -1,0 +1,30 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/master/schema.asc.json",
+  "Elgato Stream Deck": {
+    "ignore": [
+      {
+        "kind": "Exe",
+        "id": "StreamDeck.exe",
+        "matching_strategy": "Equals"
+      }
+    ]
+  },
+  "yasb": {
+    "ignore": [
+      {
+        "kind": "Exe",
+        "id": "yasb.exe",
+        "matching_strategy": "Equals"
+      }
+    ]
+  },
+  "SwitchBar":{
+    "floating": [
+      {
+        "kind": "Exe",
+        "id": "Switchbar.exe",
+        "matching_strategy": "Equals"
+      }
+    ]
+  }
+}

@@ -10,7 +10,8 @@ alt + ctrl + o         : komorebic reload-configuration
 # alt + f                 : if ($wshell.AppActivate('Firefox') -eq $False) { start firefox }
 alt + ctrl + shift + win + b                 : if ($wshell.AppActivate('Chrome') -eq $False) { start chrome }
 alt + ctrl + shift + win + t                 : if ($wshell.AppActivate('wezterm-gui') -eq $False) { start wezterm-gui }
-
+alt + ctrl + shift + win + e                 : if ($wshell.AppActivate('explorer') -eq $False) { start explorer }
+alt + ctrl + shift + win + f                 : if ($wshell.AppActivate('FPilot') -eq $False) { start FPilot }
 
 alt + q                 : komorebic close
 alt + m                 : komorebic minimize
@@ -38,8 +39,8 @@ alt + down              : komorebic stack down
 alt + up                : komorebic stack up
 alt + right             : komorebic stack right
 alt + oem_1             : komorebic unstack # oem_1 is ;
-alt + oem_4             : komorebic cycle-stack previous # oem_4 is [
-alt + oem_6             : komorebic cycle-stack next # oem_6 is ]
+# alt + oem_4             : komorebic cycle-stack previous # oem_4 is [
+# alt + oem_6             : komorebic cycle-stack next # oem_6 is ]
 
 # Resize
 alt + shift + l          : komorebic resize-axis horizontal increase
