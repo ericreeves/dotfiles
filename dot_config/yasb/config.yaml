@@ -1,74 +1,199 @@
-watch_stylesheet: true
 watch_config: true
+watch_stylesheet: true
 debug: false
 komorebi:
-  start_command: "komorebic start --whkd"
-  stop_command: "komorebic stop --whkd"
-  reload_command: "komorebic stop --whkd && komorebic start --whkd"
+  start_command: "komorebic start"
+  stop_command: "komorebic stop"
+  reload_command: "komorebic stop && komorebic start"
 bars:
   primary-bar:
     enabled: true
-    screens: ['*'] 
+    screens: ['Odyssey G95SC'] 
     class_name: "yasb-bar"
     alignment:
       position: "top"
       center: false
     blur_effect:
-      enabled: true
+      enabled: false
       acrylic: false
-      dark_mode: true
-      round_corners: false
-      border_color: None
+      dark_mode: false
     window_flags:
-      always_on_top: true
+      always_on_top: false
       windows_app_bar: true
       hide_on_fullscreen: true
     dimensions:
       width: "100%"
-      height: 30
+      height: 40
     padding:
       top: 0 # 4 4 2 4
       left: 0
       bottom: 0
       right: 0
+    animation:
+      enabled: true
+      duration: 500
     widgets:
       left:
-        [
-          "home",
-          "komorebi_workspaces",
-          "active_window",
-        ]
+        - home
+        - clock
+        - komorebi_active_layout
+        - komorebi_padding
+        - wallpapers
+        - komorebi_workspaces
       center:
-        ["clock"]
+        # - taskbar
+        - active_window
       right:
-        [
-          "cava",
-          "media",
-          "volume",
-          "weather",
-          "github",
-          "disk",
-          "wallpapers",
-          "power_menu"
-        ]
+        # - cava
+        # - cpu
+        # - memory
+        # - volume
+        - media
+        # - wifi
+        - systray
+        - apps
+    # layouts:
+    #   left:
+    #     alignment: "left"
+    #     stretch: false
+    #   center:
+    #     alignment: "center"
+    #     stretch: true
+    #   right:
+    #     alignment: "right"
+    #     stretch: false
+  secondary-bar:
+    enabled: true
+    screens: ['L1'] 
+    class_name: "yasb-bar"
+    alignment:
+      position: "top"
+      center: false
+    blur_effect:
+      enabled: false
+      acrylic: false
+      dark_mode: false
+    window_flags:
+      always_on_top: false
+      windows_app_bar: true
+      hide_on_fullscreen: true
+    dimensions:
+      width: "100%"
+      height: 40
+    padding:
+      top: 0 # 4 4 2 4
+      left: 0
+      bottom: 0
+      right: 0
+    animation:
+      enabled: true
+      duration: 500
+    widgets:
+      left:
+        - home
+        - clock
+        - komorebi_active_layout
+        - komorebi_workspaces
+      center:
+        # - taskbar
+        - active_window
+      right:
+        # - cava
+        # - cpu
+        # - memory
+        # - media
+        # - volume
+        # - wifi
+        - systray
+        - apps
+    # layouts:
+    #   left:
+    #     alignment: "left"
+    #     stretch: false
+    #   center:
+    #     alignment: "center"
+    #     stretch: true
+    #   right:
+    #     alignment: "right"
+    #     stretch: false
+
 widgets:
+  komorebi_padding:
+    type: "yasb.custom.CustomWidget"
+    options:
+      label: "<span>[]</span>"
+      label_alt: ""
+      class_name: "komorebi-padding"
+      callbacks:
+        on_left: "exec cmd /c komorebic focused-workspace-padding 8 && komorebic focused-workspace-container-padding 4"
+        on_middle: "exec cmd /c komorebic focused-workspace-padding 16 && komorebic focused-workspace-container-padding 8"
+        on_right: "exec cmd /c komorebic focused-workspace-padding 40 && komorebic focused-workspace-container-padding 20"
+  cpu:
+    type: "yasb.cpu.CpuWidget"
+    options:
+      label: "\uf200 {info[histograms][cpu_percent]} {info[percent][total]}%"
+      label_alt: "\uf200 {info[percent][total]}% {info[freq][current]}MHz"
+      update_interval: 1000
+      histogram_icons:
+        - '\u2581' # 0%
+        - '\u2581' # 10%
+        - '\u2582' # 20%
+        - '\u2583' # 30%
+        - '\u2584' # 40%
+        - '\u2585' # 50%
+        - '\u2586' # 60%
+        - '\u2587' # 70%
+        - '\u2588' # 80%+
+      histogram_num_columns: 10
+      callbacks:
+        on_right: "exec cmd /c Taskmgr"
+
+  memory:
+    type: "yasb.memory.MemoryWidget"
+    options:
+      label: "\ue266 {virtual_mem_percent}%"
+      label_alt: "\ue266 {virtual_mem_free} Free"
+      update_interval: 5000
+      callbacks:
+        on_right: "exec cmd /c Taskmgr"
+
+  wifi:
+    type: "yasb.wifi.WifiWidget"
+    options:
+      label: "<span> {wifi_icon} </span>"
+      label_alt: "{wifi_name} {wifi_strength}%"
+      update_interval: 5000
+      callbacks:
+        on_left: "exec explorer ms-availablenetworks:"
+        on_middle: "do_nothing"
+        on_right: "toggle_label"
+      wifi_icons: [
+        "\udb82\udd2e",
+        "\udb82\udd1f",
+        "\udb82\udd22",
+        "\udb82\udd25",
+        "\udb82\udd28" 
+      ]
+
   home:
     type: "yasb.home.HomeWidget"
     options:
-      label: "<span>\udb80\udf5c</span>"
+      # label: "<span>\udb80\udf5c</span>"
+      label: "<span>\ue62a</span>"
       menu_list:
       - { title: "Home", path: "~" }
-      - { title: "Downloads", path: "C:\\Users\\elrond\\Downloads"}
-      - { title: "Documents", path: "C:\\Users\\elrond\\Documents"}
-      - { title: "Pictures", path: "C:\\Users\\elrond\\Pictures"}
-      - { title: "Videos", path: "C:\\Users\\elrond\\Videos"}
+      - { title: "Downloads", path: "C:\\Users\\eric\\Downloads"}
+      - { title: "Documents", path: "C:\\Users\\eric\\Documents"}
+      - { title: "Pictures", path: "C:\\Users\\eric\\Pictures"}
+      - { title: "Videos", path: "C:\\Users\\eric\\Videos"}
+      - { title: "Config", path: "C:\\Users\\eric\\.config"}
       system_menu: true
-      power_menu: false
+      power_menu: true
       blur: true
       round_corners: true
       round_corners_type: "normal"
-      border_color: ""
-      distance: 5
+      border_color: "System"
+      distance: 6
       container_padding: 
         top: 0
         left: 0
@@ -85,74 +210,143 @@ widgets:
         system: "System Settings"
         about: "About This PC"
         task_manager: "Task Manager"
+
+  komorebi_active_layout:
+    type: "komorebi.active_layout.ActiveLayoutWidget"
+    options:
+      hide_if_offline: true
+      label: "{icon}"
+      layouts: ['bsp', 'columns', 'rows', 'grid', 'vertical_stack', 'horizontal_stack', 'ultrawide_vertical_stack','right_main_vertical_stack']
+      layout_icons:
+        bsp: "\udb81\udd74"
+        columns: "\udb81\udd6d"
+        rows: "\udb81\udf29"
+        vertical_stack: "\udb82\udfcc"
+        horizontal_stack: "\udb86\udc88"
+        ultrawide_vertical_stack: "\udb82\udc43"
+        monocle: "\udb84\udcac"
+        maximised: "\ue25d"
+        floating: "\uf2d2"
+        paused: "\uf04c"
+      callbacks:
+        on_left: 'next_layout'
+        on_middle: 'toggle_monocle'
+        on_right: 'prev_layout'
+      container_padding: 
+        top: 0
+        left: 8
+        bottom: 0
+        right: 8
+
   komorebi_workspaces:
     type: "komorebi.workspaces.WorkspaceWidget"
     options:
         label_offline: "\u26a1 Offline"
-        label_workspace_btn: ""
-        label_workspace_active_btn: ""
-        label_workspace_populated_btn: ""
-        label_default_name: "{index}"
+        label_workspace_btn: "{name}"
+        label_workspace_active_btn: "{name}"
+        label_workspace_populated_btn: "{name}"
+        label_default_name: "{name}"
         label_zero_index: false
         hide_empty_workspaces: false
         hide_if_offline: true
         animation: true
+        container_padding:
+          top: 0
+          left: 8
+          bottom: 0
+          right: 8
+
   weather:
     type: "yasb.weather.WeatherWidget"
     options:
       label: "<span>{icon}</span> {temp}"
-      label_alt: "<span>{icon}</span> {location}: Min {min_temp}, Max {max_temp}, Humidity {humidity}"
-      api_key: 'EnterAPIKeyHere'
-      update_interval: 600 #Update interval in seconds, Min 600
+      label_alt: "{location}: Min {min_temp}, Max {max_temp}, Humidity {humidity}"
+      api_key: "3bf4cf9a7c3f40d6b31174128242807" # Get your free API key from https://www.weatherapi.com/
+      show_alerts: true
+      update_interval: 600 # Update interval in seconds, Min 600 seconds
       hide_decimal: true
-      location: 'EnterLocationHere'
+      units: "imperial" # Can be 'metric' or 'imperial'
+      location: "USA Houston 77584" # You can use "USA Los Angeles 90006" {COUNTRY CITY ZIP_CODE}, or just city.
       callbacks:
-        on_left: "toggle_label"
-      icons:
-        sunnyDay: "\udb81\udd99"
-        clearNight: "\udb81\udd99"
+        on_left: "toggle_card"
+        on_middle: "do_nothing"
+        on_right: "toggle_label"
+      icons: 
+        sunnyDay: "\ue30d"
+        clearNight: "\ue32b"
         cloudyDay: "\udb81\udd99"
-        cloudyNight: "\udb81\udd99"
-        rainyDay: "\udb81\udd99"
-        rainyNight: "\udb81\udd99"
-        snowyIcyDay: "\udb81\udd99"
-        snowyIcyNight: "\udb81\udd99"
-        blizzard: "\udb81\udd99"
-        default: "\udb81\udd99" 
+        cloudyNight: "\ue311"
+        rainyDay: "\udb81\ude7e"
+        rainyNight: "\udb81\ude7e"
+        snowyIcyDay: "\udb81\udd98"
+        snowyIcyNight: "\udb81\udd98"
+        blizzard: "\uebaa"
+        default: "\uebaa"
+      weather_card: 
+        blur: True
+        round_corners: True
+        round_corners_type: "normal"
+        border_color: "System"
+        alignment: "right"
+        direction: "down"
+        distance: 6
+        icon_size: 64
+
   media:
-      type: "yasb.media.MediaWidget"
-      options:
-        label: "{title}"
-        label_alt: "{artist}"
-        max_field_size:
-          label: 25
-          label_alt: 25
-        show_thumbnail: false
-        controls_only: false
-        controls_left: true
-        hide_empty: true
-        thumbnail_alpha: 250
-        thumbnail_padding: 8
-        thumbnail_corner_radius: 0
-        icons:
-          prev_track: ""
-          next_track: ""
-          play: "<span>\uf001</span>"
-          pause: "<span>\uf001</span>"
+    type: "yasb.media.MediaWidget"
+    options:
+      label: "{title} by {artist}"
+      hide_empty: true
+      max_field_size:
+        label: 200
+      show_thumbnail: false
+      controls_only: false
+      controls_left: true
+      icons:
+        prev_track: "\ue892"
+        next_track: "\ue893"
+        play: "\ue768"
+        pause: "\ue769"
+
   active_window:
     type: "yasb.active_window.ActiveWindowWidget"
     options:
       label: "{win[title]}"
-      label_alt: "[class_name='{win[class_name]}' exe='{win[process][name]}' hwnd={win[hwnd]}]"
+      # label_alt: "[class_name='{win[class_name]}' exe='{win[process][name]}' hwnd={win[hwnd]}]"
       label_no_window: ""
       label_icon: true
-      label_icon_size: 14
-      max_length: 36
-      max_length_ellipsis: "..."
+      label_icon_size: 20
+      # max_length: 100 
+      # max_length_ellipsis: "..."
       monitor_exclusive: true
+      animation:
+        enabled: true
+        duration: 1000
+        type: fadeInOut
+
+  systray:
+    type: "yasb.systray.SystrayWidget"
+    options:
+      class_name: "systray"
+      label_collapsed: "\uf164"
+      label_expanded: "\uf165"
+      label_position: "right" # Can be "left" or "right"
+      icon_size: 16 # Can be any integer between 8 and 64
+      pin_click_modifier: "ctrl" # Can be "ctrl", "alt" or "shift"
+      show_unpinned: false
+      show_unpinned_button: true
+      show_battery: false
+      show_volume: false
+      show_network: false
+
   volume:
     type: "yasb.volume.VolumeWidget"
     options:
+      container_padding:
+        top: 0
+        left: 10
+        bottom: 0
+        right: 10
       label: "<span>{icon}</span> {level}"
       label_alt: "{volume}"
       volume_icons:
@@ -162,15 +356,34 @@ widgets:
         - "\uf027"  # Icon for 31-60% volume
         - "\uf028"  # Icon for 61-100% volume
       callbacks:
-        on_right: "exec cmd.exe /c start ms-settings:sound"
+        on_middle: "exec cmd.exe /c start ms-settings:sound"
+        on_right: "exec \"C:\\Program Files\\Elgato\\WaveLink\\WaveLink.exe\""
+      audio_menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "System"
+        alignment: "right"
+        direction: "down"
+        offset_top: 10
+        offset_left: 10
+      animation:
+        enabled: true
+        duration: 1000
+        type: fadeInOut
+
   clock:
     type: "yasb.clock.ClockWidget"
     options:
-      label: "{%a %b %d %H:%M}"
-      label_alt: "{%A, %d %B %Y %H:%M}"
-      timezones: []
+      label: "{%H:%M %Z}"
+      label_alt: "{%a %m/%d/%y %H:%M:%S %Z}"
+      timezones: ["America/Chicago", "Europe/London", "Asia/Kolkata", "Japan", "Australia/Brisbane"]
       calendar:
-        alignment: "center"
+        alignment: "left"
+      callbacks:
+        on_middle: "next_timezone"
+        on_right: "toggle_label"
+
   disk:
     type: "yasb.disk.DiskWidget"
     options:
@@ -191,41 +404,44 @@ widgets:
           on_left: "toggle_group"
           on_middle: "toggle_label"
           on_right: "exec explorer C:\\" # Open disk C in file explorer
+
   wallpapers:
     type: "yasb.wallpapers.WallpapersWidget"
     options:
       label: "<span>\udb83\ude09</span>"
-      image_path: "C:\\Users\\elrond\\.config\\Wallpapers"
+      image_path: "C:\\Users\\eric\\Pictures\\Wallpaper\\5120x1440"
       change_automatically: false
       update_interval: 60
       gallery:
         enabled: true
         blur: true
         image_width: 296
-        image_per_page: 6
+        image_per_page: 8
         show_buttons: true
-        orientation: "portrait"
+        orientation: "landscape"
         image_spacing: 10
         lazy_load: true
         lazy_load_delay: 10
         lazy_load_fadein: 200
         image_corner_radius: 20
         enable_cache: true
+
   power_menu:
-      type: "yasb.power_menu.PowerMenuWidget"
-      options:
-        label: "\uf011"
-        uptime: True
-        blur: False
-        blur_background: True
-        animation_duration: 250 # Milisecond 
-        button_row: 5 # Number of buttons in row, min 1 max 5
-        buttons:
-          signout: ["\udb80\udf43","Sign out"]
-          shutdown: ["\uf011","Shut Down"]
-          restart: ["\uead2","Restart"]
-          hibernate: ["\uf28e","Hibernate"]
-          cancel: ["\udb81\udf3a","Cancel"]
+    type: "yasb.power_menu.PowerMenuWidget"
+    options:
+      label: "\uf011"
+      uptime: False
+      blur: False
+      blur_background: True
+      animation_duration: 250 # Milisecond 
+      button_row: 5 # Number of buttons in row, min 1 max 5
+      buttons:
+        signout: ["\udb80\udf43","Sign out"]
+        shutdown: ["\uf011","Shut Down"]
+        restart: ["\uead2","Restart"]
+        hibernate: ["\uf28e","Hibernate"]
+        cancel: ["\udb81\udf3a","Cancel"]
+
   cava:
     type: "yasb.cava.CavaWidget"
     options:
@@ -247,21 +463,33 @@ widgets:
         left: 0
         bottom: 0
         right: 0
-  github:
-    type: "yasb.github.GithubWidget"
+
+  taskbar:
+    type: "yasb.taskbar.TaskbarWidget"
     options:
-      label: "<span>\ueba1</span>"
-      label_alt: "Notifications {data}" # {data} return number of unread notification
-      token: env # GitHub Personal access tokens (classic) https://github.com/settings/tokens
-      max_notification: 20 # Max number of notification displaying in menu max: 50
-      only_unread: false # Show only unread or all notifications; 
-      max_field_size: 54 # Max characters in title before truncation.
-      update_interval: 300 # Check for new notification in seconds
-      menu:
-        blur: True # Enable blur effect for the menu
-        round_corners: True # Enable round corners for the menu (this option is not supported on Windows 10)
-        round_corners_type: "normal" # Set the type of round corners for the menu (normal, small) (this option is not supported on Windows 10)
-        border_color: "System" # Set the border color for the menu (this option is not supported on Windows 10)
-        alignment: "right"
-        direction: "down"
-        distance: 6
+      animation:
+        enabled: true
+      icon_size: 20
+      ignore_apps:
+        processes: []
+        titles: []
+        classes: []
+      container_padding:
+        top: 0
+        left: 0
+        bottom: 0
+        right: 0
+
+  apps:
+    type: "yasb.applications.ApplicationsWidget"
+    options:
+      container_padding:
+        top: 0
+        left: 8
+        bottom: 0
+        right: 8
+      label: "{data}"
+      app_list:
+        - { icon: "\ueb03", launch: "cmd /c Taskmgr" }
+        - { icon: "\uf489", launch: "wt" }
+        - { icon: "\uf0a2", launch: "notification_center" }
