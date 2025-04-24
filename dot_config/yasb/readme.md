@@ -1,4 +1,3 @@
-## Simple Widgets
-Similar to simple floating widgets. Uses Bahnschrift font. Supports komorebi. If you are going to use this theme, please set your wallpapers location, weather api and location, github token (as an env. variable or directly into the config), and also install cava (winget install karlstav.cava).
+## Windows 11 Theme
 
-Also you can always customize the theme as you want.
+![Windows 11 Theme](https://i.imgur.com/no4Ehk0.png)
