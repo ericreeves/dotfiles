@@ -16,7 +16,7 @@
 		"ShowFileExtension": true,
 		"LongPathSupport": true,
 		"ShowShortenedPaths": true,
-		"ShowHiddenFiles": false,
+		"ShowHiddenFiles": true,
 		"ShowSystemFiles": false,
 		"ShowRecents": false,
 		"CalcContentsSize": "SSD",
