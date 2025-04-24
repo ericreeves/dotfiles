@@ -6,9 +6,10 @@ Set-ProfileAlias lvim "lvim.ps1 #{*}" -Bash -Force
 Set-ProfileAlias vim "lvim.ps1 #{*}" -Bash -Force
 Set-ProfileAlias vi "lvim.ps1 #{*}" -Bash -Force
 Set-ProfileAlias lg "lazygit #{*}" -Bash -Force
+Set-ProfileAlias tail "Get-Content #{*} -Wait -Tail 30" -Bash -Force
 Set-ProfileAlias cm "chezmoi #{*}" -Bash -Force
 Set-ProfileAlias cmup "chezmoi update" -Bash -Force
-Set-ProfileAlias cmdiff "chezmoi git pull -- --rebase && chezmoi diff" -Bash -Force
+Set-ProfileAlias cmdiff "chezmoi git pull -- --rebase && chezmoi diff --pager less" -Bash -Force
 
 Set-ProfileAlias tf "terraform" -Bash -Force
 Set-ProfileAlias tfp "terraform plan" -Bash -Force
