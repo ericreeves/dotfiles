@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/v0.1.35/schema.json",
+  "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/v0.1.36/schema.json",
   "app_specific_configuration_path": [
     "$Env:USERPROFILE/.config/komorebi/applications.json",
     "$Env:USERPROFILE/.config/komorebi/applications-custom.json"
@@ -8,9 +8,15 @@
   "cross_monitor_move_behaviour": "Insert",
   "cross_boundary_behaviour": "Monitor",
   "display_index_preferences": {
-    "0": "SAME028-5&1339745c&0&UID4357",
-    "1": "MSR0418-5&11355af0&0&UID268"
+    "0": "H1AK500000",
+    "1": "L1-20230418",
+    "2": "16843009"
   },
+  "bar_configurations": [
+    "$Env:USERPROFILE/.config/komorebi/komorebi.bar.json",
+    "$Env:USERPROFILE/.config/komorebi/komorebi.bar.1.json",
+    "$Env:USERPROFILE/.config/komorebi/komorebi.bar.2.json"
+  ],
   "transparency": true,
   "transparency_alpha": 230,
   "transparency_ignore_rules": [
@@ -36,13 +42,10 @@
     }
   ],
   "animation": {
-    "enabled": false,
+    "enabled": true,
     "fps": 120,
     "duration": 400,
-      "style": {
-        "movement":"EaseOutBack",
-        "transparency": "Linear"
-      }
+    "style": "EaseInOutCubic"
   },
   "default_workspace_padding": 10,
   "default_container_padding": 10,
@@ -60,7 +63,7 @@
     "single_border": "Blue"
   },
   "stackbar": {
-    "height": 40,
+    "height": 30,
     "mode": "OnStack",
     "tabs": {
       "width": 300
@@ -83,16 +86,6 @@
             {
               "id": "Chrome.exe",
               "kind": "Exe",
-              "matching_strategy": "Equals"
-            },
-            {
-              "id": "Zoom.exeXXX",
-              "kind": "Exe",
-              "matching_strategy": "Equals"
-            },
-            {
-              "id": "ConfMultiTabContentWndClassXXX",
-              "kind": "Class",
               "matching_strategy": "Equals"
             }
           ]
@@ -163,6 +156,30 @@
               "matching_strategy": "Contains"
             }
           ]
+        },
+        {
+          "name": "Utils",
+          "layout": "Grid"
+        },
+        {
+          "name": "Music",
+          "layout": "Grid"
+        },
+        {
+          "name": "Gaming",
+          "layout": "Grid"
+        }
+      ]
+    },
+    {
+      "workspaces": [
+        {
+          "name": "Main",
+          "layout": "Grid"
+        },
+        {
+          "name": "Personal",
+          "layout": "Grid"
         },
         {
           "name": "Utils",
