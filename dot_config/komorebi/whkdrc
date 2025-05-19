@@ -62,21 +62,21 @@ alt + x                 : komorebic flip-layout horizontal
 alt + y                 : komorebic flip-layout vertical
 
 # Workspaces
-alt + 1                 : komorebic focus-workspace 0
-alt + 3                 : komorebic focus-workspace 2
-alt + 2                 : komorebic focus-workspace 1
-alt + 4                 : komorebic focus-workspace 3
-alt + 5                 : komorebic focus-workspace 4
-alt + 6                 : komorebic focus-workspace 5
-alt + 7                 : komorebic focus-workspace 6
-alt + 8                 : komorebic focus-workspace 7
+alt + win + 1                 : komorebic focus-workspace 0
+alt + win + 3                 : komorebic focus-workspace 2
+alt + win + 2                 : komorebic focus-workspace 1
+alt + win + 4                 : komorebic focus-workspace 3
+alt + win + 5                 : komorebic focus-workspace 4
+alt + win + 6                 : komorebic focus-workspace 5
+alt + win + 7                 : komorebic focus-workspace 6
+alt + win + 8                 : komorebic focus-workspace 7
 
 # Move windows across workspaces
-alt + ctrl + 1         : komorebic move-to-workspace 0
-alt + ctrl + 2         : komorebic move-to-workspace 1
-alt + ctrl + 3         : komorebic move-to-workspace 2
-alt + ctrl + 4         : komorebic move-to-workspace 3
-alt + ctrl + 5         : komorebic move-to-workspace 4
-alt + ctrl + 6         : komorebic move-to-workspace 5
-alt + ctrl + 7         : komorebic move-to-workspace 6
-alt + ctrl + 8         : komorebic move-to-workspace 7
+alt + ctrl + win + 1         : komorebic move-to-workspace 0
+alt + ctrl + win + 2         : komorebic move-to-workspace 1
+alt + ctrl + win + 3         : komorebic move-to-workspace 2
+alt + ctrl + win + 4         : komorebic move-to-workspace 3
+alt + ctrl + win + 5         : komorebic move-to-workspace 4
+alt + ctrl + win + 6         : komorebic move-to-workspace 5
+alt + ctrl + win + 7         : komorebic move-to-workspace 6
+alt + ctrl + win + 8         : komorebic move-to-workspace 7
