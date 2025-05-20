@@ -3,6 +3,7 @@ Name = "komorebi"
 Description = "Tiling window management for Windows"
 Requires = [
     "yasb",
+    "whkd",
 ]
 
 [Service]
