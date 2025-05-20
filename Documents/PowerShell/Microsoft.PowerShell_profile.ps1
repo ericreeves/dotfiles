@@ -1,1 +1,1 @@
-. $HOME/.config/pwsh/main.ps1
+. $Env:USERPROFILE"\.config\pwsh\main.ps1"
