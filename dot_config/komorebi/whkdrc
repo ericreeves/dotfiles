@@ -80,3 +80,5 @@ alt + ctrl + win + 5         : komorebic move-to-workspace 4
 alt + ctrl + win + 6         : komorebic move-to-workspace 5
 alt + ctrl + win + 7         : komorebic move-to-workspace 6
 alt + ctrl + win + 8         : komorebic move-to-workspace 7
+
+alt + ctrl + b               : komorebic cycle-move-to-monitor next
