@@ -18,11 +18,29 @@
       }
     ]
   },
-  "SwitchBar":{
+  "SwitchBar": {
     "floating": [
       {
         "kind": "Exe",
         "id": "Switchbar.exe",
+        "matching_strategy": "Equals"
+      }
+    ]
+  },
+  "Everything": {
+    "floating": [
+      {
+        "kind": "Exe",
+        "id": "Everything64.exe",
+        "matching_strategy": "Equals"
+      }
+    ]
+  },
+  "CmdPal": {
+    "ignore": [
+      {
+        "kind": "Exe",
+        "id": "Microsoft.CmdPal.UI.exe",
         "matching_strategy": "Equals"
       }
     ]
