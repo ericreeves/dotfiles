@@ -1,9 +1,7 @@
 [Unit]
 Name = "desktop"
 Description = "Everything I need to work on Windows"
-Requires = [
-    "komorebi",
-]
+Requires = ["komorebi", "kanata", "yasb", "whkd"]
 
 [Service]
 Kind = "Oneshot"
