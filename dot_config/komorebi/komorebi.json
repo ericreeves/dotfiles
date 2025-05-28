@@ -10,7 +10,8 @@
   "display_index_preferences": {
     "0": "H1AK500000",
     "1": "L1-20230418",
-    "2": "16843009"
+    "2": "16843009",
+    "3": "AUO0BA4-4&646c057&0&UID8388688"
   },
   "bar_configurations": [
     "$Env:USERPROFILE/.config/komorebi/komorebi.bar.json",
@@ -37,7 +38,7 @@
     },
     {
       "kind": "Exe",
-      "id": "obs64.exe", 
+      "id": "obs64.exe",
       "matching_strategy": "Equals"
     }
   ],
