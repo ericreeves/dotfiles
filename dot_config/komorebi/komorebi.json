@@ -1,8 +1,7 @@
 {
-  "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/v0.1.36/schema.json",
+  "$schema": "./schema.json",
   "app_specific_configuration_path": [
-    "$Env:USERPROFILE/.config/komorebi/applications.json",
-    "$Env:USERPROFILE/.config/komorebi/applications-custom.json"
+    "$Env:USERPROFILE/.config/komorebi/applications-merged.json",
   ],
   "window_hiding_behaviour": "Cloak",
   "cross_monitor_move_behaviour": "Insert",
@@ -10,16 +9,15 @@
   "display_index_preferences": {
     "0": "H1AK500000",
     "1": "L1-20230418",
-    "2": "16843009",
-    "3": "AUO0BA4-4&646c057&0&UID8388688"
+    "2": "16843009"
   },
   "bar_configurations": [
     "$Env:USERPROFILE/.config/komorebi/komorebi.bar.json",
     "$Env:USERPROFILE/.config/komorebi/komorebi.bar.1.json",
     "$Env:USERPROFILE/.config/komorebi/komorebi.bar.2.json"
   ],
-  "transparency": true,
-  "transparency_alpha": 230,
+  "transparency": false,
+  "transparency_alpha": 254,
   "transparency_ignore_rules": [
     {
       "kind": "Title",
@@ -38,15 +36,15 @@
     },
     {
       "kind": "Exe",
-      "id": "obs64.exe",
+      "id": "obs64.exe", 
       "matching_strategy": "Equals"
     }
   ],
   "animation": {
     "enabled": true,
+    "duration": 500,
     "fps": 120,
-    "duration": 400,
-    "style": "EaseInOutCubic"
+    "style": [0.41,0.11,0.42,1.19]
   },
   "default_workspace_padding": 10,
   "default_container_padding": 10,
@@ -61,7 +59,7 @@
     "bar_accent": "Lavender",
     "unfocused_border": "Crust",
     "floating_border": "Green",
-    "single_border": "Blue"
+    "single_border": "Lavender"
   },
   "stackbar": {
     "height": 30,
@@ -176,7 +174,7 @@
       "workspaces": [
         {
           "name": "Main",
-          "layout": "Grid"
+          "layout": "HorizontalStack"
         },
         {
           "name": "Personal",
