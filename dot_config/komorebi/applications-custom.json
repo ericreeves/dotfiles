@@ -1,10 +1,19 @@
 {
   "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/master/schema.asc.json",
   "Elgato Stream Deck": {
-    "ignore": [
+    "floating": [
       {
         "kind": "Exe",
         "id": "StreamDeck.exe",
+        "matching_strategy": "Equals"
+      }
+    ]
+  },
+  "Elgato Wave Link": {
+    "floating": [
+      {
+        "kind": "Exe",
+        "id": "WaveLink.exe",
         "matching_strategy": "Equals"
       }
     ]
@@ -18,7 +27,16 @@
       }
     ]
   },
-  "SwitchBar": {
+  "Bitwig Studio":{
+    "floating": [
+      {
+        "kind": "Class",
+        "id": "vst3window",
+        "matching_strategy": "Legacy"
+      }
+    ]
+  },
+  "SwitchBar":{
     "floating": [
       {
         "kind": "Exe",
@@ -27,20 +45,50 @@
       }
     ]
   },
-  "Everything": {
+  "Zoom": {
     "floating": [
       {
         "kind": "Exe",
-        "id": "Everything64.exe",
+        "id": "Zoom.exe",
         "matching_strategy": "Equals"
       }
     ]
   },
-  "CmdPal": {
-    "ignore": [
+  "Microsoft Teams": {
+    "floating": [
+      {
+        "kind": "Class",
+        "id": "TeamsWebView",
+        "matching_strategy": "Equals"
+      }
+    ],
+    "object_name_change": [
+      {
+        "kind": "Class",
+        "id": "TeamsWebView",
+        "matching_strategy": "Equals"
+      }
+    ]
+  },
+  "Microsoft Teams classic": {
+    "floating": [
+      {
+        "kind": "Title",
+        "id": "Microsoft Teams Notification",
+        "matching_strategy": "Legacy"
+      },
+      {
+        "kind": "Title",
+        "id": "Microsoft Teams Call",
+        "matching_strategy": "Legacy"
+      }
+    ]
+  },
+  "gzDoom": {
+    "floating": [
       {
         "kind": "Exe",
-        "id": "Microsoft.CmdPal.UI.exe",
+        "id": "gzdoom.exe",
         "matching_strategy": "Equals"
       }
     ]
