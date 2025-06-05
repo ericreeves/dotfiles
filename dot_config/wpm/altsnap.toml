@@ -1,0 +1,13 @@
+[Unit]
+Name = "altsnap"
+Description = "Maintained continuation of Stefan Sundin's AltDrag"
+
+[Service]
+Autostart = false
+
+[Service.ExecStart]
+Executable = "$USERPROFILE/AppData/Roaming/AltSnap/AltSnap.exe"
+Arguments = ["-h"] # No tray icon
+
+[Service.Healthcheck.Process]
+DelaySec = 1

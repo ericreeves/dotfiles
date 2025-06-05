@@ -1,0 +1,11 @@
+[Unit]
+Name = "rawaccel"
+Description = "Mouse Acceleration Curve Configuration"
+
+[Service]
+Kind = "Oneshot"
+Restart = "Never"
+
+[Service.ExecStart]
+Executable = "$USERPROFILE/.local/bin/RawAccel/writer.exe" 
+Arguments = ["$USERPROFILE/.local/bin/RawAccel/settings.json"]

@@ -1,19 +1,19 @@
 [Unit]
 Name = "komorebi"
 Description = "Tiling window management for Windows"
-# Requires = [
-#     "yasb",
-#     "whkd",
-# ]
 
 [Service]
-Kind = "Simple"
-Restart = "Never"
+Kind = "Forking"
+Restart = "Always"
+RestartSec = 2
 
 [Service.ExecStart]
-Executable = "komorebi.exe"
-Arguments = ["--config", "$USERPROFILE/.config/komorebi/komorebi.json"]
-Environment = [["KOMOREBI_CONFIG_HOME", "$USERPROFILE/.config/komorebi"]]
+Executable = "komorebic.exe"
+Arguments = ["start"]
+Environment = [[
+    "KOMOREBI_CONFIG_HOME",
+    "$USERPROFILE/.config/komorebi",
+]]
 
 [[Service.ExecStop]]
 Executable = "komorebic.exe"
@@ -23,7 +23,6 @@ Arguments = ["stop"]
 Executable = "komorebic.exe"
 Arguments = ["restore-windows"]
 
-[Service.Healthcheck.Command]
-Executable = "komorebic.exe"
-Arguments = ["state"]
+[Service.Healthcheck.Process]
+Target = "komorebi.exe"
 DelaySec = 1

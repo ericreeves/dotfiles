@@ -9,8 +9,15 @@ RestartSec = 2
 
 [Service.ExecStart]
 Executable = "whkd.exe"
-Arguments = ["--config", "$USERPROFILE/.config/komorebi/whkdrc"]
-Environment = [["WHKD_CONFIG_HOME", "$USERPROFILE/.config/komorebi"]]
+Arguments = [
+    "--config",
+    "$USERPROFILE/.config/komorebi/whkdrc",
+]
+Environment = [[
+    "WHKD_CONFIG_HOME",
+    "$USERPROFILE/.config/komorebi",
+]]
+
 
 [Service.Healthcheck.Process]
 DelaySec = 1

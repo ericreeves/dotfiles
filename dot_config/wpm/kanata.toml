@@ -8,7 +8,10 @@ Restart = "Never"
 
 [Service.ExecStart]
 Executable = "kanata.exe"
-Arguments = ["-c", "$USERPROFILE/.config/kanata/kanata.kbd"]
+Arguments = [
+    "-c",
+    "$USERPROFILE/.config/kanata/eric.kbd",
+]
 
 [Service.Healthcheck.Process]
 DelaySec = 1
