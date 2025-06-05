@@ -4,9 +4,12 @@
 	process = git-lfs filter-process
 	required = true
 
-[user]
-	name = Eric Reeves
-	email = eric@alluvium.com
+[includeIf "gitdir:~/code/personal/"]
+       path = .gitconfig-personal
+[includeIf "gitdir:~/code/work/"]
+       path = .gitconfig-work
+[includeIf "gitdir:~/code/discord/"]
+       path = .gitconfig-discord
 
 [core]
 	autocrlf = input
