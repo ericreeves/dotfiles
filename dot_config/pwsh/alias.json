@@ -121,7 +121,7 @@
   },
   {
     "alias": "dmc",
-    "command": "doormat aws console --account $( $Env:HASHI_AWS_ACCOUNT_ID ) @args",
+    "command": "doormat aws console --account $( $Env:WORK_AWS_ACCOUNT_ID ) @args",
     "description": "Open AWS console via Doormat for configured HashiCorp account"
   },
   {
@@ -131,7 +131,7 @@
   },
   {
     "alias": "dmcf",
-    "command": "doormat aws cred-file add-profile --set-default --account $( $Env:HASHI_AWS_ACCOUNT_ID ) @args",
+    "command": "doormat aws cred-file add-profile --set-default --account $( $Env:WORK_AWS_ACCOUNT_ID ) @args",
     "description": "Add AWS credentials profile via Doormat and set as default"
   },
   {
