@@ -1,4 +1,4 @@
-if (Test-Path $Env:USERPROFILE"\.config\pwsh\env-secret.ps1") { . $Env:USERPROFILE"\.config\pwsh\env-secret.ps1 }
+if (Test-Path $Env:USERPROFILE"\.config\pwsh\env-secret.ps1") { . $Env:USERPROFILE"\.config\pwsh\env-secret.ps1" }
 
 . $Env:USERPROFILE"\.config\pwsh\modules.ps1"
 . $Env:USERPROFILE"\.config\pwsh\env.ps1"
