@@ -79,7 +79,6 @@
     "command": "terraform destroy -auto-approve @args",
     "description": "Destroy Terraform changes without interactive approval"
   },
-
   {
     "alias": "tfi",
     "command": "terraform init @args",
@@ -94,6 +93,21 @@
     "alias": "cmup",
     "command": "chezmoi update @args",
     "description": "Update chezmoi dotfiles from source repository"
+  },
+  {
+    "alias": "cma",
+    "command": "chezmoi add @args",
+    "description": "Add file(s) to chezmoi dotfiles"
+  },
+  {
+    "alias": "cmar",
+    "command": "chezmoi add -r @args",
+    "description": "Recursively add file(s) to chezmoi dotfiles"
+  },
+  {
+    "alias": "cmae",
+    "command": "chezmoi add --encrypt @args",
+    "description": "Encrypt and add file(s) to chezmoi dotfiles"
   },
   {
     "alias": "cmdiff",
