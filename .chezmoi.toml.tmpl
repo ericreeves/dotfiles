@@ -1,9 +1,14 @@
 encryption = "age"
+
 [age]
     identity = "{{ .chezmoi.homeDir }}/.config/chezmoi/chezmoi.age.key"
     recipient = "age1t29sa2s2p3efnyc577afyk5jwkw4cetl7ldyg8dc8yd6ps5dhqgsdu5mx8"
 
 sourceDir = "{{ .chezmoi.homeDir }}/.local/share/chezmoi"
+
 [git]
     autoPush = true
     autoCommit = true
+
+[diff]
+    pager = "delta"
