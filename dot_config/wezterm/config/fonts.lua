@@ -4,7 +4,7 @@ local platform = require('utils.platform')
 -- local font = 'Maple Mono SC NF'
 -- local font_family = 'JetBrainsMono Nerd Font'
 local font_family = 'FiraCode Nerd Font'
-local font_size = platform.is_mac and 12 or 11
+local font_size = platform.is_mac and 12 or 12
 
 return {
    font = wezterm.font_with_fallback({

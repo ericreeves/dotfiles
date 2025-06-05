@@ -1,6 +1,6 @@
 local wezterm = require('wezterm')
 local platform = require('utils.platform')
-local backdrops = require('utils.backdrops')
+-- local backdrops = require('utils.backdrops')
 local act = wezterm.action
 
 local mod = {}
@@ -9,8 +9,8 @@ if platform.is_mac then
    mod.SUPER = 'SUPER'
    mod.SUPER_REV = 'SUPER|CTRL'
 elseif platform.is_win or platform.is_linux then
-   mod.SUPER = 'ALT' -- to not conflict with Windows key shortcuts
-   mod.SUPER_REV = 'ALT|CTRL'
+   mod.SUPER = 'ALT|SHIFT' -- to not conflict with Windows key shortcuts
+   mod.SUPER_REV = 'CTRL|SHIFT|ALT'
 end
 
 -- stylua: ignore
@@ -27,7 +27,7 @@ local keys = {
    },
    { key = 'F11', mods = 'NONE',    action = act.ToggleFullScreen },
    { key = 'F12', mods = 'NONE',    action = act.ShowDebugOverlay },
-   { key = 'f',   mods = mod.SUPER, action = act.Search({ CaseInSensitiveString = '' }) },
+   { key = 'f',   mods = mod.SUPER_REV, action = act.Search({ CaseInSensitiveString = '' }) },
    {
       key = 'u',
       mods = mod.SUPER_REV,
@@ -61,13 +61,20 @@ local keys = {
    -- tabs: spawn+close
    { key = 't',          mods = mod.SUPER,     action = act.SpawnTab('DefaultDomain') },
    { key = 't',          mods = mod.SUPER_REV, action = act.SpawnTab({ DomainName = 'WSL:Ubuntu' }) },
-   { key = 'w',          mods = mod.SUPER_REV, action = act.CloseCurrentTab({ confirm = false }) },
+   { key = 'w',          mods = mod.SUPER_REV, action = act.CloseCurrentTab({ confirm = true }) },
 
    -- tabs: navigation
-   { key = 'ö', mods = mod.SUPER, action = act.ActivateTabRelative(-1) },
-   { key = 'ä', mods = mod.SUPER, action = act.ActivateTabRelative(1) },
-   { key = 'ö', mods = mod.SUPER_REV, action = act.MoveTabRelative(-1) },
-   { key = 'ä', mods = mod.SUPER_REV, action = act.MoveTabRelative(1) },
+   { key = 'w', mods = mod.SUPER, action = act.ActivateTabRelative(-1) },
+   { key = 'r', mods = mod.SUPER, action = act.ActivateTabRelative(1) },
+   { key = 'w', mods = mod.SUPER_REV, action = act.MoveTabRelative(-1) },
+   { key = 'r', mods = mod.SUPER_REV, action = act.MoveTabRelative(1) },
+
+   { key = '1', mods = mod.SUPER, action = act.ActivateTab(1) },
+   { key = '2', mods = mod.SUPER, action = act.ActivateTab(2) },
+   { key = '3', mods = mod.SUPER, action = act.ActivateTab(3) },
+   { key = '4', mods = mod.SUPER, action = act.ActivateTab(4) },
+   { key = '5', mods = mod.SUPER, action = act.ActivateTab(5) },
+   { key = '6', mods = mod.SUPER, action = act.ActivateTab(6) },
 
    -- tab: title
    { key = '0',          mods = mod.SUPER,     action = act.EmitEvent('tabs.manual-update-tab-title') },
@@ -80,103 +87,80 @@ local keys = {
    -- window: spawn windows
    { key = 'n',          mods = mod.SUPER,     action = act.SpawnWindow },
 
-   -- window: zoom window
-   {
-      key = '-',
-      mods = mod.SUPER,
-      action = wezterm.action_callback(function(window, _pane)
-         local dimensions = window:get_dimensions()
-         if dimensions.is_full_screen then
-            return
-         end
-         local new_width = dimensions.pixel_width - 50
-         local new_height = dimensions.pixel_height - 50
-         window:set_inner_size(new_width, new_height)
-      end)
-   },
-   {
-      key = '=',
-      mods = mod.SUPER,
-      action = wezterm.action_callback(function(window, _pane)
-         local dimensions = window:get_dimensions()
-         if dimensions.is_full_screen then
-            return
-         end
-         local new_width = dimensions.pixel_width + 50
-         local new_height = dimensions.pixel_height + 50
-         window:set_inner_size(new_width, new_height)
-      end)
-   },
-
    -- background controls --
-   {
-      key = [[/]],
-      mods = mod.SUPER,
-      action = wezterm.action_callback(function(window, _pane)
-         backdrops:random(window)
-      end),
-   },
-   {
-      key = [[,]],
-      mods = mod.SUPER,
-      action = wezterm.action_callback(function(window, _pane)
-         backdrops:cycle_back(window)
-      end),
-   },
-   {
-      key = [[.]],
-      mods = mod.SUPER,
-      action = wezterm.action_callback(function(window, _pane)
-         backdrops:cycle_forward(window)
-      end),
-   },
-   {
-      key = [[/]],
-      mods = mod.SUPER_REV,
-      action = act.InputSelector({
-         title = 'InputSelector: Select Background',
-         choices = backdrops:choices(),
-         fuzzy = true,
-         fuzzy_description = 'Select Background: ',
-         action = wezterm.action_callback(function(window, _pane, idx)
-            if not idx then
-               return
-            end
-            ---@diagnostic disable-next-line: param-type-mismatch
-            backdrops:set_img(window, tonumber(idx))
-         end),
-      }),
-   },
-   {
-      key = 'b',
-      mods = mod.SUPER,
-      action = wezterm.action_callback(function(window, _pane)
-         backdrops:toggle_focus(window)
-      end)
-   },
+   -- {
+   --    key = [[/]],
+   --    mods = mod.SUPER,
+   --    action = wezterm.action_callback(function(window, _pane)
+   --       backdrops:random(window)
+   --    end),
+   -- },
+   -- {
+   --    key = [[,]],
+   --    mods = mod.SUPER,
+   --    action = wezterm.action_callback(function(window, _pane)
+   --       backdrops:cycle_back(window)
+   --    end),
+   -- },
+   -- {
+   --    key = [[.]],
+   --    mods = mod.SUPER,
+   --    action = wezterm.action_callback(function(window, _pane)
+   --       backdrops:cycle_forward(window)
+   --    end),
+   -- },
+   -- {
+   --    key = [[/]],
+   --    mods = mod.SUPER_REV,
+   --    action = act.InputSelector({
+   --       title = 'InputSelector: Select Background',
+   --       choices = backdrops:choices(),
+   --       fuzzy = true,
+   --       fuzzy_description = 'Select Background: ',
+   --       action = wezterm.action_callback(function(window, _pane, idx)
+   --          if not idx then
+   --             return
+   --          end
+   --          ---@diagnostic disable-next-line: param-type-mismatch
+   --          backdrops:set_img(window, tonumber(idx))
+   --       end),
+   --    }),
+   -- },
+   -- {
+   --    key = 'b',
+   --    mods = mod.SUPER,
+   --    action = wezterm.action_callback(function(window, _pane)
+   --       backdrops:toggle_focus(window)
+   --    end)
+   -- },
 
    -- panes --
    -- panes: split panes
    {
-      key = '#',
+      key = 'b',
       mods = mod.SUPER,
       action = act.SplitVertical({ domain = 'CurrentPaneDomain' }),
    },
    {
-      key = '#',
-      mods = mod.SUPER_REV,
+      key = 'v',
+      mods = mod.SUPER,
       action = act.SplitHorizontal({ domain = 'CurrentPaneDomain' }),
    },
 
    -- panes: zoom+close pane
    { key = 'Enter', mods = mod.SUPER,     action = act.TogglePaneZoomState },
-   { key = 'w',     mods = mod.SUPER,     action = act.CloseCurrentPane({ confirm = false }) },
+   { key = 'c',     mods = mod.SUPER,     action = act.CloseCurrentPane({ confirm = true }) },
 
    -- panes: navigation
-   { key = 'k',     mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Up') },
-   { key = 'j',     mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Down') },
-   { key = 'h',     mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Left') },
-   { key = 'l',     mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Right') },
+   { key = 'e',     mods = mod.SUPER, action = act.ActivatePaneDirection('Up') },
+   { key = 'd',     mods = mod.SUPER, action = act.ActivatePaneDirection('Down') },
+   { key = 's',     mods = mod.SUPER, action = act.ActivatePaneDirection('Left') },
+   { key = 'f',     mods = mod.SUPER, action = act.ActivatePaneDirection('Right') },
+   {
+      key = 'p',
+      mods = mod.SUPER,
+      action = act.PaneSelect({ alphabet = '1234567890', mode = 'Activate' }),
+   },
    {
       key = 'p',
       mods = mod.SUPER_REV,
@@ -184,8 +168,8 @@ local keys = {
    },
 
    -- panes: scroll pane
-   { key = 'u',        mods = mod.SUPER, action = act.ScrollByLine(-5) },
-   { key = 'd',        mods = mod.SUPER, action = act.ScrollByLine(5) },
+   { key = 'u',        mods = mod.SUPER_REV, action = act.ScrollByLine(-5) },
+   { key = 'd',        mods = mod.SUPER_REV, action = act.ScrollByLine(5) },
    { key = 'PageUp',   mods = 'NONE',    action = act.ScrollByPage(-0.75) },
    { key = 'PageDown', mods = 'NONE',    action = act.ScrollByPage(0.75) },
 
@@ -243,7 +227,7 @@ local mouse_bindings = {
 return {
    disable_default_key_bindings = true,
    -- disable_default_mouse_bindings = true,
-   leader = { key = 'Space', mods = mod.SUPER_REV },
+   leader = { key = 'Space', mods = mod.SUPER_REV, timemout_miliseconds = 1000 },
    keys = keys,
    key_tables = key_tables,
    mouse_bindings = mouse_bindings,
