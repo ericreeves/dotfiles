@@ -1,5 +1,5 @@
 Import-Module gsudoModule
-Import-Module -Name HackF5.ProfileAlias -Force -Global -ErrorAction SilentlyContinue
+# Import-Module -Name HackF5.ProfileAlias -Force -Global -ErrorAction SilentlyContinue
 
 # if ($host.Name -eq 'ConsoleHost')
 # {
