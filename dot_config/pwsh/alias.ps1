@@ -1,33 +1,32 @@
 #Invoke-Expression (&scoop-search --hook) # Replace 'scoop search' with much faster 'scoop-search'
 Invoke-Expression (& { (sfsu hook --disable list | Out-String) })
 
-Set-ProfileAlias cat "bat #{*}" -Bash -Force
-Set-ProfileAlias lvim "lvim.ps1 #{*}" -Bash -Force
-Set-ProfileAlias vim "lvim.ps1 #{*}" -Bash -Force
-Set-ProfileAlias vi "lvim.ps1 #{*}" -Bash -Force
-Set-ProfileAlias lg "lazygit #{*}" -Bash -Force
-Set-ProfileAlias tail "Get-Content #{*} -Wait -Tail 30" -Bash -Force
-Set-ProfileAlias cm "chezmoi #{*}" -Bash -Force
-Set-ProfileAlias cmup "chezmoi update" -Bash -Force
-Set-ProfileAlias cmdiff "chezmoi git pull -- --rebase && chezmoi diff --pager less" -Bash -Force
+# Simple aliases (single commands only)
+Set-Alias cat bat
+Set-Alias vim nvim
+Set-Alias vi nvim
+Set-Alias lg lazygit
+Set-Alias cm chezmoi
+Set-Alias tf terraform
+Set-Alias c clear
+Set-Alias g git
 
-Set-ProfileAlias tf "terraform" -Bash -Force
-Set-ProfileAlias tfp "terraform plan" -Bash -Force
-Set-ProfileAlias tfa "terraform apply" -Bash -Force
-Set-ProfileAlias tfaa "terraform apply -auto-approve" -Bash -Force
-Set-ProfileAlias tfi "terraform init" -Bash -Force
-Set-ProfileAlias tfiu "terraform init -upgrade" -Bash -Force
-
-Set-ProfileAlias gs "git status" -Bash -Force
-Set-ProfileAlias grep "Select-String #{*}" -Force
-Set-ProfileAlias l "eza -l" -Bash -Force
-Set-ProfileAlias dml "doormat login -f" -Bash -Force
-Set-ProfileAlias dmc "doormat aws console --account $( $Env:HASHI_AWS_ACCOUNT_ID )" -Bash -Force
-Set-ProfileAlias dmv "doormat login --validate" -Bash -Force
-Set-ProfileAlias dmcf "doormat aws cred-file add-profile --set-default --account $( $Env:HASHI_AWS_ACCOUNT_ID )" -Bash -Force
-
-Set-ProfileAlias c "clear" -Bash -Force
-Set-ProfileAlias g "git" -Bash -Force
+# Function-based aliases for commands with arguments
+function l { eza -l @args }
+function tail { Get-Content @args -Wait -Tail 30 }
+function grep { Select-String @args }
+function gs { git status @args }
+function tfp { terraform plan @args }
+function tfa { terraform apply @args }
+function tfaa { terraform apply -auto-approve @args }
+function tfi { terraform init @args }
+function tfiu { terraform init -upgrade @args }
+function cmup { chezmoi update @args }
+function cmdiff { chezmoi git pull -- --rebase; chezmoi diff --pager less @args }
+function dml { doormat login -f @args }
+function dmc { doormat aws console --account $( $Env:HASHI_AWS_ACCOUNT_ID ) @args }
+function dmv { doormat login --validate @args }
+function dmcf { doormat aws cred-file add-profile --set-default --account $( $Env:HASHI_AWS_ACCOUNT_ID ) @args }
 
 function q { exit }
 function e { explorer . }
@@ -36,51 +35,6 @@ function n { nvim . }
 function w { wezterm cli spawn --new-window --cwd $pwd } # Opens a new window at the current directory
 function t { wezterm cli spawn --cwd $pwd } # Opens a new tab at the current directory
 
-#
-# Get-Process-Command
-#
-function Get-Process-Command {
-  param (
-    [Parameter(Mandatory=$true)]
-    [string]$Name
-  )
-  Get-WmiObject Win32_Process -Filter "name = '$Name.exe'" -ErrorAction SilentlyContinue | Select-Object CommandLine,ProcessId
-}
-
-function Wait-For-Process {
-  param (
-    [Parameter(Mandatory=$true)]
-    [string]$Name,
-    [Switch]$IgnoreExistingProcesses
-  )
-  if ($IgnoreExistingProcesses) {
-      $NumberOfProcesses = (Get-Process -Name $Name -ErrorAction SilentlyContinue).Count
-  } else {
-      $NumberOfProcesses = 0
-  }
-  while ( (Get-Process -Name $Name -ErrorAction SilentlyContinue).Count -eq $NumberOfProcesses ) {
-      Start-Sleep -Milliseconds 400
-  }
-}
-
-function Execute-Command ($FilePath, $ArgumentList, $WorkingDirectory) {
-    $pinfo = New-Object System.Diagnostics.ProcessStartInfo
-    $pinfo.FileName = $FilePath
-    $pinfo.RedirectStandardError = $true
-    $pinfo.RedirectStandardOutput = $true
-    $pinfo.UseShellExecute = $false
-    $pinfo.Arguments = $ArgumentList
-    $pinfo.WorkingDirectory = $WorkingDirectory
-    $p = New-Object System.Diagnostics.Process
-    $p.StartInfo = $pinfo
-    $p.Start() | Out-Null
-    $p.WaitForExit()
-    # [pscustomobject]@{
-    #     stdout = $p.StandardOutput.ReadToEnd()
-    #     stderr = $p.StandardError.ReadToEnd()
-    #     ExitCode = $p.ExitCode
-    # }
-}
 ## Which
 function which {
   param(
