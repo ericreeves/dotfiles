@@ -111,7 +111,7 @@
   },
   {
     "alias": "cmdiff",
-    "command": "chezmoi git pull -- --rebase; chezmoi diff --pager less @args",
+    "command": "chezmoi git pull -- --rebase; chezmoi diff @args",
     "description": "Pull latest chezmoi changes and show differences"
   },
   {
