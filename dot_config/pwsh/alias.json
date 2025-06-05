@@ -1,0 +1,153 @@
+[
+  {
+    "alias": "cat",
+    "command": "bat @args",
+    "description": "Display file contents with syntax highlighting using bat"
+  },
+  {
+    "alias": "vim",
+    "command": "nvim @args",
+    "description": "Open files in Neovim text editor"
+  },
+  {
+    "alias": "vi",
+    "command": "nvim @args",
+    "description": "Open files in Neovim text editor (vi compatibility)"
+  },
+  {
+    "alias": "lg",
+    "command": "lazygit @args",
+    "description": "Launch LazyGit terminal UI for Git operations"
+  },
+  {
+    "alias": "cm",
+    "command": "chezmoi @args",
+    "description": "Manage dotfiles with chezmoi"
+  },
+  {
+    "alias": "tf",
+    "command": "terraform @args",
+    "description": "Run Terraform infrastructure management commands"
+  },
+  {
+    "alias": "c",
+    "command": "clear @args",
+    "description": "Clear the terminal screen"
+  },
+  {
+    "alias": "g",
+    "command": "git @args",
+    "description": "Run Git version control commands"
+  },
+  {
+    "alias": "l",
+    "command": "eza -l @args",
+    "description": "List directory contents in long format using eza"
+  },
+  {
+    "alias": "tail",
+    "command": "Get-Content @args -Wait -Tail 30",
+    "description": "Display the last 30 lines of a file and follow changes"
+  },
+  {
+    "alias": "grep",
+    "command": "Select-String @args",
+    "description": "Search for text patterns in files using PowerShell Select-String"
+  },
+  {
+    "alias": "gs",
+    "command": "git status @args",
+    "description": "Show Git repository status"
+  },
+  {
+    "alias": "tfp",
+    "command": "terraform plan @args",
+    "description": "Show Terraform execution plan"
+  },
+  {
+    "alias": "tfa",
+    "command": "terraform apply @args",
+    "description": "Apply Terraform configuration changes"
+  },
+  {
+    "alias": "tfaa",
+    "command": "terraform apply -auto-approve @args",
+    "description": "Apply Terraform changes without interactive approval"
+  },
+  {
+    "alias": "tfdd",
+    "command": "terraform destroy -auto-approve @args",
+    "description": "Destroy Terraform changes without interactive approval"
+  },
+
+  {
+    "alias": "tfi",
+    "command": "terraform init @args",
+    "description": "Initialize Terraform working directory"
+  },
+  {
+    "alias": "tfiu",
+    "command": "terraform init -upgrade @args",
+    "description": "Initialize Terraform and upgrade provider versions"
+  },
+  {
+    "alias": "cmup",
+    "command": "chezmoi update @args",
+    "description": "Update chezmoi dotfiles from source repository"
+  },
+  {
+    "alias": "cmdiff",
+    "command": "chezmoi git pull -- --rebase; chezmoi diff --pager less @args",
+    "description": "Pull latest chezmoi changes and show differences"
+  },
+  {
+    "alias": "dml",
+    "command": "doormat login -f @args",
+    "description": "Login to Doormat with force flag"
+  },
+  {
+    "alias": "dmc",
+    "command": "doormat aws console --account $( $Env:HASHI_AWS_ACCOUNT_ID ) @args",
+    "description": "Open AWS console via Doormat for configured HashiCorp account"
+  },
+  {
+    "alias": "dmv",
+    "command": "doormat login --validate @args",
+    "description": "Validate Doormat login credentials"
+  },
+  {
+    "alias": "dmcf",
+    "command": "doormat aws cred-file add-profile --set-default --account $( $Env:HASHI_AWS_ACCOUNT_ID ) @args",
+    "description": "Add AWS credentials profile via Doormat and set as default"
+  },
+  {
+    "alias": "q",
+    "command": "exit",
+    "description": "Exit the current PowerShell session"
+  },
+  {
+    "alias": "e",
+    "command": "explorer .",
+    "description": "Open Windows Explorer in current directory"
+  },
+  {
+    "alias": "b",
+    "command": "explorer shell:RecycleBinFolder",
+    "description": "Open Windows Recycle Bin in Explorer"
+  },
+  {
+    "alias": "n",
+    "command": "nvim .",
+    "description": "Open current directory in Neovim"
+  },
+  {
+    "alias": "w",
+    "command": "wezterm cli spawn --new-window --cwd $pwd",
+    "description": "Open a new WezTerm window at current directory"
+  },
+  {
+    "alias": "t",
+    "command": "wezterm cli spawn --cwd $pwd",
+    "description": "Open a new WezTerm tab at current directory"
+  }
+]
