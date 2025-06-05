@@ -127,7 +127,7 @@
 .glazewm-workspaces .ws-btn.active {
     color: transparent;
     background-color: var(--icon-color);
-    width: 36px;
+    width: 10px;
     height: 10px;
     border-radius: 5px;
 }

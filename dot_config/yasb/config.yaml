@@ -14,7 +14,7 @@ bars:
       position: "top"
       center: false
     blur_effect:
-      enabled: true 
+      enabled: true
       acrylic: false
       dark_mode: true
       round_corners: true
@@ -31,9 +31,19 @@ bars:
       bottom: 0
       right: 10
     widgets:
-      left: ["power_menu","apps"]
-      center: ["komorebi_workspaces","komorebi_active_layout","active_window"]
-      right: ["systray","brightness","wallpapers","weather","wifi","battery","volume", "clock"]
+      left: ["power_menu", "apps"]
+      center: ["komorebi_workspaces", "komorebi_active_layout", "active_window"]
+      right:
+        [
+          "systray",
+          "brightness",
+          "wallpapers",
+          "weather",
+          "wifi",
+          "battery",
+          "volume",
+          "clock",
+        ]
 widgets:
   active_window:
     type: "yasb.active_window.ActiveWindowWidget"
@@ -74,7 +84,16 @@ widgets:
     options:
       hide_if_offline: false
       label: "{icon}"
-      layouts: ['bsp', 'columns', 'rows', 'grid', 'vertical_stack', 'horizontal_stack', 'ultrawide_vertical_stack']
+      layouts:
+        [
+          "bsp",
+          "columns",
+          "rows",
+          "grid",
+          "vertical_stack",
+          "horizontal_stack",
+          "ultrawide_vertical_stack",
+        ]
       layout_icons:
         bsp: "[\\\\]"
         columns: "[||]"
@@ -90,12 +109,12 @@ widgets:
       callbacks:
         on_left: "next_layout"
         on_middle: "toggle_monocle"
-        on_right: "prev_layout" 
-      container_padding: 
+        on_right: "prev_layout"
+      container_padding:
         top: 0
         left: 8
         bottom: 0
-        right: 8 
+        right: 8
   glazewm_workspaces:
     type: "glazewm.workspaces.GlazewmWorkspacesWidget"
     options:
@@ -116,13 +135,13 @@ widgets:
       show_alerts: true
       update_interval: 600
       hide_decimal: true
-      units: "metric"
+      units: "imperial"
       location: "auto:ip"
       callbacks:
         on_left: "toggle_card"
         on_middle: "do_nothing"
         on_right: "toggle_label"
-      icons: 
+      icons:
         sunnyDay: "\ue30d"
         clearNight: "\ue32b"
         cloudyDay: "\udb81\udd99"
@@ -133,7 +152,7 @@ widgets:
         snowyIcyNight: "\udb81\udd98"
         blizzard: "\uebaa"
         default: "\uebaa"
-      weather_card: 
+      weather_card:
         blur: True
         round_corners: True
         round_corners_type: "normal"
@@ -168,18 +187,14 @@ widgets:
       label: "<span>{icon}</span>"
       label_alt: "Brightness {percent}%"
       tooltip: true
-      auto_light: false 
+      auto_light: false
       auto_light_icon: "\udb80\udce1"
       auto_light_night_level: 35
       auto_light_night_start_time: "19:00"
       auto_light_night_end_time: "06:45"
       auto_light_day_level: 75
-      brightness_icons: [
-        "\udb80\udcde",
-        "\udb80\udcdd",
-        "\udb80\udcdf",
-        "\udb80\udce0"
-      ]       
+      brightness_icons:
+        ["\udb80\udcde", "\udb80\udcdd", "\udb80\udcdf", "\udb80\udce0"]
       callbacks:
         on_left: "toggle_label"
       container_padding:
@@ -222,9 +237,9 @@ widgets:
       label_position: "right"
       icon_size: 16
       pin_click_modifier: "alt"
-      show_unpinned: true
-      show_battery: false
-      show_volume: false
+      show_unpinned: false
+      show_battery: true
+      show_volume: true
   media:
     type: "yasb.media.MediaWidget"
     options:
@@ -295,11 +310,11 @@ widgets:
     type: "yasb.wallpapers.WallpapersWidget"
     options:
       label: "<span>\uf03e</span>"
-      image_path: "C:\\Wallpapers"
-      change_automatically: false 
-      update_interval: 60 
+      image_path: "C:/Users/EricReeves/Pictures/Wallpaper"
+      change_automatically: false
+      update_interval: 60
       gallery:
-        enabled: true 
+        enabled: true
         blur: true
         image_width: 220
         image_per_page: 8
