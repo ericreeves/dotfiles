@@ -23,8 +23,8 @@ alt + h                 : komorebic focus left
 alt + j                 : komorebic focus down
 alt + k                 : komorebic focus up
 alt + l                 : komorebic focus right
-# alt + a     : komorebic cycle-focus previous # oem_4 is [
-# alt + g    : komorebic cycle-focus next # oem_6 is ]
+alt + a     : komorebic cycle-focus previous # oem_4 is [
+alt + g    : komorebic cycle-focus next # oem_6 is ]
 
 # Move windows
 alt + ctrl + h         : komorebic move left
@@ -34,13 +34,13 @@ alt + ctrl + l         : komorebic move right
 alt + ctrl + return    : komorebic promote
 
 # Stack windows
-alt + left              : komorebic stack left
-alt + down              : komorebic stack down
-alt + up                : komorebic stack up
-alt + right             : komorebic stack right
+ctrl + win + h          : komorebic stack left
+ctrl + win + j          : komorebic stack down
+ctrl + win + k          : komorebic stack up
+ctrl + win + l          : komorebic stack right
 alt + oem_1             : komorebic unstack # oem_1 is ;
-# alt + oem_4             : komorebic cycle-stack previous # oem_4 is [
-# alt + oem_6             : komorebic cycle-stack next # oem_6 is ]
+alt + oem_4             : komorebic cycle-stack previous # oem_4 is [
+alt + oem_6             : komorebic cycle-stack next # oem_6 is ]
 
 # Resize
 alt + shift + l          : komorebic resize-axis horizontal increase
@@ -49,36 +49,37 @@ alt + shift + k          : komorebic resize-axis vertical increase
 alt + shift + j          : komorebic resize-axis vertical decrease
 
 # Manipulate windows
-alt + f                 : komorebic toggle-float
-alt + ctrl + f         : komorebic toggle-monocle
-alt + t         : komorebic toggle-workspace-layer
+alt + ctrl + f                 : komorebic toggle-float
+alt + shift + f         : komorebic toggle-monocle
+alt + win + f         : komorebic toggle-workspace-layer
 
 # Window manager options
 alt + ctrl + r         : komorebic retile
 alt + p                 : komorebic toggle-pause
 
 # Layouts
-# alt + x                 : komorebic flip-layout horizontal
-# alt + y                 : komorebic flip-layout vertical
+alt + x                 : komorebic flip-layout horizontal
+alt + y                 : komorebic flip-layout vertical
 
 # Workspaces
-alt + 1                 : komorebic focus-workspace 0
-alt + 3                 : komorebic focus-workspace 2
-alt + 2                 : komorebic focus-workspace 1
-alt + 4                 : komorebic focus-workspace 3
-alt + 5                 : komorebic focus-workspace 4
-alt + 6                 : komorebic focus-workspace 5
-alt + 7                 : komorebic focus-workspace 6
-alt + 8                 : komorebic focus-workspace 7
+alt + win + 1                 : komorebic focus-workspace 0
+alt + win + 3                 : komorebic focus-workspace 2
+alt + win + 2                 : komorebic focus-workspace 1
+alt + win + 4                 : komorebic focus-workspace 3
+alt + win + 5                 : komorebic focus-workspace 4
+alt + win + 6                 : komorebic focus-workspace 5
+alt + win + 7                 : komorebic focus-workspace 6
+alt + win + 8                 : komorebic focus-workspace 7
 
 # Move windows across workspaces
-alt + ctrl + 1         : komorebic move-to-workspace 0
-alt + ctrl + 2         : komorebic move-to-workspace 1
-alt + ctrl + 3         : komorebic move-to-workspace 2
-alt + ctrl + 4         : komorebic move-to-workspace 3
-alt + ctrl + 5         : komorebic move-to-workspace 4
-alt + ctrl + 6         : komorebic move-to-workspace 5
-alt + ctrl + 7         : komorebic move-to-workspace 6
-alt + ctrl + 8         : komorebic move-to-workspace 7
+alt + ctrl + win + 1         : komorebic move-to-workspace 0
+alt + ctrl + win + 2         : komorebic move-to-workspace 1
+alt + ctrl + win + 3         : komorebic move-to-workspace 2
+alt + ctrl + win + 4         : komorebic move-to-workspace 3
+alt + ctrl + win + 5         : komorebic move-to-workspace 4
+alt + ctrl + win + 6         : komorebic move-to-workspace 5
+alt + ctrl + win + 7         : komorebic move-to-workspace 6
+alt + ctrl + win + 8         : komorebic move-to-workspace 7
 
 alt + ctrl + b               : komorebic cycle-move-to-monitor next
+alt + ctrl + v               : komorebic cycle-move-to-monitor previous
