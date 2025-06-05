@@ -8,8 +8,8 @@
        path = .gitconfig-personal
 [includeIf "gitdir:~/code/work/"]
        path = .gitconfig-work
-[includeIf "gitdir:~/code/discord/"]
-       path = .gitconfig-discord
+[includeIf "gitdir:~/code/harnold/"]
+       path = .gitconfig-harnold
 
 [core]
 	autocrlf = input
