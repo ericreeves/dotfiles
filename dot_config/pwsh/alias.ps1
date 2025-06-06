@@ -1,6 +1,10 @@
 ### Import alias management functions
 . (Join-Path $PSScriptRoot "alias-manager.ps1")
-Import-Aliases
+try {
+    Import-Aliases *> $null
+} catch {
+    Write-Host "An error occurred importing aliases: $_"
+}
 
 ### Scoop Config
 Invoke-Expression (& { (sfsu hook --disable list | Out-String) })
