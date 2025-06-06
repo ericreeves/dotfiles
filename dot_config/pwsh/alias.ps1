@@ -7,7 +7,6 @@ try {
 }
 
 ### Scoop Config
-Invoke-Expression (& { (sfsu hook --disable list | Out-String) })
 function Update-ScoopApps {
     <#
     .SYNOPSIS
