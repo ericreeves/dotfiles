@@ -1,7 +1,8 @@
 $Env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" +
             [System.Environment]::GetEnvironmentVariable("Path","User") + ";" +
-            [System.Environment]::GetEnvironmentVariable("USERPROFILE") + "\.cargo\bin" + ";" +
-            [System.Environment]::GetEnvironmentVariable("USERPROFILE") + "\.local\bin\cava"
+            $Env:USERPROFILE + "\.local\bin" + ";" + 
+            $Env:USERPROFILE + "\.cargo\bin" + ";" +
+            $Env:USERPROFILE + "\.local\bin\cava"
 
 $Env:EDITOR = "nvim"
 $Env:NVIM_LOG_FILE = $Env:USERPROFILE + "/.config/nvim-data"
