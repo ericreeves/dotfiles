@@ -3,6 +3,7 @@ $modules = @(
     'PSReadLine'
     'PSFzf'
     'gsudoModule'
+    'posh-git'
 )
 
 foreach ($module in $modules) {
