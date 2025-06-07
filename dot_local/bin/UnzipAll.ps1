@@ -2,15 +2,68 @@
 # Analyzes archive structure to determine extraction strategy
 
 param(
-    [Parameter(Mandatory=$true, HelpMessage="Specify the directory containing ZIP files to extract")]
-    [ValidateScript({
-        if (-not (Test-Path -Path $_ -PathType Container)) {
-            throw "The specified path '$_' does not exist or is not a directory."
-        }
-        return $true
-    })]
-    [string]$Path
+    [Parameter(Mandatory=$false, Position=0, HelpMessage="Specify the directory containing ZIP files to extract")]
+    [string]$Path = "",
+    
+    [Parameter(Mandatory=$false, HelpMessage="Specify the destination directory for extracted files (defaults to source directory)")]
+    [string]$Destination = ""
 )
+
+# Capture the command used to invoke this script
+$InvokedCommand = $MyInvocation.Line.Trim()
+
+# Function to display usage information
+function Show-Usage {
+    param([string]$Command)
+    
+    Write-Host ""
+    Write-Host "ZIP File Extraction Script" -ForegroundColor Green
+    Write-Host "=========================" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "USAGE:" -ForegroundColor Yellow
+    Write-Host "  $Command -Path <SourceDirectory> [-Destination <DestinationDirectory>]" -ForegroundColor White
+    Write-Host "  $Command <SourceDirectory> [-Destination <DestinationDirectory>]" -ForegroundColor White
+    Write-Host ""
+    Write-Host "PARAMETERS:" -ForegroundColor Yellow
+    Write-Host "  Path          (Required) Directory containing ZIP files to extract" -ForegroundColor White
+    Write-Host "                           Can be specified as -Path or as first positional argument" -ForegroundColor Gray
+    Write-Host "  -Destination  (Optional) Directory where files will be extracted" -ForegroundColor White
+    Write-Host "                           Defaults to source directory if not specified" -ForegroundColor Gray
+    Write-Host ""
+    Write-Host "EXAMPLES:" -ForegroundColor Yellow
+    Write-Host "  # Extract ZIP files in current directory (positional)" -ForegroundColor Gray
+    Write-Host "  $Command ." -ForegroundColor White
+    Write-Host ""
+    Write-Host "  # Extract ZIP files in current directory (named parameter)" -ForegroundColor Gray
+    Write-Host "  $Command -Path ." -ForegroundColor White
+    Write-Host ""
+    Write-Host "  # Extract ZIP files from Downloads to Desktop" -ForegroundColor Gray
+    Write-Host "  $Command `"C:\Downloads`" -Destination `"C:\Users\$env:USERNAME\Desktop\Extracted`"" -ForegroundColor White
+    Write-Host ""
+    Write-Host "  # Extract from network drive to local folder" -ForegroundColor Gray
+    Write-Host "  $Command `"\\Server\Share\Archives`" -Destination `"C:\LocalExtracted`"" -ForegroundColor White
+    Write-Host ""
+    Write-Host "FEATURES:" -ForegroundColor Yellow
+    Write-Host "  • Intelligently analyzes ZIP structure before extraction" -ForegroundColor White
+    Write-Host "  • Creates subdirectories for ZIPs with loose files" -ForegroundColor White
+    Write-Host "  • Extracts directly for ZIPs containing only folders" -ForegroundColor White
+    Write-Host "  • Moves successfully extracted ZIP files to recycle bin" -ForegroundColor White
+    Write-Host "  • Handles directory conflicts with user prompts" -ForegroundColor White
+    Write-Host ""
+}
+
+# Check if required parameters are provided and show usage if not
+if ([string]::IsNullOrEmpty($Path)) {
+    Show-Usage -Command $InvokedCommand
+    exit 1
+}
+
+# Validate that the path exists and is a directory
+if (-not (Test-Path -Path $Path -PathType Container)) {
+    Write-Error "The specified path '$Path' does not exist or is not a directory."
+    Show-Usage -Command $InvokedCommand
+    exit 1
+}
 
 # Function to check ZIP contents and determine extraction strategy
 function Get-ZipExtractionInfo {
@@ -122,7 +175,27 @@ if (-not (Get-Command -Name "Expand-Archive" -ErrorAction SilentlyContinue)) {
 
 # Get specified directory and resolve to full path
 $workingPath = Resolve-Path -Path $Path
-Write-Host "Working directory: $workingPath" -ForegroundColor Cyan
+Write-Host "Source directory: $workingPath" -ForegroundColor Cyan
+
+# Determine destination path
+if ($Destination -ne "") {
+    # Validate destination path exists or can be created
+    if (-not (Test-Path -Path $Destination)) {
+        try {
+            New-Item -Path $Destination -ItemType Directory -Force | Out-Null
+            Write-Host "Created destination directory: $Destination" -ForegroundColor Green
+        }
+        catch {
+            Write-Error "Cannot create destination directory '$Destination': $($_.Exception.Message)"
+            exit 1
+        }
+    }
+    $destinationPath = Resolve-Path -Path $Destination
+    Write-Host "Destination directory: $destinationPath" -ForegroundColor Cyan
+} else {
+    $destinationPath = $workingPath
+    Write-Host "Destination directory: Same as source" -ForegroundColor Cyan
+}
 
 # Get all ZIP files in the specified directory
 $zipFiles = Get-ChildItem -Path $workingPath -Filter "*.zip" -File
@@ -156,14 +229,14 @@ foreach ($file in $zipFiles) {
         if ($zipInfo.RootFiles.Count -gt 0) {
             Write-Host "    Root files: $($zipInfo.RootFiles -join ', ')" -ForegroundColor DarkGray
         }
-        $targetDir = Join-Path -Path $workingPath -ChildPath $fileName
+        $targetDir = Join-Path -Path $destinationPath -ChildPath $fileName
         $extractToSubdir = $true
     } else {
-        Write-Host "  ZIP contains only directories - extracting to current directory" -ForegroundColor Gray
+        Write-Host "  ZIP contains only directories - extracting to destination directory" -ForegroundColor Gray
         if ($zipInfo.RootDirs.Count -gt 0) {
             Write-Host "    Root directories: $($zipInfo.RootDirs -join ', ')" -ForegroundColor DarkGray
         }
-        $targetDir = $workingPath
+        $targetDir = $destinationPath
         $extractToSubdir = $false
     }
     
