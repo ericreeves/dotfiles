@@ -47,7 +47,7 @@ function ... { # Navigate to git root if in a git repo
 function b { __zoxide_z - } # Go back to previous directory
 # function ffc { Invoke-FzfFileAction -Drive ($args[0] ?? 'd') -Action 'cd' } # Fuzzy find files and navigate to their directory
 # function fdc { Invoke-FzfDirectoryAction -Drive ($args[0] ?? 'd') -Action 'cd' } # Fuzzy find directories and navigate to selected directory
-function cdf { Invoke-FuzzySetLocation } # Fuzzy find and change directory
+function cdf { Invoke-FuzzySetLocation $args[0] } # Fuzzy find and change directory
 function cde { Set-LocationFuzzyEverything } # Change directory based upon Everything context
 
 ### Search
