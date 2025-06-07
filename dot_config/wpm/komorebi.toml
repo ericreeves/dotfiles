@@ -15,9 +15,10 @@ Environment = [[
     "$USERPROFILE/.config/komorebi",
 ]]
 
+
 [[Service.ExecStop]]
-Executable = "komorebic.exe"
-Arguments = ["stop"]
+Executable = "powershell.exe"
+Arguments = ["-NoProfile", "-Command", "& {& komorebic stop; Wait-Process -Name 'komorebi' -ErrorAction SilentlyContinue; exit 0}"]
 
 [[Service.ExecStopPost]]
 Executable = "komorebic.exe"
