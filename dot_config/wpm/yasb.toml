@@ -7,7 +7,7 @@ Requires = [
 
 [Service]
 Kind = "Forking"
-Restart = "OnFailure"
+Restart = "Always"
 RestartSec = 2
 
 [Service.ExecStart]
