@@ -23,6 +23,9 @@ Set-Alias -Name vi -Value $Env:EDITOR
 # Neovim Config
 $Env:NVIM_LOG_FILE = $Env:USERPROFILE + "/.config/nvim-data"
 
+# Development Config
+$Env:LOCAL_CODE_HOME = $Env:USERPROFILE + "/code"
+
 # Window Manager Config
 $Env:KOMOREBI_CONFIG_HOME = $Env:USERPROFILE + "/.config/komorebi"
 $Env:WHKD_CONFIG_HOME = $Env:USERPROFILE + "/.config/komorebi"
