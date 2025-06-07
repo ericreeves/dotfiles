@@ -30,6 +30,8 @@ function flushdns { # Flush DNS cache
 	Clear-DnsClientCache
 	Write-Host "DNS has been flushed"
 }
+function reload { . $PROFILE } # Reload Powershell $PROFILE
+function uza { UnzipAll -Path $args[0] }
 function ww { wezterm cli spawn --new-window --cwd $pwd } # Open new WezTerm window at current directory
 function wt { wezterm cli spawn --cwd $pwd } # Open new WezTerm tab at current directory
 
@@ -49,7 +51,6 @@ function cdf { Invoke-FuzzySetLocation } # Fuzzy find and change directory
 function cde { Set-LocationFuzzyEverything } # Change directory based upon Everything context
 
 ### Search
-function fgs { Invoke-FuzzyGitStatus } # Fuzzy find and select git status items
 function fh { Invoke-FuzzyHistory } # Fuzzy search command history
 function fhc { # Searches your command history, sets your clipboard to the selected item - Usage: fhc [<string>]
   $find = $args
@@ -90,6 +91,7 @@ function cmu { chezmoi update $args } # Update chezmoi dotfiles from source
 function cmdf { chezmoi git pull -- --rebase; chezmoi diff $args } # Pull latest changes and show differences
 
 ### Git
+function fgs { Invoke-FuzzyGitStatus } # Fuzzy find and select git status items
 function lg { lazygit $args } # Launch LazyGit terminal UI for Git operations
 function g { git $args } # Git command shortcut
 function gs { git status $args } # Show Git repository status
@@ -100,6 +102,33 @@ function gcp {
     git add .
     git commit -m "$args"
     git push
+}
+function ghrc { # Clone a repository using 'gh repo clone' - Usage: ghrc <repo_url> [local_directory]
+  param(
+    [Parameter(Mandatory = $true, Position = 0)]
+    [string]$RepoUrl,
+    [Parameter(Position = 1)]
+    [string]$LocalDirectory = $Env:LOCAL_CODE_HOME
+  )
+  
+  # Parse repo name from URL
+  $repoName = ""
+  if ($RepoUrl -match "^https://github\.com/[^/]+/([^/]+?)(?:\.git)?/?$") {
+    $repoName = $matches[1]
+  }
+  elseif ($RepoUrl -match "^[^/]+/([^/]+)$") {
+    $repoName = $matches[1]
+  }
+  else {
+    Write-Error "Invalid repository URL format. Use either 'https://github.com/USERNAME/REPONAME' or 'USERNAME/REPONAME'"
+    return
+  }
+  
+  # Construct full clone path
+  $clonePath = Join-Path $LocalDirectory $repoName
+  
+  gh repo clone $RepoUrl $clonePath
+  Set-Location $clonePath
 }
 
 ### Terraform
