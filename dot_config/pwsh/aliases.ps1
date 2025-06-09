@@ -1,6 +1,6 @@
 ### Linuxish
 function cat { Get-Content $args } # Display file contents
-function grep { Select-String $args } # Search for text patterns in files
+function grep { Select-String $args[0] } # Search for text patterns in files
 function kill { Stop-Process -Name $args[0] } # Kill process by name
 function l { eza -l $args } # List directory contents in long format
 function rmrf { # Recursive remove without confirmation - Usage: rmrf <path1> <path2> ... <pathN>
