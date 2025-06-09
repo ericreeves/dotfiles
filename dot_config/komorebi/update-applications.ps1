@@ -20,6 +20,21 @@ if (-not (Test-Path $StockJsonFile)) {
     exit 1
 }
 
+# Generate and update schema file
+Write-Host "Generating komorebi configuration schema..."
+try {
+    $schemaOutput = & komorebic static-config-schema
+    if ($LASTEXITCODE -eq 0) {
+        $schemaPath = "$Env:KOMOREBI_CONFIG_HOME/schema.json"
+        Set-Content -Path $schemaPath -Value $schemaOutput
+        Write-Host "Successfully updated schema.json"
+    } else {
+        Write-Warning "Failed to generate schema, exit code: $LASTEXITCODE"
+    }
+} catch {
+    Write-Warning "Error running komorebic static-config-schema: $_"
+}
+
 # Fetch latest application configuration from GitHub
 Write-Host "Fetching latest application configuration from GitHub..."
 try {
