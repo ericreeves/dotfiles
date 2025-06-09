@@ -1,8 +1,6 @@
 {
   "$schema": "./schema.json",
-  "app_specific_configuration_path": [
-    "$Env:USERPROFILE/.config/komorebi/applications-merged.json",
-  ],
+  "app_specific_configuration_path": [ "$Env:KOMOREBI_CONFIG_HOME/applications-merged.json" ],
   "window_hiding_behaviour": "Cloak",
   "cross_monitor_move_behaviour": "Insert",
   "cross_boundary_behaviour": "Monitor",
@@ -12,9 +10,9 @@
     "2": "16843009"
   },
   "bar_configurations": [
-    "$Env:USERPROFILE/.config/komorebi/komorebi.bar.json",
-    "$Env:USERPROFILE/.config/komorebi/komorebi.bar.1.json",
-    "$Env:USERPROFILE/.config/komorebi/komorebi.bar.2.json"
+    "$Env:KOMOREBI_CONFIG_HOME/komorebi.bar.json",
+    "$Env:KOMOREBI_CONFIG_HOME/komorebi.bar.1.json",
+    "$Env:KOMOREBI_CONFIG_HOME/komorebi.bar.2.json"
   ],
   "transparency": false,
   "transparency_alpha": 254,
