@@ -1,5 +1,14 @@
 {
   "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/master/schema.asc.json",
+  "1Password": {
+    "floating": [
+      {
+        "kind": "Exe",
+        "id": "1Password.exe",
+        "matching_strategy": "Equals"
+      }
+    ]
+  },
   "Elgato Stream Deck": {
     "floating": [
       {
