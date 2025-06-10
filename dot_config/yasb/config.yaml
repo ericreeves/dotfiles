@@ -192,8 +192,8 @@ widgets:
       api_key: '24b6c2cda6d84066b0304531241908'
       update_interval: 600
       hide_decimal: true
-      location: "Hungary, Eger"
-      units: "metric"
+      location: "Houston, TX"
+      units: "imperial"
       callbacks:
         on_left: "toggle_card"
       icons:
