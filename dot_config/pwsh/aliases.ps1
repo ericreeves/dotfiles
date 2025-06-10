@@ -25,6 +25,13 @@ function which {
 ### Terminal
 function c { Clear-Host $args } # Clear the terminal screen
 function q { exit } # Exit the current PowerShell session
+function md5 {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string]$TargetFiles
+  )
+  forfiles /s /m $TargetFiles /c "cmd /c CertUtil -hashfile @path MD5" 
+}
 function sysinfo { Get-ComputerInfo } # Display detailed system information
 function flushdns { # Flush DNS cache
 	Clear-DnsClientCache
