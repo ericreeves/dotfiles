@@ -59,6 +59,7 @@ return {
       brightness = 0.4,
    },
 
+   audible_bell = "Disabled",
    visual_bell = {
       fade_in_function = 'EaseIn',
       fade_in_duration_ms = 250,
