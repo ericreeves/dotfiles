@@ -39,13 +39,13 @@
     }
   ],
   "animation": {
-    "enabled": true,
+    "enabled": false,
     "duration": 500,
     "fps": 120,
     "style": [0.41,0.11,0.42,1.19]
   },
-  "default_workspace_padding": 10,
-  "default_container_padding": 10,
+  "default_workspace_padding": 15,
+  "default_container_padding": 15,
   "border_style": "System",
   "border_width": 1,
   "border": true,
@@ -57,13 +57,20 @@
     "bar_accent": "Lavender",
     "unfocused_border": "Crust",
     "floating_border": "Green",
-    "single_border": "Lavender"
+    "single_border": "Lavender",
+    "stack_border": "Lavender",
+    "stackbar_background": "Crust",
+    "stackbar_focused_text": "Lavender",
+    "stackbar_unfocused_text": "Surface0"
   },
   "stackbar": {
     "height": 30,
     "mode": "OnStack",
+    "label": "Title",
     "tabs": {
-      "width": 300
+      "width": 400,
+      "font_family": "Segoe UI",
+      "font_size": 18
     }
   },
   "monitors": [
