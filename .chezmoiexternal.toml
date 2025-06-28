@@ -1,7 +1,7 @@
-[".slimzsh"]
-    type = "git-repo"
-    url = "https://github.com/changs/slimzsh.git"
-    refreshPeriod = "168h"
+# [".slimzsh"]
+#    type = "git-repo"
+#    url = "https://github.com/changs/slimzsh.git"
+#    refreshPeriod = "168h"
 
 # [".config/nvim"]
 #     type = "git-repo"
