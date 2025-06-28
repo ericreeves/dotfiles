@@ -1,11 +1,28 @@
+Host 192.168.1.5
+  HostName 192.168.1.5
+  User media
+
 Host cube
   User eric
-  Hostname %h.alluvium.cloud
+  HostName %h.alluvium.cloud
 
 Host pve1
   User root
-  Hostname %h.alluvium.cloud
+  HostName %h.alluvium.cloud
 
 Host cosmos
   User root
-  Hostname 192.168.1.10
+  HostName 192.168.1.10
+
+Host servarr
+  User media
+  HostName 192.168.1.5
+
+Host minecraft
+  User root
+  HostName 192.168.1.15
+
+Host ai
+  User root
+  HostName 192.168.1.17
+  IdentitiesOnly=yes
