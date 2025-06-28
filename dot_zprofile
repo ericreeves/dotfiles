@@ -1,3 +1,2 @@
-if [ -f ~/.zshrc ]; then
-  source ~/.zshrc
-fi
+[ -f ~/.zshrc ] && source ~/.zshrc
+
