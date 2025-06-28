@@ -38,7 +38,10 @@ function flushdns { # Flush DNS cache
 	Write-Host "DNS has been flushed"
 }
 function reload { . $PROFILE } # Reload Powershell $PROFILE
+function rmmac { Get-ChildItem -Path . -Recurse -Force | Where-Object { ($_.PSIsContainer -and $_.Name -eq "__MACOSX") -or ($_.Name -eq ".DS_Store") } | Remove-Item -Recurse -Force -Verbose }
+function uz { 7z x $args[0] }
 function uza { UnzipAll -Path $args[0] }
+function uzar { Get-ChildItem -Directory -Recurse $args[0] | ForEach-Object { Push-Location $_.FullName; uza .; Pop-Location } }
 function ww { wezterm cli spawn --new-window --cwd $pwd } # Open new WezTerm window at current directory
 function wt { wezterm cli spawn --cwd $pwd } # Open new WezTerm tab at current directory
 
@@ -160,3 +163,7 @@ function dmtp {
   )
   doormat aws tf-push variable-set --account $( $Env:WORK_AWS_ACCOUNT_ID ) --id $Varable_Set_ID
 }
+
+### AI
+#function ai { fabric $args } #  Fabric AI CLI
+Set-Alias ai fabric
