@@ -4,6 +4,7 @@ $modules = @(
     'PSFzf'
     'gsudoModule'
     'posh-git'
+    'Microsoft.WinGet.CommandNotFound'
 )
 
 foreach ($module in $modules) {

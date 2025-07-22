@@ -26,11 +26,9 @@ palette = "catppuccin_mocha"
 format = """
 [╭╴](fg:surface2)\
 $os\
+$shell\
 $sudo\
 $directory\
-$terraform\
-$conda\
-$python\
 $git_branch$git_commit$git_state$git_metrics$git_status\
 $jobs\
 $memory_usage\
@@ -47,6 +45,11 @@ $line_break\
 $localip\
 $character]($style)\
 """
+# Disabled
+# $shlvl\
+# $terraform\
+# $conda\
+# $python\
 
 right_format = """
 [<──╯](fg:surface2)
@@ -57,8 +60,9 @@ add_newline = true
 
 # Customization and activation of some modules:
 # Listed in the order of their position in the module row above
+
 [os]
-format = "[$symbol ]($style)[ ]()"
+format = "[$symbol]($style)[ ]()"
 style = "fg:white"
 disabled = false
 
@@ -101,6 +105,19 @@ SUSE = ""
 Ubuntu = ""
 Unknown = ""
 Windows = ""
+
+[shell]
+format = "[$indicator]($style)[ ]()"
+powershell_indicator = "psh"
+pwsh_indicator = "pwsh"
+unknown_indicator = "unknown_shell"
+style = "fg:white"
+disabled = false
+
+[shlvl]
+disabled = false
+format = '$shlvl level(s) down'
+threshold = 3
 
 [username]
 format = '[  ]($style)[$user]($style)[]()'
