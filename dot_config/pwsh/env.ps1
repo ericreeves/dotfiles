@@ -20,6 +20,12 @@ $Env:EDITOR = if (Test-CommandExists nvim) { 'nvim' }
 Set-Alias -Name vim -Value $Env:EDITOR
 Set-Alias -Name vi -Value $Env:EDITOR
 
+# Set SHLVL to determine how many shells deep we are - used by starship prompt
+$env:SHLVL = [int]$env:SHLVL + 1
+
+#  Starship Debugging
+# $Env:STARSHIP_LOG = "debug"
+
 # Neovim Config
 $Env:NVIM_LOG_FILE = $Env:USERPROFILE + "/.config/nvim-data"
 
@@ -70,3 +76,8 @@ $PSReadLineOptions = @{
 
 }
 Set-PSReadLineOption @PSReadLineOptions
+
+# Conda setup for python
+If (Test-Path "C:\Users\eric\scoop\apps\miniconda3\current\Scripts\conda.exe") {
+    (& "C:\Users\eric\scoop\apps\miniconda3\current\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
+}
