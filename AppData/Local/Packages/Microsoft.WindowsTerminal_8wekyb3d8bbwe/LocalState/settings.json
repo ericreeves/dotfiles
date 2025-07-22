@@ -6,30 +6,25 @@
     "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
     "keybindings": [],
     "launchMode": "focus",
-    "newTabMenu": 
-    [
+    "newTabMenu": [
         {
             "type": "remainingProfiles"
         }
     ],
-    "profiles": 
-    {
-        "defaults": 
-        {
+    "profiles": {
+        "defaults": {
             "antialiasingMode": "cleartype",
             "bellStyle": "window",
             "colorScheme": "Catppuccin Mocha",
             "experimental.repositionCursorWithMouse": true,
             "experimental.retroTerminalEffect": false,
-            "font": 
-            {
+            "font": {
                 "face": "FiraCode Nerd Font"
             },
             "opacity": 90,
             "useAcrylic": true
         },
-        "list": 
-        [
+        "list": [
             {
                 "commandline": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
@@ -72,12 +67,43 @@
                 "icon": "C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.1.1-2\\Menu\\anaconda_prompt.ico",
                 "name": "Anaconda Prompt (25.1.1-2)",
                 "startingDirectory": "C:\\Users\\eric"
+            },
+            {
+                "commandline": "%WINDIR%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy ByPass -NoExit -Command \"& 'C:\\Users\\eric\\anaconda3\\shell\\condabin\\conda-hook.ps1' ; conda activate 'C:\\Users\\eric\\anaconda3' \"",
+                "guid": "{eed49005-877d-5de2-94d5-5ce5e370f8c3}",
+                "icon": "C:\\Users\\eric\\anaconda3\\Menu\\anaconda_powershell_prompt.ico",
+                "name": "Anaconda PowerShell Prompt (anaconda3)",
+                "startingDirectory": "C:\\Users\\eric"
+            },
+            {
+                "commandline": "%WINDIR%\\System32\\cmd.exe \"/K\" C:\\Users\\eric\\anaconda3\\Scripts\\activate.bat C:\\Users\\eric\\anaconda3",
+                "guid": "{e78b37b4-0017-568b-9279-1abde5e14cde}",
+                "icon": "C:\\Users\\eric\\anaconda3\\Menu\\anaconda_prompt.ico",
+                "name": "Anaconda Prompt (anaconda3)",
+                "startingDirectory": "C:\\Users\\eric"
+            },
+            {
+                "guid": "{bf35c02e-2610-5dc0-b2a3-b1a9dc1de824}",
+                "hidden": false,
+                "name": "Ubuntu-24.04",
+                "source": "Microsoft.WSL"
+            },
+            {
+                "commandline": "%WINDIR%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy ByPass -NoExit -Command \"& 'C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.5.1-0\\shell\\condabin\\conda-hook.ps1' ; conda activate 'C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.5.1-0' \"",
+                "name": "Anaconda PowerShell Prompt (25.5.1-0)",
+                "icon": "C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.5.1-0\\Menu\\anaconda_powershell_prompt.ico",
+                "startingDirectory": "C:\\Users\\eric"
+            },
+            {
+                "commandline": "%WINDIR%\\System32\\cmd.exe \"/K\" C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.5.1-0\\Scripts\\activate.bat C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.5.1-0",
+                "name": "Anaconda Prompt (25.5.1-0)",
+                "icon": "C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.5.1-0\\Menu\\anaconda_prompt.ico",
+                "startingDirectory": "C:\\Users\\eric"
             }
         ]
     },
     "rendering.graphicsAPI": "direct3d11",
-    "schemes": 
-    [
+    "schemes": [
         {
             "background": "#161621",
             "black": "#45475A",
@@ -103,24 +129,20 @@
         }
     ],
     "showTabsInTitlebar": true,
-    "themes": 
-    [
+    "themes": [
         {
             "name": "Catppuccin Mocha",
-            "tab": 
-            {
+            "tab": {
                 "background": "#161621FF",
                 "iconStyle": "default",
                 "showCloseButton": "always",
                 "unfocusedBackground": null
             },
-            "tabRow": 
-            {
+            "tabRow": {
                 "background": "#161621FF",
                 "unfocusedBackground": "#161621FF"
             },
-            "window": 
-            {
+            "window": {
                 "applicationTheme": "dark",
                 "experimental.rainbowFrame": false,
                 "frame": null,
