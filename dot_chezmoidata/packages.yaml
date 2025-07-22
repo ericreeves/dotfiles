@@ -1,0 +1,7 @@
+packages:
+  common:
+    cargo:
+    - 'git-profile'
+  ubuntu:
+    apt:
+    - 'curl'

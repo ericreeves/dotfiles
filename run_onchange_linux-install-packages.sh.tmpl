@@ -1,0 +1,16 @@
+{{ if eq .chezmoi.os "linux" -}}
+#!pwsh
+
+{{ range .packages.common.cargo -}}
+Write-Host "--- Cargo'ing Rust apps" -ForegroundColor Yellow
+cargo install {{ . | quote }}
+{{ end -}}
+
+{{ if .packages.linux.apt -}}
+Write-Host "--- Root is required for apt packages. Sudoooooooing..." -ForegroundColor Yellow
+{{ range .packages.linux.apt -}}
+$env:DEBIAN_FRONTEND = "noninteractive"
+sudo apt-get install -qq -y {{ . | quote }}
+{{ end -}}
+{{ end -}}
+{{ end -}}
