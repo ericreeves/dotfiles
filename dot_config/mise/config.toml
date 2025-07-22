@@ -1,0 +1,8 @@
+[tools]
+chezmoi = "latest"
+gh = "latest"
+neovim = "latest"
+node = "latest"
+"npm:claude" = "latest"
+starship = "latest"
+tmux = "latest"
