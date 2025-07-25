@@ -1,0 +1,13 @@
+{{ if eq .chezmoi.os "linux" -}}
+
+#!{{ lookPath "pwsh" }}
+
+{{ if .packages.ubuntu.apt -}}
+Write-Host "--- Root is required for apt packages. Sudoooooooing..." -ForegroundColor Yellow
+{{ range .packages.ubuntu.apt -}}
+$env:DEBIAN_FRONTEND = "noninteractive"
+sudo apt-get install -qq -y {{ . | quote }}
+{{ end -}}
+{{ end -}}
+
+{{ end -}}
