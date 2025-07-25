@@ -6,8 +6,10 @@ go = "latest"
 lazydocker = "latest"
 gh = "latest"
 neovim = "latest"
-"npm:claude" = "latest"
 tmux = "latest"
+python = "3.12"
+direnv = "latest"
+zoxide = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["python"]
