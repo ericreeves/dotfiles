@@ -8,6 +8,11 @@
     url = "https://github.com/ericreeves/lazyvim"
     refreshPeriod = "1h"
 
+[".config/tmux/plugins/tpm"]
+    type = "git-repo"
+    url = "https://github.com/tmux-plugins/tpm"
+    refreshPeriod = "1h"
+
 #[".oh-my-zsh"]
 #    type = "archive"
 #    url = "https://github.com/ohmyzsh/ohmyzsh/archive/master.tar.gz"
