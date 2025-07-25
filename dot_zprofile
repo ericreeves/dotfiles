@@ -1,2 +1,56 @@
-[ -f ~/.zshrc ] && source ~/.zshrc
+eval "$(mise activate zsh)"
+
+# Set Editor Variable
+	export EDITOR="nvim"
+  if [ -x "$(command -v nvim)" ]; then
+  alias vim=nvim
+	alias vi=nvim
+	alias v=nvim
+elif [ -x "$(command -v vim)" ]; then 
+	export EDITOR="vim"
+	alias vi=vim
+	alias v=vim
+elif [ -x "$(command -v vi)" ]; then
+	export EDITOR="vi"
+	alias v=vi
+fi
+
+############################################################
+# Paths
+############################################################
+# Define XDG Paths
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_STATE_HOME="$HOME/.local/state"
+export XDG_CACHE_HOME="$HOME/.cache"
+
+# Tmux Plugin Manager
+export TMUX_PLUGIN_MANAGER_PATH="$HOME/.config/tmux/plugins"
+
+# Executable Paths
+# Any Paths Here That Exist Will Be Added To $PATH
+for P in \
+  /usr/local/sbin \
+  /usr/local/bin \
+	$HOME/.local/bin \
+	$HOME/bin \
+	; do
+		if [ -d "$P" ]; then
+			export PATH=$P:$PATH
+		fi
+done
+
+############################################################
+# HomeBrew
+############################################################
+if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    alias brewup='brew update && brew upgrade && brew upgrade --cask && brew cleanup; brew doctor; brew cleanup --prune 30'
+
+fi
+############################################################
+# Stuff!
+############################################################
+eval "$(direnv hook zsh)"
+eval "$(zoxide init zsh)"
 
