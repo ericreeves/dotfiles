@@ -12,6 +12,7 @@ direnv = "latest"
 zoxide = "latest"
 rust = "latest"
 "cargo:git-profile" = "latest"
+lazygit = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["python"]
