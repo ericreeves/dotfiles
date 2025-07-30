@@ -1,4 +1,4 @@
-eval "$(mise activate zsh)"
+eval "$(mise activate zsh --shims)"
 
 # Set Editor Variable
 	export EDITOR="nvim"
