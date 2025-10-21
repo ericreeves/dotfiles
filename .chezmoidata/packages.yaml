@@ -5,3 +5,5 @@ packages:
   ubuntu:
     apt:
     - 'curl'
+    - 'libnspr4'
+    - 'libnss3'

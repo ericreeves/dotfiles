@@ -3,10 +3,15 @@
 #    url = "https://github.com/changs/slimzsh.git"
 #    refreshPeriod = "168h"
 
-# [".config/nvim"]
-#     type = "git-repo"
-#     url = "https://github.com/ericreeves/NormalNvim.git"
-#     refreshPeriod = "1h"
+[".config/nvim"]
+    type = "git-repo"
+    url = "https://github.com/ericreeves/lazyvim"
+    refreshPeriod = "1h"
+
+[".config/tmux/plugins/tpm"]
+    type = "git-repo"
+    url = "https://github.com/tmux-plugins/tpm"
+    refreshPeriod = "1h"
 
 #[".oh-my-zsh"]
 #    type = "archive"

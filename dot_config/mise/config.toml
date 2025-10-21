@@ -1,8 +1,18 @@
 [tools]
 chezmoi = "latest"
+starship = "latest"
+node = "lts"
+go = "latest"
+lazydocker = "latest"
 gh = "latest"
 neovim = "latest"
-node = "latest"
-"npm:claude" = "latest"
-starship = "latest"
 tmux = "latest"
+python = "3.12"
+direnv = "latest"
+zoxide = "latest"
+rust = "latest"
+"cargo:git-profile" = "latest"
+lazygit = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = ["python"]
