@@ -23,10 +23,12 @@ Host minecraft
   HostName 192.168.1.15
 
 Host ai
-  User root
+  User eric
   HostName 192.168.1.17
   IdentitiesOnly=yes
 
 Host dev
   User eric
   Hostname 192.168.1.120
+#  LocalForward 127.0.0.1:3000 127.0.0.1:3000
+#  LocalForward 127.0.0.1:5000 127.0.0.1:5000
