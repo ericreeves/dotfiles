@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/master/schema.asc.json",
   "1Password": {
-    "ignore": [
+    "floating": [
       {
         "kind": "Exe",
         "id": "1Password.exe",
@@ -673,7 +673,7 @@
     ]
   },
   "Elgato Wave Link": {
-    "ignore": [
+    "floating": [
       {
         "kind": "Exe",
         "id": "WaveLink.exe",
@@ -1496,6 +1496,15 @@
       }
     ]
   },
+  "Microsoft IME Pad": {
+    "floating": [
+      {
+        "kind": "Exe",
+        "id": "IMEPADSV.EXE",
+        "matching_strategy": "Equals"
+      }
+    ]
+  },
   "Microsoft Outlook": {
     "ignore": [
       {
@@ -1563,10 +1572,10 @@
           "matching_strategy": "StartsWith"
         }
       ]
-     ]
+    ]
   },
   "Microsoft Teams": {
-    "tray_and_multi_window": [
+    "floating": [
       {
         "kind": "Class",
         "id": "TeamsWebView",
@@ -1582,7 +1591,7 @@
     ]
   },
   "Microsoft Teams classic": {
-    "ignore": [
+    "floating": [
       {
         "kind": "Title",
         "id": "Microsoft Teams Notification",
@@ -3223,10 +3232,93 @@
     ]
   },
   "Zoom": {
-    "ignore": [
+    "floating": [
       {
         "kind": "Exe",
         "id": "Zoom.exe",
+        "matching_strategy": "Equals"
+      }
+    ]
+  },
+  "GoBorderless": {
+    "floating": [
+      [
+        {
+          "kind": "Exe",
+          "id": "GoBorderless.exe",
+          "matching_strategy": "Equals"
+        }
+      ]
+    ]
+  },
+  "REAL Video Enhancer": {
+    "floating": [
+      [
+        {
+          "kind": "Exe",
+          "id": "REAL-Video-Enhancer.exe",
+          "matching_strategy": "Equals"
+        }
+      ]
+    ]
+  },
+  "Winxvideo AI": {
+    "ignore": [
+      [
+        {
+          "kind": "Class",
+          "id": "Qt5QWindowIcon",
+          "matching_strategy": "Equals"
+        },
+        {
+          "kind": "Exe",
+          "id": "Winxvideo AI.exe",
+          "matching_strategy": "Equals"
+        }
+      ]
+    ]
+  },
+  "Elgato Stream Deck": {
+    "floating": [
+      {
+        "kind": "Exe",
+        "id": "StreamDeck.exe",
+        "matching_strategy": "Equals"
+      }
+    ]
+  },
+  "yasb": {
+    "ignore": [
+      {
+        "kind": "Exe",
+        "id": "yasb.exe",
+        "matching_strategy": "Equals"
+      }
+    ]
+  },
+  "Bitwig Studio": {
+    "floating": [
+      {
+        "kind": "Class",
+        "id": "vst3window",
+        "matching_strategy": "Legacy"
+      }
+    ]
+  },
+  "SwitchBar": {
+    "floating": [
+      {
+        "kind": "Exe",
+        "id": "Switchbar.exe",
+        "matching_strategy": "Equals"
+      }
+    ]
+  },
+  "gzDoom": {
+    "floating": [
+      {
+        "kind": "Exe",
+        "id": "gzdoom.exe",
         "matching_strategy": "Equals"
       }
     ]
