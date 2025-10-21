@@ -1,6 +1,8 @@
 {
   "$schema": "./schema.json",
-  "app_specific_configuration_path": [ "$Env:KOMOREBI_CONFIG_HOME/applications-merged.json" ],
+  "app_specific_configuration_path": [
+    "C:\\Users\\eric/.config/komorebi/applications.json"
+  ],
   "window_hiding_behaviour": "Cloak",
   "cross_monitor_move_behaviour": "Insert",
   "cross_boundary_behaviour": "Monitor",
@@ -34,7 +36,7 @@
     },
     {
       "kind": "Exe",
-      "id": "obs64.exe", 
+      "id": "obs64.exe",
       "matching_strategy": "Equals"
     }
   ],
@@ -42,7 +44,12 @@
     "enabled": false,
     "duration": 500,
     "fps": 120,
-    "style": [0.41,0.11,0.42,1.19]
+    "style": [
+      0.41,
+      0.11,
+      0.42,
+      1.19
+    ]
   },
   "default_workspace_padding": 15,
   "default_container_padding": 15,
@@ -84,8 +91,13 @@
       },
       "workspaces": [
         {
-          "name": "Main",
-          "layout": "UltrawideVerticalStack",
+          "name": "1",
+          "layout_rules": {
+            "1": "UltrawideVerticalStack"
+          },
+          "custom_layout_rules": {
+            "5": "C:/Users/eric/.config/komorebi/custom-3-col-layout.json"
+          },
           "intial_workspace_rules": [
             {
               "id": "Chrome.exe",
@@ -95,8 +107,13 @@
           ]
         },
         {
-          "name": "Personal",
-          "layout": "UltrawideVerticalStack",
+          "name": "2",
+          "layout_rules": {
+            "1": "UltrawideVerticalStack"
+          },
+          "custom_layout_rules": {
+            "5": "C:/Users/eric/.config/komorebi/custom-3-col-layout.json"
+          },
           "intial_workspace_rules": [
             {
               "id": "zen.exe",
@@ -106,11 +123,11 @@
           ]
         },
         {
-          "name": "Code",
+          "name": "3",
           "layout": "UltrawideVerticalStack"
         },
         {
-          "name": "Music",
+          "name": "4",
           "layout": "UltrawideVerticalStack",
           "intial_workspace_rules": [
             {
@@ -121,7 +138,7 @@
           ]
         },
         {
-          "name": "Gaming",
+          "name": "5",
           "intial_workspace_rules": [
             {
               "kind": "Path",
