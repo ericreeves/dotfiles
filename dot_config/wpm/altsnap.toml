@@ -3,11 +3,14 @@ Name = "altsnap"
 Description = "Maintained continuation of Stefan Sundin's AltDrag"
 
 [Service]
-Autostart = false
+Kind = "Forking"
+Restart = "Always"
+RestartSec = 2
 
 [Service.ExecStart]
-Executable = "$USERPROFILE/AppData/Roaming/AltSnap/AltSnap.exe"
-Arguments = ["-h"] # No tray icon
+Executable = "$Env:USERPROFILE\\AppData\\Roaming\\AltSnap\\AltSnap.exe"
 
 [Service.Healthcheck.Process]
+Target = "AltSnap.exe"
 DelaySec = 1
+

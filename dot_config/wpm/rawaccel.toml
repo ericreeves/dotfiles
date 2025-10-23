@@ -7,5 +7,5 @@ Kind = "Oneshot"
 Restart = "Never"
 
 [Service.ExecStart]
-Executable = "$USERPROFILE/.local/bin/RawAccel/writer.exe" 
-Arguments = ["$USERPROFILE/.local/bin/RawAccel/settings.json"]
+Executable = "$Env:USERPROFILE\\.local\\bin\\RawAccel\\writer.exe" 
+Arguments = ["$Env:USERPROFILE\\.local\\bin\\RawAccel\\settings.json"]

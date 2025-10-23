@@ -2,9 +2,7 @@
 Name = "desktop"
 Description = "Desktop WPM-managed Services"
 Requires = [
-    "whkd",
-    "altsnap",
-    "rawaccel",
+    "komorebi",
 ]
 
 [Service]
