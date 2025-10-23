@@ -27,14 +27,15 @@ $env:SHLVL = [int]$env:SHLVL + 1
 # $Env:STARSHIP_LOG = "debug"
 
 # Neovim Config
-$Env:NVIM_LOG_FILE = $Env:USERPROFILE + "/.config/nvim-data"
+$Env:NVIM_LOG_FILE = $Env:USERPROFILE + "\.config\nvim-data"
 
 # Development Config
-$Env:LOCAL_CODE_HOME = $Env:USERPROFILE + "/code"
+$Env:LOCAL_CODE_HOME = $Env:USERPROFILE + "\code"
 
 # Window Manager Config
-$Env:KOMOREBI_CONFIG_HOME = $Env:USERPROFILE + "/.config/komorebi"
-$Env:WHKD_CONFIG_HOME = $Env:USERPROFILE + "/.config/komorebi"
+$Env:KOMOREBI_CONFIG_HOME = $Env:USERPROFILE + "\.config\komorebi"
+$Env:KOMOREBI_AHK_EXE = $Env:USERPROFILE + "\AppData\Local\Programs\AutoHotkey\v2\AutoHotkey64.exe"
+$Env:WHKD_CONFIG_HOME = $Env:USERPROFILE + "\.config\komorebi"
 
 # FZF Config
 $Env:FZF_FILE_OPTS = "--preview=`"bat --style=numbers --color=always {}`" --preview-window=border-rounded --preview-label=`" PREVIEW `" --border=rounded --border-label=`" FILES `" --tabstop=2 --color=16 --bind=ctrl-d:preview-half-page-down,ctrl-u:preview-half-page-up"
