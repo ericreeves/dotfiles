@@ -1,0 +1,27 @@
+{
+  "environment_variables": {
+    "KOMOREBI_CONFIG_HOME": "$Env:USERPROFILE\\.config\\komorebi"
+  },
+  "applications": [
+    {
+      "start_cmd": "komorebic.exe",
+      "start_argument_list": ["start"],
+      "stop_cmd": "komorebic.exe",
+      "stop_argument_list": ["stop"],
+      "process_name": "komorebi"
+    },
+    {
+      "start_cmd": "yasbc.exe",
+      "start_argument_list": ["start"],
+      "stop_cmd": "yasbc.exe",
+      "stop_argument_list": ["stop"],
+      "process_name": "yasb"
+    },
+    {
+      "start_cmd": "C:\\Users\\eric\\AppData\\Local\\Programs\\AutoHotkey\\v2\\AutoHotkey64.exe",
+      "start_argument_list": ["C:\\Users\\eric\\.config\\ahk\\init.ahk"],
+      "process_name": "AutoHotkey64",
+      "process_path": "C:\\Users\\eric\\AppData\\Local\\Programs\\AutoHotkey\\v2\\AutoHotkey64.exe"
+    }
+  ]
+}
