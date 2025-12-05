@@ -1,14 +1,11 @@
 [Unit]
 Name = "yasb"
 Description = "status bar for Windows"
-Requires = [
-    "komorebi",
-]
 
 [Service]
 Kind = "Forking"
-Restart = "Always"
-RestartSec = 2
+Restart = "Never"
+Autostart = false
 
 [Service.ExecStart]
 Executable = "yasbc.exe"
@@ -19,5 +16,5 @@ Executable = "powershell.exe"
 Arguments = ["-NoProfile", "-Command", "& {& yasbc stop; Wait-Process -Name 'yasb' -ErrorAction SilentlyContinue; exit 0}"]
 
 [Service.Healthcheck.Process]
-DelaySec = 1
+DelaySec = 10
 Target = "yasb.exe"

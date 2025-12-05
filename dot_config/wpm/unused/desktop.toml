@@ -1,0 +1,18 @@
+[Unit]
+Name = "desktop"
+Description = "Desktop WPM-managed Services"
+Requires = [
+    "komorebi",
+    "yasb",
+    "ahk",
+    "altsnap"
+]
+
+[Service]
+Kind = "Simple"
+Restart = "Never"
+Autostart = true
+
+[Service.ExecStart]
+Executable = "cmd.exe"
+Arguments = ["/c", "pause"]
