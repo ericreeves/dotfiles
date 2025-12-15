@@ -95,17 +95,17 @@ local RENDER_VARIANTS = {
 -- stylua: ignore
 -- Catppuccin Mocha colors
 local colors = {
-   text_default          = { bg = '#11111b', fg = '#cdd6f4' },  -- Crust bg, Text fg
+   text_default          = { bg = '#11111b', fg = '#313244' },  -- Crust bg, Surface0 fg (darker inactive)
    text_hover            = { bg = '#585b70', fg = '#cdd6f4' },  -- Surface2 bg, Text fg
-   text_active           = { bg = '#313244', fg = '#cdd6f4' },  -- Surface0 bg, Text fg
+   text_active           = { bg = '#1e1e2e', fg = '#cdd6f4' },  -- Base bg, Text fg
 
-   unseen_output_default = { bg = '#11111b', fg = '#fab387' },  -- Crust bg, Peach fg
-   unseen_output_hover   = { bg = '#585b70', fg = '#fab387' },  -- Surface2 bg, Peach fg
-   unseen_output_active  = { bg = '#313244', fg = '#fab387' },  -- Surface0 bg, Peach fg
+   unseen_output_default = { bg = '#11111b', fg = '#b4befe' },  -- Crust bg, Lavender fg
+   unseen_output_hover   = { bg = '#585b70', fg = '#b4befe' },  -- Surface2 bg, Lavender fg
+   unseen_output_active  = { bg = '#1e1e2e', fg = '#b4befe' },  -- Base bg, Lavender fg
 
    scircle_default       = { bg = '#11111b', fg = '#11111b' },  -- Crust
    scircle_hover         = { bg = '#11111b', fg = '#585b70' },  -- Surface2
-   scircle_active        = { bg = '#11111b', fg = '#313244' },  -- Surface0
+   scircle_active        = { bg = '#11111b', fg = '#1e1e2e' },  -- Base
 }
 
 ---

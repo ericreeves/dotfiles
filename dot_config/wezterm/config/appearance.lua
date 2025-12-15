@@ -26,12 +26,12 @@ return {
     tab_bar = {
       background = '#11111b',
       active_tab = {
-        bg_color = '#313244',
+        bg_color = '#1e1e2e',
         fg_color = '#cdd6f4',
       },
       inactive_tab = {
         bg_color = '#11111b',
-        fg_color = '#cdd6f4',
+        fg_color = '#313244',
       },
       inactive_tab_hover = {
         bg_color = '#585b70',
