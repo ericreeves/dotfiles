@@ -93,18 +93,19 @@ local RENDER_VARIANTS = {
 
 ---@type table<string, Cells.SegmentColors>
 -- stylua: ignore
+-- Catppuccin Mocha colors
 local colors = {
-   text_default          = { bg = '#45475A', fg = '#1C1B19' },
-   text_hover            = { bg = '#5D87A3', fg = '#1C1B19' },
-   text_active           = { bg = '#74c7ec', fg = '#11111B' },
+   text_default          = { bg = '#11111b', fg = '#cdd6f4' },  -- Crust bg, Text fg
+   text_hover            = { bg = '#585b70', fg = '#cdd6f4' },  -- Surface2 bg, Text fg
+   text_active           = { bg = '#313244', fg = '#cdd6f4' },  -- Surface0 bg, Text fg
 
-   unseen_output_default = { bg = '#45475A', fg = '#FFA066' },
-   unseen_output_hover   = { bg = '#5D87A3', fg = '#FFA066' },
-   unseen_output_active  = { bg = '#74c7ec', fg = '#FFA066' },
+   unseen_output_default = { bg = '#11111b', fg = '#fab387' },  -- Crust bg, Peach fg
+   unseen_output_hover   = { bg = '#585b70', fg = '#fab387' },  -- Surface2 bg, Peach fg
+   unseen_output_active  = { bg = '#313244', fg = '#fab387' },  -- Surface0 bg, Peach fg
 
-   scircle_default       = { bg = 'rgba(0, 0, 0, 0.4)', fg = '#45475A' },
-   scircle_hover         = { bg = 'rgba(0, 0, 0, 0.4)', fg = '#5D87A3' },
-   scircle_active        = { bg = 'rgba(0, 0, 0, 0.4)', fg = '#74C7EC' },
+   scircle_default       = { bg = '#11111b', fg = '#11111b' },  -- Crust
+   scircle_hover         = { bg = '#11111b', fg = '#585b70' },  -- Surface2
+   scircle_active        = { bg = '#11111b', fg = '#313244' },  -- Surface0
 }
 
 ---

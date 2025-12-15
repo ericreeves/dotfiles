@@ -55,10 +55,11 @@ local charging_icons = {
 
 ---@type table<string, Cells.SegmentColors>
 -- stylua: ignore
+-- Catppuccin Mocha colors
 local colors = {
-   date      = { fg = '#fab387', bg = 'rgba(0, 0, 0, 0.4)' },
-   battery   = { fg = '#f9e2af', bg = 'rgba(0, 0, 0, 0.4)' },
-   separator = { fg = '#74c7ec', bg = 'rgba(0, 0, 0, 0.4)' }
+   date      = { fg = '#b4befe', bg = 'rgba(0, 0, 0, 0.4)' },  -- Lavender
+   battery   = { fg = '#b4befe', bg = 'rgba(0, 0, 0, 0.4)' },  -- Lavender
+   separator = { fg = '#b4befe', bg = 'rgba(0, 0, 0, 0.4)' },  -- Lavender
 }
 
 local cells = Cells:new()

@@ -9,29 +9,29 @@ if platform.is_mac then
    mod.SUPER = 'SUPER'
    mod.SUPER_REV = 'SUPER|CTRL'
 elseif platform.is_win or platform.is_linux then
-   mod.SUPER = 'ALT' -- to not conflict with Windows key shortcuts
+   mod.SUPER = 'ALT|SHIFT|CTRL' -- to not conflict with Windows key shortcuts
    mod.SUPER_REV = 'SHIFT|ALT'
 end
 
 -- stylua: ignore
 local keys = {
    -- misc/useful --
-   { key = 'F1', mods = 'NONE', action = 'ActivateCopyMode' },
+   { key = 'c', mods = mod.SUPER, action = 'ActivateCopyMode' },
    { key = 'p',  mods = mod.SUPER, action = act.ActivateCommandPalette },
    { key = 'd', mods = mod.SUPER,     action = wezterm.action.ShowLauncherArgs {
       flags = 'DOMAINS',
       title = 'Choose domain',
     }
   },
-   { key = 'g', mods = mod.SUPER, action = act.ShowLauncherArgs({ flags = 'FUZZY|WORKSPACES' }) },
-   {
-      key = 'F5',
-      mods = 'NONE',
-      action = act.ShowLauncherArgs({ flags = 'FUZZY|WORKSPACES' }),
-   },
-   { key = 'F11', mods = 'NONE',    action = act.ToggleFullScreen },
-   { key = 'F12', mods = 'NONE',    action = act.ShowDebugOverlay },
-   { key = 'f',   mods = mod.SUPER_REV, action = act.Search({ CaseInSensitiveString = '' }) },
+   -- { key = 'g', mods = mod.SUPER, action = act.ShowLauncherArgs({ flags = 'FUZZY|WORKSPACES' }) },
+   -- {
+   --    key = 'F5',
+   --    mods = 'NONE',
+   --    action = act.ShowLauncherArgs({ flags = 'FUZZY|WORKSPACES' }),
+   -- },
+   -- { key = 'f', mods = mod.SUPER,    action = act.ToggleFullScreen },
+   -- { key = 'F12', mods = 'NONE',    action = act.ShowDebugOverlay },
+   -- { key = 'f',   mods = mod.SUPER_REV, action = act.Search({ CaseInSensitiveString = '' }) },
    -- {
    --    key = 'u',
    --    mods = mod.SUPER_REV,
@@ -63,16 +63,16 @@ local keys = {
 
    -- tabs --
    -- tabs: spawn+close
-   { key = 't',          mods = mod.SUPER,     action = act.SpawnTab('CurrentPaneDomain') },
-   { key = 'w',          mods = mod.SUPER_REV, action = act.CloseCurrentTab({ confirm = true }) },
-   { key = 'd',          mods = mod.SUPER_REV, action = act.DetachDomain('CurrentPaneDomain') },
+   { key = 't',          mods = mod.SUPER,     action = act.EmitEvent('tabs.show-launch-menu') },
+   { key = 'w',          mods = mod.SUPER, action = act.CloseCurrentTab({ confirm = true }) },
+   { key = 'z',          mods = mod.SUPER, action = act.DetachDomain('CurrentPaneDomain') },
 
    -- tabs: navigation
+   { key = 'y', mods = mod.SUPER, action = act.MoveTabRelative(-1) },
    { key = 'u', mods = mod.SUPER, action = act.ActivateTabRelative(-1) },
-   { key = 'o', mods = mod.SUPER, action = act.ActivateTabRelative(1) },
+   { key = 'i', mods = mod.SUPER, action = act.ActivateTabRelative(1) },
+   { key = 'o', mods = mod.SUPER, action = act.MoveTabRelative(1) },
 
-   { key = 'o', mods = mod.SUPER_REV, action = act.MoveTabRelative(1) },
-   { key = 'u', mods = mod.SUPER_REV, action = act.MoveTabRelative(-1) },
 
    -- panes: navigation
    { key = 'k',     mods = mod.SUPER, action = act.ActivatePaneDirection('Up') },
@@ -80,20 +80,22 @@ local keys = {
    { key = 'h',     mods = mod.SUPER, action = act.ActivatePaneDirection('Left') },
    { key = 'l',     mods = mod.SUPER, action = act.ActivatePaneDirection('Right') },
 
-   { key = 'l',     mods = mod.SUPER_REV, action = act.RotatePanes 'Clockwise' },
-   { key = 'h',     mods = mod.SUPER_REV, action = act.RotatePanes 'CounterClockwise' },
+   -- { key = 'l',     mods = mod.SUPER_REV, action = act.RotatePanes 'Clockwise' },
+   -- { key = 'h',     mods = mod.SUPER_REV, action = act.RotatePanes 'CounterClockwise' },
 
-   { key = 'k',        mods = mod.SUPER_REV, action = act.ScrollByLine(-5) },
-   { key = 'j',        mods = mod.SUPER_REV, action = act.ScrollByLine(5) },
+   -- { key = 'k',        mods = mod.SUPER_REV, action = act.ScrollByLine(-5) },
+   -- { key = 'j',        mods = mod.SUPER_REV, action = act.ScrollByLine(5) },
 
    -- panes: zoom+close pane
-   { key = 'f', mods = mod.SUPER,     action = act.TogglePaneZoomState },
-   { key = 'c',     mods = mod.SUPER,     action = act.CloseCurrentPane({ confirm = true }) },
+   -- { key = 'f', mods = mod.SUPER,     action = act.TogglePaneZoomState },
+   -- { key = 'c',     mods = mod.SUPER,     action = act.CloseCurrentPane({ confirm = true }) },
 
    -- tab: title
-  { key = 'r', mods = mod.SUPER_REV, action = act.EmitEvent('tabs.reset-tab-title') },
+  -- { key = 'r', mods = mod.SUPER_REV, action = act.ReloadConfiguration },
+  -- { key = 'r', mods = mod.SUPER, action = act.EmitEvent('tabs.manual-update-tab-title') },
+  -- { key = 'r', mods = mod.SUPER_REV, action = act.EmitEvent('tabs.reset-tab-title') },
   { key = 'r', mods = mod.SUPER, action = act.EmitEvent('tabs.manual-update-tab-title') },
-
+  { key = 'r', mods = mod.SUPER_REV, action = act.EmitEvent('tabs.reset-tab-title') },
    -- window --
    -- window: spawn windows
    { key = 'n',          mods = mod.SUPER,     action = act.SpawnWindow },
@@ -163,11 +165,11 @@ local keys = {
    --    mods = mod.SUPER,
    --    action = act.PaneSelect({ alphabet = '1234567890', mode = 'Activate' }),
    -- },
-   {
-      key = 's',
-      mods = 'LEADER',
-      action = act.PaneSelect({ alphabet = '1234567890', mode = 'SwapWithActiveKeepFocus' }),
-   },
+   -- {
+   --    key = 's',
+   --    mods = 'LEADER',
+   --    action = act.PaneSelect({ alphabet = '1234567890', mode = 'SwapWithActiveKeepFocus' }),
+   -- },
 
    -- panes: scroll pane
    -- { key = 'PageUp',   mods = 'NONE',    action = act.ScrollByPage(-0.75) },
