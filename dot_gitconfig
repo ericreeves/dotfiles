@@ -13,9 +13,7 @@
 
 [core]
 	autocrlf = input
-      pager = delta
-
-	sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
+        pager = delta
 
 
 [interactive]
@@ -31,5 +29,3 @@
 [diff]
     colorMoved = default
 
-[credential "helperselector"]
-	selected = wincred
