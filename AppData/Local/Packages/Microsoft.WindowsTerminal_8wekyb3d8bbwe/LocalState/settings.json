@@ -6,25 +6,31 @@
     "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
     "keybindings": [],
     "launchMode": "focus",
-    "newTabMenu": [
+    "newTabMenu": 
+    [
         {
             "type": "remainingProfiles"
         }
     ],
-    "profiles": {
-        "defaults": {
+    "profiles": 
+    {
+        "defaults": 
+        {
             "antialiasingMode": "cleartype",
             "bellStyle": "window",
             "colorScheme": "Catppuccin Mocha",
             "experimental.repositionCursorWithMouse": true,
             "experimental.retroTerminalEffect": false,
-            "font": {
-                "face": "FiraCode Nerd Font"
+            "font": 
+            {
+                "face": "FiraCode Nerd Font",
+                "weight": "semi-bold"
             },
             "opacity": 90,
             "useAcrylic": true
         },
-        "list": [
+        "list": 
+        [
             {
                 "commandline": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
@@ -89,21 +95,50 @@
                 "source": "Microsoft.WSL"
             },
             {
-                "commandline": "%WINDIR%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy ByPass -NoExit -Command \"& 'C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.5.1-0\\shell\\condabin\\conda-hook.ps1' ; conda activate 'C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.5.1-0' \"",
-                "name": "Anaconda PowerShell Prompt (25.5.1-0)",
-                "icon": "C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.5.1-0\\Menu\\anaconda_powershell_prompt.ico",
+                "commandline": "%WINDIR%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy ByPass -NoExit -Command \"& 'H:\\AI\\pinokio\\bin\\miniconda\\shell\\condabin\\conda-hook.ps1' ; conda activate 'H:\\AI\\pinokio\\bin\\miniconda' \"",
+                "guid": "{a8d87650-a09b-5767-a035-d6b4a4175999}",
+                "icon": "H:\\AI\\pinokio\\bin\\miniconda\\Menu\\anaconda_powershell_prompt.ico",
+                "name": "Anaconda PowerShell Prompt (miniconda)",
                 "startingDirectory": "C:\\Users\\eric"
             },
             {
-                "commandline": "%WINDIR%\\System32\\cmd.exe \"/K\" C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.5.1-0\\Scripts\\activate.bat C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.5.1-0",
-                "name": "Anaconda Prompt (25.5.1-0)",
-                "icon": "C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.5.1-0\\Menu\\anaconda_prompt.ico",
+                "commandline": "%WINDIR%\\System32\\cmd.exe \"/K\" H:\\AI\\pinokio\\bin\\miniconda\\Scripts\\activate.bat H:\\AI\\pinokio\\bin\\miniconda",
+                "guid": "{b3ebe7b3-516b-562f-8d58-fe79d2738564}",
+                "icon": "H:\\AI\\pinokio\\bin\\miniconda\\Menu\\anaconda_prompt.ico",
+                "name": "Anaconda Prompt (miniconda)",
+                "startingDirectory": "C:\\Users\\eric"
+            },
+            {
+                "guid": "{f05d82fa-9948-5d8e-b0a1-0235aeb96b89}",
+                "hidden": true,
+                "name": "Developer Command Prompt for VS 2019",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{b747e469-bf88-5bde-a7c5-97859ee7ce04}",
+                "hidden": true,
+                "name": "Developer PowerShell for VS 2019",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "commandline": "%WINDIR%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy ByPass -NoExit -Command \"& 'C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.7.0-2\\shell\\condabin\\conda-hook.ps1' ; conda activate 'C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.7.0-2' \"",
+                "guid": "{97cb339c-590d-5afc-8cb3-8741fe7041c0}",
+                "icon": "C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.7.0-2\\Menu\\anaconda_powershell_prompt.ico",
+                "name": "Anaconda PowerShell Prompt (25.7.0-2)",
+                "startingDirectory": "C:\\Users\\eric"
+            },
+            {
+                "commandline": "%WINDIR%\\System32\\cmd.exe \"/K\" C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.7.0-2\\Scripts\\activate.bat C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.7.0-2",
+                "guid": "{8634052e-dfbd-531d-95fe-8957340c7e04}",
+                "icon": "C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.7.0-2\\Menu\\anaconda_prompt.ico",
+                "name": "Anaconda Prompt (25.7.0-2)",
                 "startingDirectory": "C:\\Users\\eric"
             }
         ]
     },
     "rendering.graphicsAPI": "direct3d11",
-    "schemes": [
+    "schemes": 
+    [
         {
             "background": "#161621",
             "black": "#45475A",
@@ -129,20 +164,24 @@
         }
     ],
     "showTabsInTitlebar": true,
-    "themes": [
+    "themes": 
+    [
         {
             "name": "Catppuccin Mocha",
-            "tab": {
+            "tab": 
+            {
                 "background": "#161621FF",
                 "iconStyle": "default",
                 "showCloseButton": "always",
                 "unfocusedBackground": null
             },
-            "tabRow": {
+            "tabRow": 
+            {
                 "background": "#161621FF",
                 "unfocusedBackground": "#161621FF"
             },
-            "window": {
+            "window": 
+            {
                 "applicationTheme": "dark",
                 "experimental.rainbowFrame": false,
                 "frame": null,

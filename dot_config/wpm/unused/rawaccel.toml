@@ -5,6 +5,7 @@ Description = "Mouse Acceleration Curve Configuration"
 [Service]
 Kind = "Oneshot"
 Restart = "Never"
+Autostart = false # Started by altsnap
 
 [Service.ExecStart]
 Executable = "$Env:USERPROFILE\\.local\\bin\\RawAccel\\writer.exe" 

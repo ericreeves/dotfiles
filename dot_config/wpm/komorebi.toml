@@ -4,28 +4,29 @@ Description = "Tiling window management for Windows"
 
 [Service]
 Kind = "Forking"
-Restart = "Always"
+Restart = "Never"
 RestartSec = 2
+Autostart = false
 
 [Service.ExecStart]
 Executable = "komorebic.exe"
 Arguments = ["start"]
-Environment = [[ "KOMOREBI_CONFIG_HOME", "$USERPROFILE/.config/komorebi", ]]
+Environment = [[ "KOMOREBI_CONFIG_HOME", "$USERPROFILE\\.config\\komorebi", ]]
 
-[[Service.ExecStartPre]]
-Executable = "pwsh.exe"
-Arguments = ["-NoProfile", "-File", "$USERPROFILE/.config/komorebi/update-applications.ps1" ]
-Environment = [[ "KOMOREBI_CONFIG_HOME", "$USERPROFILE/.config/komorebi", ]]
+#[[Service.ExecStartPre]]
+#Executable = "pwsh.exe"
+#Arguments = ["-NoProfile", "-File", "$USERPROFILE\\.config\\komorebi\\update-applications.ps1" ]
+#Environment = [[ "KOMOREBI_CONFIG_HOME", "$USERPROFILE\\.config\\komorebi", ]]
 
 [[Service.ExecStop]]
 Executable = "powershell.exe"
 Arguments = ["-NoProfile", "-Command", "& {& komorebic stop; Wait-Process -Name 'komorebi' -ErrorAction SilentlyContinue; exit 0}"]
-Environment = [[ "KOMOREBI_CONFIG_HOME", "$USERPROFILE/.config/komorebi", ]]
+Environment = [[ "KOMOREBI_CONFIG_HOME", "$USERPROFILE\\.config\\komorebi", ]]
 
 [[Service.ExecStopPost]]
 Executable = "komorebic.exe"
 Arguments = ["restore-windows"]
-Environment = [[ "KOMOREBI_CONFIG_HOME", "$USERPROFILE/.config/komorebi", ]]
+Environment = [[ "KOMOREBI_CONFIG_HOME", "$USERPROFILE\\.config\\komorebi", ]]
 
 [Service.Healthcheck.Process]
 Target = "komorebi.exe"

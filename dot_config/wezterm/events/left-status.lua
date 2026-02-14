@@ -12,9 +12,10 @@ local GLYPH_KEY_TABLE = nf.md_table_key --[[ '󱏅' ]]
 local GLYPH_KEY = nf.md_key --[[ '󰌆' ]]
 
 ---@type table<string, Cells.SegmentColors>
+-- Catppuccin Mocha colors
 local colors = {
-   default = { bg = '#fab387', fg = '#1c1b19' },
-   scircle = { bg = 'rgba(0, 0, 0, 0.4)', fg = '#fab387' },
+   default = { bg = '#b4befe', fg = '#11111B' },  -- Lavender bg, Crust fg
+   scircle = { bg = 'rgba(0, 0, 0, 0.4)', fg = '#b4befe' },  -- Lavender
 }
 
 local cells = Cells:new()

@@ -1,18 +1,18 @@
 {
   "$schema": "./schema.json",
-  "app_specific_configuration_path": [ "$Env:KOMOREBI_CONFIG_HOME/applications-merged.json" ],
+  "app_specific_configuration_path": [
+    "C:\\Users\\eric\\.config\\komorebi/applications.json"
+  ],
   "window_hiding_behaviour": "Cloak",
   "cross_monitor_move_behaviour": "Insert",
   "cross_boundary_behaviour": "Monitor",
   "display_index_preferences": {
-    "0": "H1AK500000",
-    "1": "L1-20230418",
+    "0": "SAME028-5&1339745c&0&UID4357",
+    "1": "Default_Monitor-2&180ef493&0&UID256",
     "2": "16843009"
   },
   "bar_configurations": [
-    "$Env:KOMOREBI_CONFIG_HOME/komorebi.bar.json",
-    "$Env:KOMOREBI_CONFIG_HOME/komorebi.bar.1.json",
-    "$Env:KOMOREBI_CONFIG_HOME/komorebi.bar.2.json"
+    "$Env:KOMOREBI_CONFIG_HOME/komorebi.bar.1.json"
   ],
   "transparency": false,
   "transparency_alpha": 254,
@@ -34,20 +34,20 @@
     },
     {
       "kind": "Exe",
-      "id": "obs64.exe", 
+      "id": "obs64.exe",
       "matching_strategy": "Equals"
     }
   ],
   "animation": {
     "enabled": false,
-    "duration": 500,
+    "duration": 120,
     "fps": 120,
-    "style": [0.41,0.11,0.42,1.19]
+    "style":"Linear"
   },
   "default_workspace_padding": 15,
   "default_container_padding": 15,
   "border_style": "System",
-  "border_width": 1,
+  "border_width": 2,
   "border": true,
   "border_offset": 0,
   "theme": {
@@ -84,7 +84,7 @@
       },
       "workspaces": [
         {
-          "name": "Main",
+          "name": "1",
           "layout": "UltrawideVerticalStack",
           "intial_workspace_rules": [
             {
@@ -95,7 +95,7 @@
           ]
         },
         {
-          "name": "Personal",
+          "name": "2",
           "layout": "UltrawideVerticalStack",
           "intial_workspace_rules": [
             {
@@ -106,11 +106,11 @@
           ]
         },
         {
-          "name": "Code",
+          "name": "3",
           "layout": "UltrawideVerticalStack"
         },
         {
-          "name": "Music",
+          "name": "4",
           "layout": "UltrawideVerticalStack",
           "intial_workspace_rules": [
             {
@@ -121,7 +121,7 @@
           ]
         },
         {
-          "name": "Gaming",
+          "name": "5",
           "intial_workspace_rules": [
             {
               "kind": "Path",
@@ -147,18 +147,13 @@
               "id": "Slack.exe",
               "kind": "Exe",
               "matching_strategy": "Equals"
-            }
-          ]
-        },
-        {
-          "name": "Personal",
-          "layout": "Grid",
-          "intial_workspace_rules": [
+            },
             {
-              "id": "Discord.exe",
+              "id": "Ferdium.exe",
               "kind": "Exe",
-              "matching_strategy": "Contains"
+              "matching_strategy": "Equals"
             }
+
           ]
         },
         {

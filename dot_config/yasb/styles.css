@@ -1,191 +1,399 @@
-/* ===================== */
-/* === COLOR VARIABLES === */
-/* ===================== */
+/* ====================================================================== */
+/* ===                    YASB STYLESHEET                            === */
+/* ====================================================================== */
+/*
+ * YASB (Yet Another Status Bar) - Custom Styling
+ * Theme: Catppuccin Mocha Reimagined
+ *
+ * DOCUMENTATION: https://github.com/amnweb/yasb/wiki/Styling
+ *
+ * KEY CONCEPTS:
+ * - Uses limited CSS (no CSS3 or advanced features)
+ * - Auto-reloads when watch_stylesheet: true in config.yaml
+ * - Main selectors: .yasb-bar, .widget, .icon, .label
+ * - Widget-specific: .*-widget (e.g., .clock-widget, .battery-widget)
+ * - Container divisions: .container-left, .container-center, .container-right
+ *
+ * DARK MODE SUPPORT:
+ * - Root element gets .dark class when OS uses dark theme
+ * - Example: .yasb-bar.dark { background-color: #000; }
+ */
+
+/* ====================================================================== */
+/* ===                    COLOR VARIABLES                            === */
+/* ====================================================================== */
+/*
+ * Color palette from Catppuccin Mocha theme
+ * Reference: https://github.com/catppuccin/catppuccin
+ *
+ * USAGE:
+ * - Use CSS variables for consistent theming: color: var(--lavender);
+ * - Modify these values to customize the entire theme
+ * - Aliased colors at bottom for semantic usage
+ */
 :root {
-    /* Catppuccin Mocha color palette */
-    --rosewater: #f5e0dc;
-    --flamingo: #f2cdcd;
-    --pink: #f5c2e7;
-    --mauve: #cba6f7;
-    --red: #f38ba8;
-    --maroon: #eba0ac;
-    --peach: #fab387;
-    --yellow: #f9e2af;
-    --green: #a6e3a1;
-    --teal: #94e2d5;
-    --sky: #89dceb;
-    --sapphire: #74c7ec;
-    --blue: #89b4fa;
-    --lavender: #b4befe;
+    /* === Catppuccin Mocha Accent Colors === */
+    /* Warm colors - use for highlights and alerts */
+    --rosewater: #f5e0dc;  /* Soft pink, subtle highlights */
+    --flamingo: #f2cdcd;   /* Light coral, battery icon */
+    --pink: #f5c2e7;       /* Bright pink, special accents */
+    --mauve: #cba6f7;      /* Purple, memory widget */
+    --red: #f38ba8;        /* Error states, power menu */
+    --maroon: #eba0ac;     /* Dark rose, weather icon */
+    --peach: #fab387;      /* Orange, warnings */
+    --yellow: #f9e2af;     /* Yellow, wifi icon */
 
-/* Text colors */
-    --text: #cdd6f4;
-    --subtext1: #bac2de;
-    --subtext0: #a6adc8;
+    /* Cool colors - use for status and info */
+    --green: #a6e3a1;      /* Success states */
+    --teal: #94e2d5;       /* Info, disk widget */
+    --sky: #89dceb;        /* Light blue, clock icon */
+    --sapphire: #74c7ec;   /* Medium blue */
+    --blue: #89b4fa;       /* Primary blue, volume icon */
+    --lavender: #b4befe;   /* Light purple, active elements */
 
-/* Overlay colors */
-    --overlay2: #9399b2;
-    --overlay1: #7f849c;
-    --overlay0: #6c7086;
+    /* === Text Colors (Hierarchy) === */
+    --text: #cdd6f4;       /* Primary text, highest contrast */
+    --subtext1: #bac2de;   /* Secondary text */
+    --subtext0: #a6adc8;   /* Tertiary text, default widget text */
 
-/* Surface colors */
-    --surface2: #585b70;
-    --surface1: #45475a;
-    --surface0: #282936;
+    /* === Overlay Colors (Inactive Elements) === */
+    --overlay2: #9399b2;   /* Disabled elements, high */
+    --overlay1: #7f849c;   /* Disabled elements, medium */
+    --overlay0: #6c7086;   /* Disabled elements, low */
 
-/* Base colors */
-    --base: #1e1e2e;
-    --mantle: rgba(24, 24, 37, 0.5);
-    --crust: rgba(17, 17, 27, 0.5);
+    /* === Surface Colors (Backgrounds) === */
+    --surface2: #585b70;   /* Elevated surfaces, highest */
+    --surface1: #45475a;   /* Elevated surfaces, medium */
+    --surface0: #282936;   /* Elevated surfaces, lowest, buttons */
 
-/* Aliased Colors */
-    --background-color: rgba(17, 17, 27, 0.5);
-    --active-color: #9399b2b;
-    --accent-color: #ffffff;
-    --border-color: rgba(24, 24, 37, 0.5);
-    --hover-color: #b4befe;
-    --icon-color:  #1e1e2e;
+    /* === Base Colors (Main Backgrounds) === */
+    --base: #1e1e2e;       /* Primary background */
+    --mantle: #292c3c;     /* Secondary background, menus */
+    --crust: #232634;      /* Deepest background, containers */
+
+    /* === Semantic Color Aliases === */
+    /* Use these for consistent theming across widgets */
+    --background-color: #202036;           /* Main bar background */
+    --container-background-color: #11111b; /* Widget containers */
+    --active-color: #9399b2b;              /* Active state indicator */
+    --accent-color: #ffffff;               /* High emphasis accents */
+    --border-color: rgba(24, 24, 37, 0.5); /* Subtle borders */
+    --hover-color: #b4befe;                /* Hover state (lavender) */
+    --icon-color:  #1e1e2e;                /* Icon contrast color */
 }
 
-/* ================= */
-/* === BASE STYLES === */
-/* ================= */
+/* ====================================================================== */
+/* ===                    BASE STYLES                                === */
+/* ====================================================================== */
+/*
+ * Universal styles applied to all elements
+ *
+ * CUSTOMIZATION:
+ * - font-size: Default text size (12px recommended for status bars)
+ * - font-family: Use Nerd Font proportional variants to prevent clipping
+ *   - Get icons from: https://www.nerdfonts.com/cheat-sheet
+ *   - Or use Windows Character Map (charmap.exe)
+ * - color: Default text color for all elements
+ */
 * {
-    font-size: 12px;
-    color: var(--subtext0);
-    font-weight: 700;
-    font-family: "Segoe UI", "JetBrainsMono NFP";
+    font-size: 12px;              /* Base font size for all widgets */
+    color: var(--subtext0);       /* Default text color (low contrast) */
+    font-weight: 700;             /* Bold text for better readability */
+    font-family: "Segoe UI", "JetBrainsMono NFP"; /* Use Nerd Font for icons */
     margin: 0;
     padding: 0;
 }
 
-/* ================= */
-/* === BAR LAYOUT === */
-/* ================= */
+/* ====================================================================== */
+/* ===                    BAR LAYOUT                                 === */
+/* ====================================================================== */
+/*
+ * Main bar container and widget layout
+ *
+ * SELECTORS:
+ * - .yasb-bar: Main status bar window
+ * - .container-left: Left widget section
+ * - .container-center: Center widget section
+ * - .container-right: Right widget section
+ * - .widget: All widget containers
+ * - .widget-container: Inner wrapper for widget content
+ *
+ * CUSTOMIZATION:
+ * - Modify padding/margin for widget spacing
+ * - Change background-color for bar appearance
+ * - Use .yasb-bar.dark for dark mode specific styles
+ */
 .yasb-bar {
     padding: 0;
     margin: 0;
-    background-color: var(--crust);
+    background-color: var(--background-color);
 }
 
-/* Common widget styles */
+/* === Universal Widget Styles === */
+/* Applied to all widgets unless overridden */
 .widget {
-    padding: 0 8px;
-    margin: 0 2px;
+    padding: 0 8px;  /* Horizontal spacing between widgets */
+    margin: 0 2px;   /* Small gap between adjacent widgets */
 }
 
+/* Widget label (text content) */
 .widget .label {
     padding: 0px 2px;
 }
 
+/* Alternate label (toggled via callbacks) */
 .widget .label.alt {
     padding: 0px 2px;
 }
 
+/* Widget icons (Nerd Font glyphs or Unicode) */
 .icon {
-    font-size: 16px;
-    margin: 0 4px 0 0;
+    font-size: 16px;         /* Slightly larger than text for visibility */
+    margin: 0 4px 0 0;       /* Space between icon and label */
 }
 
-/* ==================== */
-/* === POWER MENU === */
-/* ==================== */
-.power-menu-widget .label {
-    color: var(--red);
-    font-size: 13px;
+/* ====================================================================== */
+/* ===                NAVIGATION / LAUNCHER WIDGETS                  === */
+/* ====================================================================== */
+
+/* ====================================================================== */
+/* ===                    HOME WIDGET                                === */
+/* ====================================================================== */
+/*
+ * Quick access menu for common directories and system options
+ * Widget type: yasb.home.HomeWidget
+ *
+ * SELECTORS:
+ * - .home-widget: Main widget icon
+ * - .home-menu: Dropdown menu container
+ * - .home-menu .menu-item: Individual menu entries
+ * - .home-menu .separator: Visual divider between sections
+ *
+ * CUSTOMIZATION:
+ * - Configure menu items in config.yaml under menu_list
+ * - Enable/disable system_menu and power_menu options
+ * - Modify menu styling (blur, borders, alignment)
+ * - Common paths: Home, Downloads, Documents, Pictures, Videos
+ */
+.home-widget {
+    padding: 0 4px 0 12px;
 }
 
-.power-menu-popup {
-    background-color: transparent;
+.home-widget .icon {
+    font-size: 18px;
+    color: var(--subtext1);  /* Secondary text color for home icon */
 }
 
-.power-menu-popup .button {
-    padding: 0;
-    width: 180px;
-    height: 230px;
-    border-radius: 8px;
-    background-color: var(--base);
-    border: 8px solid rgba(58, 59, 83, 0);
-    margin: 0px;
-}
-
-.power-menu-popup .button.hover {
-    background-color: var(--surface0);
-    border: 8px solid var(--surface0);
-}
-
-.power-menu-popup .button .label {
-    margin-bottom: 8px;
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--lavender);
-}
-
-.power-menu-popup .button .icon {
-    font-size: 64px;
-    padding-top: 32px;
-    color: var(--lavender);
-}
-
-/* Cancel button specific styles */
-.power-menu-popup .button.cancel {
-    height: 32px;
-    border-radius: 4px;
-}
-
-.power-menu-popup .button.cancel .icon {
-    padding: 0;
-    margin: 0;
-}
-
-.power-menu-popup .button.cancel .label {
-    color: var(--red);
-    margin: 0;
-}
-
-/* ==================== */
-/* === VOLUME WIDGET === */
-/* ==================== */
-.volume-widget .icon {
-    color: var(--blue);
-    margin: 1px 2px 0 0;
-}
-
-/* Audio dropdown menu */
-.audio-menu {
+/* === Home Menu Dropdown === */
+.home-menu {
     background-color: var(--mantle);
+    padding: 0;
+    margin-left: 2px;
 }
 
-.audio-container .device {
-    font-size: 20px;
-    background-color: transparent;
-    border: none;
-    padding: 6px 8px 6px 4px;
-    margin: 2px 0;
-    font-size: 12px;
+/* Individual menu items (directories, actions) */
+.home-menu .menu-item {
+    padding: 8px 48px 8px 12px;
+    font-weight: 600;
+    color: var(--text);      /* Primary text color */
+}
+
+/* Hover state for menu items */
+.home-menu .menu-item:hover {
+    background-color: var(--lavender);  /* Lavender highlight */
+    color: var(--surface0);             /* Dark text on light background */
+    margin: 4px 6px;
     border-radius: 4px;
 }
 
-.audio-container .device.selected {
-    background-color: rgba(255, 255, 255, 0.085);
+/* Menu separators (dividing lines) */
+.home-menu .separator {
+    max-height: 1px;
+    background-color: var(--overlay0);  /* Subtle divider line */
+    margin: 0 8px;
 }
 
-.audio-container .device:hover {
-    background-color: rgba(255, 255, 255, 0.06);
+/* ====================================================================== */
+/* ===                WINDOW MANAGER WIDGETS                         === */
+/* ====================================================================== */
+
+/* ====================================================================== */
+/* ===                    GLAZEWM WORKSPACES                         === */
+/* ====================================================================== */
+/*
+ * Window manager workspace/desktop indicators for GlazeWM
+ * Widget type: glazewm.workspaces.GlazewmWorkspacesWidget
+ *
+ * SELECTORS:
+ * - .glazewm-workspaces: Main container
+ * - .ws-btn: Workspace button
+ * - .ws-btn.active_populated: Active workspace with windows
+ * - .ws-btn.active_empty: Active workspace without windows
+ */
+.glazewm-workspaces {
+    background-color: var(--crust);  /* Dark background container */
+    margin: 4px 0;
+    border-radius: 12px;             /* Rounded pill shape */
+    border: 0;
 }
 
-/* ================= */
-/* === DISK WIDGET === */
-/* ================= */
+/* Individual workspace buttons */
+.glazewm-workspaces .ws-btn {
+    font-size: 14px;
+    border: none;
+    color: var(--overlay0);          /* Muted for inactive workspaces */
+    padding: 0 6px;
+    cursor: pointer;
+}
+
+/* Active workspace (with or without windows) */
+.glazewm-workspaces .ws-btn.active_populated,
+.glazewm-workspaces .ws-btn.active_empty {
+    color: var(--red);               /* Red highlights active workspace */
+    font-weight: 900;
+}
+
+/* ====================================================================== */
+/* ===                    KOMOREBI WIDGETS                           === */
+/* ====================================================================== */
+/*
+ * Komorebi is a tiling window manager for Windows
+ * Documentation: https://github.com/amnweb/yasb/wiki (Komorebi widgets)
+ *
+ * AVAILABLE WIDGETS:
+ * - komorebi.workspaces.WorkspaceWidget: Workspace switcher
+ * - komorebi.active_layout.ActiveLayoutWidget: Current tiling layout
+ * - komorebi.control.KomorebiControlWidget: Start/stop/reload controls
+ * - komorebi.stack.StackWidget: Stacked window navigator
+ *
+ * CUSTOMIZATION:
+ * - Dots represent workspaces (empty/populated/active)
+ * - Layout icons configured in config.yaml
+ * - Offline state shown when Komorebi not running
+ */
+
+/* === Shared Container Backgrounds === */
+/* Container styling for apps, workspaces, and layout widgets */
+.apps-widget .widget-container,
+.komorebi-workspaces .widget-container,
+.komorebi-active-layout .widget-container {
+    background-color: var(--container-background-color);  /* Dark container */
+    border-radius: 12px;                                  /* Rounded corners */
+    margin: 4px 0;
+    /* border: 1px solid var(--border-color); */  /* Optional border */
+}
+
+/* === Komorebi Workspaces Widget === */
+.komorebi-workspaces {
+    padding: 0;
+    color: var(--overlay0);
+}
+
+/* Offline status text (shown when Komorebi not running) */
+.komorebi-workspaces .offline-status {
+    color: var(--foreground-color);
+    font-size: 12px;
+    padding: 0 4px;
+    font-weight: 600;
+}
+
+/* Workspace buttons - styled as dots */
+.komorebi-workspaces .ws-btn {
+    color: transparent;              /* Hide text, show dots only */
+    width: 10px;                     /* Dot width */
+    height: 10px;                    /* Dot height */
+    background-color: var(--surface0);  /* Empty workspace color */
+    border-radius: 5px;              /* Circular dots */
+    margin: 0 2px;                   /* Spacing between dots */
+    font-size: 1px;                  /* Minimal font size */
+}
+
+/* Hover state for workspace dots */
+.komorebi-workspaces .ws-btn:hover {
+    color: var(--accent-color);
+    background-color: var(--hover-color);  /* Lavender on hover */
+}
+
+/* Populated workspace (has windows but not active) */
+.komorebi-workspaces .ws-btn.populated {
+    width: 10px;
+    height: 10px;
+    background-color: var(--surface2);  /* Brighter than empty */
+    border-radius: 5px;
+    margin: 0 2px;
+    font-size: 1px;
+}
+
+/* Active workspace (currently focused) */
+.komorebi-workspaces .ws-btn.active {
+    color: transparent;
+    background-color: var(--lavender);  /* Lavender for active */
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+}
+
+/* === Komorebi Active Layout Widget === */
+.komorebi-active-layout {
+    padding: 0 4px;
+}
+
+.komorebi-active-layout .label {
+    font-weight: 600;
+    padding-bottom: 2px;
+}
+
+/* ====================================================================== */
+/* ===                SYSTEM MONITORING WIDGETS                      === */
+/* ====================================================================== */
+
+/* ====================================================================== */
+/* ===                    BATTERY WIDGET                             === */
+/* ====================================================================== */
+/*
+ * Battery level and charging status
+ * Widget type: yasb.battery.BatteryWidget
+ *
+ * CUSTOMIZATION:
+ * - Icon changes based on battery percentage
+ * - Shows charging icon when plugged in
+ * - Configure charging_options in config.yaml
+ * - Use label_alt for detailed info (time remaining, etc.)
+ */
+.battery-widget .icon {
+    color: var(--flamingo);  /* Flamingo (coral) for battery */
+}
+
+/* ====================================================================== */
+/* ===                    DISK WIDGET                                === */
+/* ====================================================================== */
+/*
+ * Disk usage monitor for all drives
+ * Widget type: yasb.disk.DiskWidget
+ *
+ * SELECTORS:
+ * - .disk-widget: Main widget container
+ * - .disk-group: Dropdown container for all disks
+ * - .disk-group-row: Individual disk row
+ * - .disk-group-label-bar: Progress bar showing disk usage
+ * - .disk-group-label: Disk letter/name
+ * - .disk-group-label-size: Disk size text
+ *
+ * CUSTOMIZATION:
+ * - Adjust row dimensions for more/less compact display
+ * - Modify progress bar colors to indicate fullness
+ * - Configure which drives to show in config.yaml
+ */
 .disk-widget .icon {
-    color: var(--teal);
+    color: var(--teal);      /* Teal for disk/storage */
 }
 
-/* Disk dropdown */
+/* === Disk Dropdown Menu === */
 .disk-group {
     background-color: var(--mantle);
 }
 
+/* Individual disk row container */
 .disk-group-row {
     min-width: 220px;
     max-width: 220px;
@@ -196,45 +404,106 @@
     border: 1px solid transparent;
 }
 
+/* Hover effect for disk rows */
 .disk-group-row:hover {
     background-color: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Disk usage progress bar background */
 .disk-group-label-bar {
     max-height: 8px;
     border: 0;
-    background-color: rgba(148, 226, 213, 0.3);
+    background-color: rgba(148, 226, 213, 0.3);  /* Teal with transparency */
     border-radius: 4px;
 }
 
+/* Disk usage progress bar fill */
 .disk-group-label-bar::chunk {
-    background-color: var(--teal);
+    background-color: var(--teal);  /* Filled portion of bar */
     border-radius: 4px;
 }
 
+/* Disk letter label (C:, D:, etc.) */
 .disk-group-label {
     font-size: 13px;
 }
 
+/* Disk size text (e.g., "234 GB / 512 GB") */
 .disk-group-label-size {
     font-size: 12px;
-    color: rgba(205, 214, 244, 0.5);
+    color: rgba(205, 214, 244, 0.5);  /* Dimmed for secondary info */
 }
 
-/* ================= */
-/* === CLOCK WIDGET === */
-/* ================= */
+/* ====================================================================== */
+/* ===                    MEMORY WIDGET                              === */
+/* ====================================================================== */
+/*
+ * System memory (RAM) usage monitor
+ * Widget type: yasb.memory.MemoryWidget
+ *
+ * CUSTOMIZATION:
+ * - Shows used/total memory or percentage
+ * - Configure label format in config.yaml
+ * - Add callbacks (e.g., open Task Manager on click)
+ * - Adjust update_interval for performance
+ */
+.memory-widget .icon {
+    color: var(--mauve);     /* Mauve (purple) for memory */
+}
+
+/* ====================================================================== */
+/* ===                    WIFI WIDGET                                === */
+/* ====================================================================== */
+/*
+ * WiFi signal strength and network status
+ * Widget type: yasb.wifi.WifiWidget
+ *
+ * CUSTOMIZATION:
+ * - Icon changes based on signal strength (0-100%)
+ * - Configure wifi_icons array in config.yaml
+ * - Shows different icon for ethernet connection
+ * - Click callbacks for quick settings or label toggle
+ */
+.wifi-widget .icon {
+    color: var(--yellow);    /* Yellow for network/wifi */
+}
+
+/* ====================================================================== */
+/* ===                INFORMATION WIDGETS                            === */
+/* ====================================================================== */
+
+/* ====================================================================== */
+/* ===                    CLOCK WIDGET                               === */
+/* ====================================================================== */
+/*
+ * Clock and calendar widget
+ * Widget type: yasb.clock.ClockWidget
+ *
+ * SELECTORS:
+ * - .clock-widget: Main widget container
+ * - .calendar: Dropdown calendar popup
+ * - .calendar .calendar-table: Calendar grid
+ * - .calendar .day-label: Day of week
+ * - .calendar .month-label: Month name
+ * - .calendar .date-label: Large date number
+ *
+ * CUSTOMIZATION:
+ * - label format in config.yaml (e.g., "%H:%M" for 24h time)
+ * - Modify calendar colors and dimensions
+ * - Change date-label font-size for emphasis
+ * - Configure timezones in config.yaml
+ */
 .clock-widget {
-    background-color: var(--crust);
+    background-color: var(--crust);  /* Darker background for emphasis */
     margin: 4px 0;
-    border-radius: 12px;
+    border-radius: 12px;             /* Rounded pill shape */
     border: 0;
 }
 
 .clock-widget .icon {
     font-size: 14px;
-    color: var(--sky)
+    color: var(--sky)                /* Sky blue for clock icon */
 }
 
 .clock-widget .label {
@@ -243,11 +512,12 @@
     color: var(--subtext0);
 }
 
-/* Calendar dropdown */
+/* === Calendar Dropdown === */
 .calendar {
     background-color: var(--mantle);
 }
 
+/* Calendar grid and cells */
 .calendar .calendar-table,
 .calendar .calendar-table::item {
     background-color: transparent;
@@ -258,8 +528,9 @@
     outline: none;
 }
 
+/* Selected/current date in calendar */
 .calendar .calendar-table::item:selected {
-    color: var(--crust);
+    color: var(--crust);            /* Dark text on light background */
     background-color: var(--lavender);
     border-radius: 5px;
 }
@@ -268,6 +539,7 @@
     margin-top: 20px;
 }
 
+/* Calendar text labels (day, month, date) */
 .calendar .day-label,
 .calendar .month-label,
 .calendar .date-label {
@@ -282,181 +554,206 @@
     font-weight: normal;
 }
 
+/* Large date number display */
 .calendar .date-label {
-    font-size: 88px;
+    font-size: 88px;                /* Extra large for emphasis */
     font-weight: 900;
     color: rgb(255, 255, 255);
     margin-top: -20px;
 }
 
-/* ==================== */
-/* === WEATHER WIDGET === */
-/* ==================== */
-.weather-widget .icon {
-    font-size: 20px;
-    margin: 0 2px 1px 0;
-    color: var(--maroon);
+/* ====================================================================== */
+/* ===                    UPTIME WIDGET                              === */
+/* ====================================================================== */
+/*
+ * System uptime display
+ * Shows how long the system has been running
+ *
+ * CUSTOMIZATION:
+ * - Part of power menu widget display
+ * - Modify font size and color for emphasis
+ * - Shown in power menu when uptime: true in config
+ */
+.uptime {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: var(--surface2);  /* Muted color for secondary info */
+    font-weight: 600;
 }
 
+/* ====================================================================== */
+/* ===                    WEATHER WIDGET                             === */
+/* ====================================================================== */
+/*
+ * Weather display with temperature and conditions
+ * Widget type: yasb.weather.WeatherWidget
+ *
+ * SELECTORS:
+ * - .weather-widget: Main widget container
+ * - .weather-card: Dropdown card with detailed forecast
+ *
+ * CUSTOMIZATION:
+ * - Configure API key, location, units in config.yaml
+ * - Modify icon colors for different weather conditions
+ * - Adjust weather-card styling for forecast details
+ * - Icons configured in config.yaml under weather.options.icons
+ */
+.weather-widget .icon {
+    font-size: 20px;              /* Larger icon for weather */
+    margin: 0 2px 1px 0;
+    color: var(--maroon);         /* Maroon for weather icon */
+}
+
+/* Weather forecast card popup */
 .weather-card {
     background-color: var(--mantle);
 }
 
-/* ====================== */
-/* === WORKSPACE WIDGET === */
-/* ====================== */
-.glazewm-workspaces {
-    background-color: var(--crust);
-    margin: 4px 0;
-    border-radius: 12px;
-    border: 0;
+/* ====================================================================== */
+/* ===                    CONTROL WIDGETS                            === */
+/* ====================================================================== */
+
+/* ====================================================================== */
+/* ===                    POWER MENU WIDGET                          === */
+/* ====================================================================== */
+/*
+ * Power menu for shutdown, restart, sleep, etc.
+ * Widget type: yasb.power_menu.PowerMenuWidget
+ *
+ * SELECTORS:
+ * - .power-menu-widget: Main widget container
+ * - .power-menu-popup: Popup menu container
+ * - .power-menu-popup .button: Individual action buttons
+ * - .power-menu-popup .button.hover: Hovered button state
+ * - .power-menu-popup .button.cancel: Cancel button
+ *
+ * CUSTOMIZATION:
+ * - Adjust button dimensions for larger/smaller menu
+ * - Modify colors to match theme (currently uses red for danger)
+ * - Change icon sizes for visual emphasis
+ * - Configure buttons in config.yaml under power_menu.options.buttons
+ */
+.power-menu-widget .label {
+    color: var(--red);       /* Red indicates power/danger actions */
+    font-size: 13px;
 }
 
-.glazewm-workspaces .ws-btn {
-    font-size: 14px;
-    border: none;
-    color: var(--overlay0);
-    padding: 0 6px;
-    cursor: pointer;
+/* Popup menu background */
+.power-menu-popup {
+    background-color: transparent;
 }
 
-.glazewm-workspaces .ws-btn.active_populated,
-.glazewm-workspaces .ws-btn.active_empty {
-    color: var(--red);
-    font-weight: 900;
-}
-
-/* --- Komorebi Active Layout --- */
-.komorebi-active-layout {
-    padding: 0 4px;
-}
-
-.komorebi-active-layout .label {
-    font-weight: 600;
-    padding-bottom: 2px;
-}
-
-
-/* --- Workspace and Layout Containers --- */
-.apps-widget .widget-container,
-.komorebi-workspaces .widget-container,
-.komorebi-active-layout .widget-container {
-    background-color: var(--crust);
-    border-radius: 12px;
-    margin: 4px 0;
-    /* border: 1px solid var(--border-color); */
-}
-
-
-.komorebi-workspaces {
+/* Individual action buttons (Shutdown, Restart, etc.) */
+.power-menu-popup .button {
     padding: 0;
-    color: var(--overlay0);
+    width: 180px;            /* Button width */
+    height: 230px;           /* Button height (tall cards) */
+    border-radius: 8px;      /* Rounded corners */
+    background-color: var(--base);
+    border: 8px solid rgba(58, 59, 83, 0);  /* Transparent border for spacing */
+    margin: 0px;
 }
 
-.komorebi-workspaces .offline-status {
-    color: var(--foreground-color);
-    font-size: 12px;
-    padding: 0 4px;
-    font-weight: 600;
+/* Hover state for power buttons */
+.power-menu-popup .button.hover {
+    background-color: var(--surface0);  /* Lighter background on hover */
+    border: 8px solid var(--surface0);
 }
 
-.komorebi-workspaces .ws-btn {
-    color: transparent;
-    width: 10px;
-    height: 10px;
-    background-color: var(--surface0);
-    border-radius: 5px;
-    margin: 0 2px;
-    font-size: 1px;
+/* Button labels (Shutdown, Restart, etc.) */
+.power-menu-popup .button .label {
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--lavender);  /* Lavender for button text */
 }
 
-.komorebi-workspaces .ws-btn:hover {
-    color: var(--accent-color);
-    background-color: var(--hover-color);
+/* Button icons (large power symbols) */
+.power-menu-popup .button .icon {
+    font-size: 64px;         /* Large icons for visibility */
+    padding-top: 32px;       /* Position icon in button */
+    color: var(--lavender);
 }
 
-.komorebi-workspaces .ws-btn.populated {
-    width: 10px;
-    height: 10px;
-    background-color: var(--active-color);
-    border-radius: 5px;
-    margin: 0 2px;
-    font-size: 1px;
-}
-
-.komorebi-workspaces .ws-btn.active {
-    color: transparent;
-    background-color: var(--lavender);
-    width: 10px;
-    height: 10px;
-    border-radius: 5px;
-}
-
-
-/* ================= */
-/* === WIFI WIDGET === */
-/* ================= */
-.wifi-widget .icon {
-    color: var(--yellow);
-}
-
-/* ===================== */
-/* === BATTERY WIDGET === */
-/* ===================== */
-.battery-widget .icon {
-    color: var(--flamingo);
-}
-
-/* ==================== */
-/* === MEMORY WIDGET === */
-/* ==================== */
-.memory-widget .icon {
-    color: var(--mauve);
-}
-
-/* ================= */
-/* === UPTIME WIDGET === */
-/* ================= */
-.uptime {
-    font-size: 14px;
-    margin-bottom: 10px;
-    color: var(--surface2);
-    font-weight: 600;
-}
-
-/* ================= */
-/* === HOME WIDGET === */
-/* ================= */
-.home-widget {
-    padding: 0 4px 0 12px;
-}
-
-.home-widget .icon {
-    font-size: 18px;
-    color: var(--subtext1);
-}
-
-.home-menu {
-    background-color: var(--mantle);
-    padding: 0;
-    margin-left: 2px;
-}
-
-.home-menu .menu-item {
-    padding: 8px 48px 8px 12px;
-    font-weight: 600;
-    color: var(--text);
-}
-
-.home-menu .menu-item:hover {
-    background-color: var(--lavender);
-    color: var(--surface0);
-    margin: 4px 6px;
+/* === Cancel Button (Special Styling) === */
+.power-menu-popup .button.cancel {
+    height: 32px;            /* Shorter than other buttons */
     border-radius: 4px;
 }
 
-.home-menu .separator {
-    max-height: 1px;
-    background-color: var(--overlay0);
-    margin: 0 8px;
+.power-menu-popup .button.cancel .icon {
+    padding: 0;
+    margin: 0;
 }
+
+.power-menu-popup .button.cancel .label {
+    color: var(--red);       /* Red for cancel action */
+    margin: 0;
+}
+
+/* ====================================================================== */
+/* ===                    VOLUME WIDGET                              === */
+/* ====================================================================== */
+/*
+ * System volume control and audio device selector
+ * Widget type: yasb.volume.VolumeWidget
+ *
+ * SELECTORS:
+ * - .volume-widget: Main widget container
+ * - .audio-menu: Dropdown menu for audio devices
+ * - .audio-container .device: Individual audio device button
+ * - .audio-container .device.selected: Currently active device
+ *
+ * CUSTOMIZATION:
+ * - Icon changes based on volume level (configure in config.yaml)
+ * - Modify hover/selected colors for better visibility
+ * - Adjust menu dimensions if needed
+ */
+.volume-widget .icon {
+    color: var(--blue);      /* Blue for volume/audio */
+    margin: 1px 2px 0 0;
+}
+
+/* === Audio Device Dropdown === */
+.audio-menu {
+    background-color: var(--mantle);  /* Dark background for menu */
+}
+
+/* Individual audio device entries */
+.audio-container .device {
+    font-size: 20px;         /* Note: overridden below to 12px */
+    background-color: transparent;
+    border: none;
+    padding: 6px 8px 6px 4px;
+    margin: 2px 0;
+    font-size: 12px;         /* Actual font size */
+    border-radius: 4px;
+}
+
+/* Currently selected audio device */
+.audio-container .device.selected {
+    background-color: rgba(255, 255, 255, 0.085);  /* Subtle highlight */
+}
+
+/* Hover state for audio devices */
+.audio-container .device:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+/* ====================================================================== */
+/* ===                    END OF STYLESHEET                          === */
+/* ====================================================================== */
+/*
+ * ADDITIONAL RESOURCES:
+ * - YASB Wiki: https://github.com/amnweb/yasb/wiki
+ * - Styling Guide: https://github.com/amnweb/yasb/wiki/Styling
+ * - Widget Documentation: https://github.com/amnweb/yasb/wiki (see widget list)
+ * - Catppuccin Theme: https://github.com/catppuccin/catppuccin
+ * - Nerd Fonts Icons: https://www.nerdfonts.com/cheat-sheet
+ *
+ * TIPS:
+ * - Use watch_stylesheet: true for auto-reload on changes
+ * - Limited CSS support - avoid CSS3 and advanced features
+ * - Test changes with different window managers (Komorebi, GlazeWM)
+ * - Use .yasb-bar.dark for OS dark mode specific styling
+ */

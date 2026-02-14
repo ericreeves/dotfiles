@@ -11,12 +11,13 @@ local M = {}
 
 ---@type table<string, Cells.SegmentColors>
 -- stylua: ignore
+-- Catppuccin Mocha colors
 local colors = {
-   label_text   = { fg = '#CDD6F4' },
-   icon_default = { fg = '#89B4FA' },
-   icon_wsl     = { fg = '#FAB387' },
-   icon_ssh     = { fg = '#F38BA8' },
-   icon_unix    = { fg = '#CBA6F7' },
+   label_text   = { fg = '#CDD6F4' },  -- Text
+   icon_default = { fg = '#b4befe' },  -- Lavender
+   icon_wsl     = { fg = '#b4befe' },  -- Lavender
+   icon_ssh     = { fg = '#b4befe' },  -- Lavender
+   icon_unix    = { fg = '#b4befe' },  -- Lavender
 }
 
 local cells = Cells:new()
@@ -91,35 +92,53 @@ end
 
 local choices, choices_data = build_choices()
 
-M.setup = function()
-   wezterm.on('new-tab-button-click', function(window, pane, button, default_action)
-      if default_action and button == 'Left' then
-         window:perform_action(default_action, pane)
-      end
+local function show_launch_selector(window, pane)
+   window:perform_action(
+      act.InputSelector({
+         title = 'InputSelector: Launch Menu',
+         choices = choices,
+         fuzzy = true,
+         fuzzy_description = nf.md_rocket .. ' Select a launch item: ',
+         action = wezterm.action_callback(function(_window, _pane, id, label)
+            if not id and not label then
+               return
+            else
+               wezterm.log_info('you selected ', id, label)
+               wezterm.log_info(choices_data[tonumber(id)])
+               window:perform_action(
+                  act.SpawnCommandInNewTab(choices_data[tonumber(id)]),
+                  pane
+               )
+            end
+         end),
+      }),
+      pane
+   )
+end
 
-      if default_action and button == 'Right' then
-         window:perform_action(
-            act.InputSelector({
-               title = 'InputSelector: Launch Menu',
-               choices = choices,
-               fuzzy = true,
-               fuzzy_description = nf.md_rocket .. ' Select a lauch item: ',
-               action = wezterm.action_callback(function(_window, _pane, id, label)
-                  if not id and not label then
-                     return
-                  else
-                     wezterm.log_info('you selected ', id, label)
-                     wezterm.log_info(choices_data[tonumber(id)])
-                     window:perform_action(
-                        act.SpawnCommandInNewTab(choices_data[tonumber(id)]),
-                        pane
-                     )
-                  end
-               end),
-            }),
-            pane
-         )
-      end
+M.setup = function()
+   -- Custom event for keybinding (Super+T)
+   wezterm.on('tabs.show-launch-menu', function(window, pane)
+      show_launch_selector(window, pane)
+   end)
+
+   -- Add to command palette
+   wezterm.on('augment-command-palette', function(window, pane)
+      return {
+         {
+            brief = 'New Tab (Launch Menu)',
+            icon = 'md_rocket',
+            action = wezterm.action_callback(function(w, p)
+               show_launch_selector(w, p)
+            end),
+         },
+      }
+   end)
+
+   -- New tab button click handler
+   wezterm.on('new-tab-button-click', function(window, pane, button, default_action)
+      -- Both left and right click show the launch menu
+      show_launch_selector(window, pane)
       return false
    end)
 end

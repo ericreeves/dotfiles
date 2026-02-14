@@ -4,6 +4,8 @@ return {
    exit_behavior = 'CloseOnCleanExit', -- if the shell program exited with a successful status
    exit_behavior_messaging = 'Verbose',
    status_update_interval = 1000,
+   enable_kitty_keyboard = false,
+   default_ssh_auth_sock = "\\\\.\\pipe\\openssh-ssh-agent",
 
    scrollback_lines = 20000,
 
