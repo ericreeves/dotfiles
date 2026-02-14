@@ -5,7 +5,6 @@ return {
    exit_behavior_messaging = 'Verbose',
    status_update_interval = 1000,
    enable_kitty_keyboard = false,
-   default_ssh_auth_sock = "\\\\.\\pipe\\openssh-ssh-agent",
 
    scrollback_lines = 20000,
 
