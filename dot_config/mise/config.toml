@@ -11,6 +11,7 @@ rust = "latest"
 lazygit = "latest"
 delta = "latest"
 zoxide = "latest"
+neovim = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["python"]
