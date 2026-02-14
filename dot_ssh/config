@@ -22,13 +22,24 @@ Host minecraft
   User root
   HostName 192.168.1.15
 
-Host ai
-  User eric
-  HostName 192.168.1.17
-  IdentitiesOnly=yes
-
 Host dev
   User eric
-  Hostname 192.168.1.120
-#  LocalForward 127.0.0.1:3000 127.0.0.1:3000
-#  LocalForward 127.0.0.1:5000 127.0.0.1:5000
+  HostName 192.168.1.17
+
+Host slopops
+  User eric
+  Hostname 192.168.1.9
+
+Host ops
+  User eric
+  Hostname 192.168.1.6
+
+Host github-harnoldcodes
+  User git
+  Hostname github.com
+  IdentityFile ~/.ssh/github-harnoldcodes 
+
+Host github-ericreeves
+  User git
+  Hostname github.com
+  IdentityFile ~/.ssh/github-ericreeves
