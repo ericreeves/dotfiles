@@ -33,8 +33,8 @@
   _    _    _    _    _    _         _    _    _    _    _    _
 )
 (deflayer extend
-  _    _    _    _    lrld _         home   pgdn  pgup     end        _     _
-  _    _    _    _    _    _         left   down  up       right       _    _
+  _    _    _    _    lrld _         end    pgdn  pgup     home       _    _
+  _    _    _    _    _    _         left   down  up       right      _    _
   _    _    _    _    _    _         A-left C-tab C-S-tab  A-right    _    _
 )
 
