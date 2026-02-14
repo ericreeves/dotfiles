@@ -4,12 +4,12 @@ starship = "latest"
 node = "lts"
 go = "latest"
 lazydocker = "latest"
-gh = "latest"
 tmux = "latest"
 python = "3.12"
 rust = "latest"
 "cargo:git-profile" = "latest"
 lazygit = "latest"
+delta = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["python"]
