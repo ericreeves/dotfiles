@@ -1,0 +1,40 @@
+(defcfg
+  concurrent-tap-hold yes
+  log-layer-changes no
+  process-unmapped-keys yes
+)
+(defvar
+  tt 200 ;; tap-time
+  ht 200 ;; hold-time
+)
+
+(defalias
+  tab (tap-hold $tt $ht tab (layer-while-held extend))
+  cap (tap-hold $tt $ht esc lctl)
+  ;; cap (tap-hold $tt $hold-time esc (layer-while-held vim-nav))
+  a (switch ((key-timing 1 less-than $tt)) _ break () (tap-hold $tt $ht a lmet) break)
+  s (switch ((key-timing 1 less-than $tt)) _ break () (tap-hold $tt $ht s lalt) break)
+  d (switch ((key-timing 1 less-than $tt)) _ break () (tap-hold $tt $ht d lctl) break)
+  f (switch ((key-timing 1 less-than $tt)) _ break () (tap-hold $tt $ht f lsft) break)
+  j (switch ((key-timing 1 less-than $tt)) _ break () (tap-hold-release-timeout $tt $ht j rsft j) break)
+  k (switch ((key-timing 1 less-than $tt)) _ break () (tap-hold-release-timeout $tt $ht k rctl k) break)
+  l (switch ((key-timing 1 less-than $tt)) _ break () (tap-hold $tt $ht l ralt) break)
+  ; (switch ((key-timing 1 less-than $tt)) _ break () (tap-hold $tt $ht ; rmet) break)
+)
+
+(defsrc
+  tab  q    w    e    r    t         y    u    i    o    p    [
+  caps a    s    d    f    g         h    j    k    l    ;    '
+  lsft z    x    c    v    b         n    m    ,    .    /    rsft
+)
+(deflayer default
+  @tab _    _    _    _    _         _    _    _    _    _    _
+  @cap @a   @s   @d   @f   _         _    @j   @k   @l   @;   _
+  _    _    _    _    _    _         _    _    _    _    _    _
+)
+(deflayer extend
+  _    _    _    _    lrld _         home   pgdn  pgup     end        _     _
+  _    _    _    _    _    _         left   down  up       right       _    _
+  _    _    _    _    _    _         A-left C-tab C-S-tab  A-right    _    _
+)
+
