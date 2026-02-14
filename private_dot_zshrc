@@ -136,8 +136,6 @@ if [[ -e ${HOME}/.zshrc.config ]]; then
   source ${HOME}/.zshrc.config
 fi
 
-. "$HOME/.local/share/../bin/env"
-
 # bun completions
 [ -s "/home/eric/.bun/_bun" ] && source "/home/eric/.bun/_bun"
 
