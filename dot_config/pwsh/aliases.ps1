@@ -165,5 +165,6 @@ function dmtp {
 }
 
 ### AI
-#function ai { fabric $args } #  Fabric AI CLI
-Set-Alias ai fabric
+#function fai { fabric $args } #  Fabric AI CLI
+Set-Alias fai fabric
+function faih { fabric --help }
