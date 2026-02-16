@@ -8,46 +8,19 @@
   "cross_boundary_behaviour": "Monitor",
   "display_index_preferences": {
     "0": "SAME028-5&1339745c&0&UID4357",
-    "1": "Default_Monitor-2&180ef493&0&UID256",
-    "2": "16843009"
+    "1": "Default_Monitor-2&180ef493&0&UID256"
   },
-  "bar_configurations": [
-    "$Env:KOMOREBI_CONFIG_HOME/komorebi.bar.1.json"
-  ],
   "transparency": false,
-  "transparency_alpha": 254,
-  "transparency_ignore_rules": [
-    {
-      "kind": "Title",
-      "id": "YouTube",
-      "matching_strategy": "Contains"
-    },
-    {
-      "kind": "Title",
-      "id": "Picture",
-      "matching_strategy": "Contains"
-    },
-    {
-      "kind": "Title",
-      "id": "Media Player",
-      "matching_strategy": "Contains"
-    },
-    {
-      "kind": "Exe",
-      "id": "obs64.exe",
-      "matching_strategy": "Equals"
-    }
-  ],
   "animation": {
     "enabled": false,
-    "duration": 120,
+    "duration": 500,
     "fps": 120,
-    "style":"Linear"
+    "style": "EaseInOutExpo"
   },
   "default_workspace_padding": 15,
   "default_container_padding": 15,
   "border_style": "System",
-  "border_width": 2,
+  "border_width": 3,
   "border": true,
   "border_offset": 0,
   "theme": {
@@ -56,6 +29,7 @@
     "accent": "Lavender",
     "bar_accent": "Lavender",
     "unfocused_border": "Crust",
+    "unfocused_locked_border": "Pink",
     "floating_border": "Green",
     "single_border": "Lavender",
     "stack_border": "Lavender",
@@ -64,7 +38,7 @@
     "stackbar_unfocused_text": "Surface0"
   },
   "stackbar": {
-    "height": 30,
+    "height": 40,
     "mode": "OnStack",
     "label": "Title",
     "tabs": {
@@ -85,8 +59,24 @@
       "workspaces": [
         {
           "name": "1",
-          "layout": "UltrawideVerticalStack",
-          "intial_workspace_rules": [
+          "layout": "Scrolling",
+          "initial_workspace_rules": [
+            {
+              "id": "vivaldi.exe",
+              "kind": "Exe",
+              "matching_strategy": "Equals"
+            },
+            {
+              "id": "wezterm-gui.exe",
+              "kind": "Exe",
+              "matching_strategy": "Equals"
+            }
+          ]
+        },
+        {
+          "name": "2",
+          "layout": "Scrolling",
+          "initial_workspace_rules": [
             {
               "id": "Chrome.exe",
               "kind": "Exe",
@@ -95,24 +85,13 @@
           ]
         },
         {
-          "name": "2",
-          "layout": "UltrawideVerticalStack",
-          "intial_workspace_rules": [
-            {
-              "id": "zen.exe",
-              "kind": "Exe",
-              "matching_strategy": "Equals"
-            }
-          ]
-        },
-        {
           "name": "3",
-          "layout": "UltrawideVerticalStack"
+          "layout": "Scrolling"
         },
         {
           "name": "4",
-          "layout": "UltrawideVerticalStack",
-          "intial_workspace_rules": [
+          "layout": "Scrolling",
+          "initial_workspace_rules": [
             {
               "id": "Spotify.exe",
               "kind": "Exe",
@@ -122,6 +101,14 @@
         },
         {
           "name": "5",
+          "layout": "Scrolling",
+          "initial_workspace_rules": [
+            {
+              "id": "reaper.exe",
+              "kind": "Exe",
+              "matching_strategy": "Equals"
+            }
+          ],
           "intial_workspace_rules": [
             {
               "kind": "Path",
@@ -142,9 +129,9 @@
         {
           "name": "Main",
           "layout": "Grid",
-          "intial_workspace_rules": [
+          "initial_workspace_rules": [
             {
-              "id": "Slack.exe",
+              "id": "Discord.exe",
               "kind": "Exe",
               "matching_strategy": "Equals"
             },
@@ -153,36 +140,19 @@
               "kind": "Exe",
               "matching_strategy": "Equals"
             }
-
           ]
         },
         {
           "name": "Utils",
-          "layout": "Grid"
-        },
-        {
-          "name": "Music",
-          "layout": "Grid"
-        },
-        {
-          "name": "Gaming",
-          "layout": "Grid"
-        }
-      ]
-    },
-    {
-      "workspaces": [
-        {
-          "name": "Main",
-          "layout": "HorizontalStack"
-        },
-        {
-          "name": "Personal",
-          "layout": "Grid"
-        },
-        {
-          "name": "Utils",
-          "layout": "Grid"
+          "layout": "Grid",
+          "initial_workspace_rules": [
+            {
+              "id": "slack.exe",
+              "kind": "Exe",
+              "matching_strategy": "Equals"
+            }
+          ]
+
         },
         {
           "name": "Music",

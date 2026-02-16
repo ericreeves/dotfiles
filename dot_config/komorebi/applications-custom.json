@@ -1,5 +1,69 @@
 {
   "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/master/schema.asc.json",
+  "OBS Studio (64-bit)": {
+    "floating": [
+      {
+        "kind": "Exe",
+        "id": "obs64.exe",
+        "matching_strategy": "Equals"
+      }
+    ]
+  },
+  "Handy": {
+    "ignore": [
+      [
+        {
+          "kind": "Exe",
+          "id": "handy.exe",
+          "matching_strategy": "Equals"
+        }
+      ]
+    ]
+  },
+  "SuperDisplay": {
+    "floating": [
+      [
+        {
+          "kind": "Exe",
+          "id": "SuperDisplay.exe",
+          "matching_strategy": "Equals"
+        }
+      ]
+    ]
+  },
+  "ScreenToGif": {
+    "floating": [
+      [
+        {
+          "kind": "Exe",
+          "id": "ScreenToGif.exe",
+          "matching_strategy": "Equals"
+        }
+      ]
+    ]
+  },
+  "LocalSend": {
+    "floating": [
+      [
+        {
+          "kind": "Exe",
+          "id": "localsend_app.exe",
+          "matching_strategy": "Equals"
+        }
+      ]
+    ]
+  },
+  "ShareX": {
+    "floating": [
+      [
+        {
+          "kind": "Exe",
+          "id": "ShareX.exe",
+          "matching_strategy": "Equals"
+        }
+      ]
+    ]
+  },
   "GoBorderless": {
     "floating": [
       [
