@@ -25,9 +25,9 @@ if (Test-Path $functionsPath) {
 
 # Starship prompt
 if (Get-Command "starship" -ErrorAction SilentlyContinue) {
-  $ENV:STARSHIP_CONFIG = "$( $HOME )/.config/starship.toml"
+  $ENV:STARSHIP_CONFIG = "$( $HOME )\.config\starship.toml"
   Invoke-Expression (&starship init powershell)
 }
 
-Invoke-Expression (& { (sfsu hook --disable list | Out-String) }) # Faster scoop searching
+# Invoke-Expression (& { (sfsu hook --disable list | Out-String) }) # Faster scoop searching
 Invoke-Expression (& { (zoxide init --cmd cd powershell | Out-String) }) # Enable zoxide
