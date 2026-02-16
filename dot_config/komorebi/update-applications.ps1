@@ -12,6 +12,8 @@ param (
     [string]$komorebiConfigPath = "$Env:KOMOREBI_CONFIG_HOME/komorebi.json"
 )
 
+$success = $true
+
 # Check if files exist
 if (-not (Test-Path $customJsonPath)) {
     Write-Error "Custom JSON file not found: $customJsonPath"
@@ -28,6 +30,7 @@ try {
         Write-Host "Successfully updated schema.json"
     } else {
         Write-Warning "Failed to generate schema, exit code: $LASTEXITCODE"
+        $success = $false
     }
 } catch {
     Write-Warning "Error running komorebic static-config-schema: $_"
@@ -39,6 +42,7 @@ try {
     & komorebic fetch-app-specific-configuration
     if ($LASTEXITCODE -ne 0) {
         Write-Error "Failed to fetch application configuration from GitHub"
+        $success = $false
     }
     Write-Host "Successfully updated applications.json from GitHub"
 
@@ -51,6 +55,7 @@ try {
     }
 } catch {
     Write-Error "Error running komorebic fetch-app-specific-configuration: $_"
+    $success = $false
 }
 # Read and convert JSON files to hashtables
 $first  = Get-Content $customJsonPath -Raw | ConvertFrom-Json -AsHashtable
@@ -127,7 +132,20 @@ if (Test-Path $komorebiConfigPath) {
 
     } catch {
         Write-Warning "Failed to update komorebi.json: $_"
+        $success = $false
     }
 } else {
     Write-Warning "komorebi.json not found at $komorebiConfigPath"
+}
+
+if ($success) {
+    Write-Host "Reloading komorebi configuration..."
+    & komorebic reload-configuration
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Failed to reload configuration"
+    } else {
+        Write-Host "Successfully reloaded komorebi configuration"
+    }
+} else {
+    Write-Warning "Skipping configuration reload due to previous errors"
 }
