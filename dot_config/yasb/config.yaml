@@ -34,7 +34,6 @@ bars:
       bottom: 0
       right: 0
     widgets:
-
       # left: ["power_menu","apps"]
       # center: ["komorebi_workspaces","komorebi_active_layout","active_window"]
       # right: ["systray","wallpapers","weather","wifi","volume", "clock"]
@@ -43,10 +42,12 @@ bars:
           "active_window",
       ]
       center: [
-          "komorebi-grouper",
+        "komorebi_workspaces", 
+        "komorebi_active_layout",
+        "komorebi_control",
+        "clock"
         ]
       right: [
-          "systray",
           "memory",
           "disk",
           "weather",
@@ -57,13 +58,6 @@ bars:
           "clock"
       ]
 widgets:
-  komorebi-grouper:
-    type: "yasb.grouper.GrouperWidget"
-    options:
-      class_name: "komorebi-grouper"
-      # widgets: ["komorebi_workspaces", "komorebi_active_layout", "komorebi_control", "komorebi_stack"]
-      widgets: ["komorebi_workspaces", "komorebi_active_layout", "komorebi_control"]
-      hide_empty: false
   systray:
     type: "yasb.systray.SystrayWidget"
     options:
@@ -98,7 +92,7 @@ widgets:
     options:
       hide_if_offline: false
       label: "{icon} {layout_name}"
-      layouts: ['ultrawide_vertical_stack', 'columns', 'grid', 'vertical_stack', 'horizontal_stack']
+      layouts: ['bsp', 'columns', 'rows', 'grid', 'scrolling', 'vertical_stack', 'horizontal_stack', 'ultrawide_vertical_stack','right_main_vertical_stack']
       layout_icons:
         bsp: "[\\\\]"
         columns: "[||]"
@@ -244,24 +238,24 @@ widgets:
     options:
       label: "<span>{icon}</span> {temp}"
       label_alt: "{location}: {conditions}, Min {min_temp}, Max {max_temp}, Humidity {humidity}"
-      api_key: '24b6c2cda6d84066b0304531241908'
+      api_key: 'd62fa13e38a642fa8c745809222004'
       update_interval: 600
       hide_decimal: true
       location: "Houston, TX"
       units: "imperial"
       callbacks:
         on_left: "toggle_card"
-      icons:
-        sunnyDay: "\udb81\udd99"
-        clearNight: "\ue3c2"
-        cloudyDay: "\ue21d"
-        cloudyNight: "\ue226"
-        rainyDay: "\ue371"
-        rainyNight: "\ue371"
-        snowyIcyDay: "\udb81\udf17"
-        snowyIcyNight: "\udb81\udf17"
-        blizzardDay: "\udb81\udd99"
-        default: "\udb81\udd99"
+      # icons:
+      #   sunnyDay: "\udb81\udd99"
+      #   clearNight: "\ue3c2"
+      #   cloudyDay: "\ue21d"
+      #   cloudyNight: "\ue226"
+      #   rainyDay: "\ue371"
+      #   rainyNight: "\ue371"
+      #   snowyIcyDay: "\udb81\udf17"
+      #   snowyIcyNight: "\udb81\udf17"
+      #   blizzardDay: "\udb81\udd99"
+      #   default: "\udb81\udd99"
       weather_card:
         blur: true
         round_corners: true
