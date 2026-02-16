@@ -1,46 +1,26 @@
 #Requires AutoHotkey v2.0
 #SingleInstance Force
+#UseHook True
 ; #NoTrayIcon
 
-; AutoHotkey v2 Script
+; ----------------------------
+; HRM assumptions (Voyager + Kanata)
+; Left hand:
+;   A = LWin (lmet)   S = LAlt (lalt)   D = LCtrl (lctl)   F = LShift (lsft)
+; Right hand:
+;   J = RShift (rsft) K = RCtrl (rctl)  L = RAlt (ralt)    ; = RWin (rmet)
+;
+; We deliberately bind Komorebi to LEFT modifiers so the right-hand mods
+; can be reserved for workspace/window selection.
+; ----------------------------
 
-; # Win
-; ! Alt
-; ^ Ctrl
-; + Shift
+global MAX_WS := 4  ; 5 workspaces: 0..4  (aka 1..5 if you think human)
 
-; Reload this script and komorebic configuration
-!^+#o::{
-    ; RunWait("komorebic.exe reload-configuration", , "Hide")
-    Reload()
-    ; Run("komorebic.exe retile", , "Hide")
+
+Komo(args) {
+    Run('komorebic.exe ' args, , "Hide")
 }
 
-; App shortcuts - focus if open, launch if not
-; !f::FocusOrLaunch("Firefox", "firefox.exe")
-; !^+#b::FocusOrLaunch("brave.exe", "brave.exe")
-; !^+#c::FocusOrLaunch("chrome.exe", "chrome.exe")
-; !^+#v::FocusOrLaunch("vivaldi.exe", "vivaldi.exe")
-; !^+#t::FocusOrLaunch("wezterm-gui.exe", "wezterm-gui.exe")
-; !^+#e::FocusOrLaunch("Explorer", "explorer.exe")
-; !^+#f::FocusOrLaunch("FPilot.exe", "FPilot.exe")
-; !^+#e::FocusOrLaunch("Code.exe", "C:\Users\eric\AppData\Local\Programs\Microsoft VS Code\Code.exe")
-; !^+#d::FocusOrLaunch("discord.exe", "discord.exe", "C:\Users\eric\AppData\Local\Discord\Update.exe --processStart Discord.exe")
-
-; Window manager options
-!#t::Run("komorebic.exe retile", , "Hide")
-
-; Cycle Layouts
-!^+#,::Run("komorebic.exe cycle-layout next", , "Hide")
-!^+#.::Run("komorebic.exe cycle-layout previous", , "Hide")
-
-; Layouts
-!^+#;::Run("komorebic.exe flip-layout horizontal", , "Hide")
-!^+#/::Run("komorebic.exe flip-layout vertical", , "Hide")
-
-!^+#p::Run("komorebic.exe toggle-pause", , "Hide")
-
-; FocusOrLaunch: exeName is the executable name (e.g., "chrome.exe"), exeOrPath is either an executable name or a full path.
 FocusOrLaunch(exeName, exeOrPath, lnkPath := "") {
     if !WinExist("ahk_exe " exeName) {
         Run(lnkPath != "" ? lnkPath : exeOrPath)
@@ -49,119 +29,171 @@ FocusOrLaunch(exeName, exeOrPath, lnkPath := "") {
     }
 }
 
-;!q::Run("komorebic.exe close", , "Hide")
-;!m::Run("komorebic.exe minimize", , "Hide")
+; ---------- Hyper (Win+Alt+Ctrl+Shift) app launchers ----------
+; Hyper = A+S+D+F with HRMs
+; Focus or launch WezTerm (Alt+Win+Ctrl+Shift+T)
+!#^+t::FocusOrLaunch("wezterm-gui.exe", "wezterm-gui.exe")
+; Focus or launch Vivaldi (Alt+Win+Ctrl+Shift+V)
+!#^+v::FocusOrLaunch("vivaldi.exe", "vivaldi.exe")
+; Focus or launch Explorer (Alt+Win+Ctrl+Shift+E)
+!#^+e::FocusOrLaunch("explorer.exe", "explorer.exe")
+; Focus or launch Discord (Alt+Win+Ctrl+Shift+D)
+!#^+d::FocusOrLaunch("discord.exe", "discord.exe", "C:\Users\eric\AppData\Local\Discord\Update.exe --processStart Discord.exe")
 
-;^!#u::Run("komorebic.exe unmanage", , "Hide")
-;^!#m::Run("komorebic.exe manage", , "Hide")
+; Reload komorebi config, retile, and reload AHK script (LAlt+LWin+LCtrl+LShift+/)
+<!<#<^<+/::{
+    Komo("reload-configuration")
+    Sleep 50
+    Komo("retile")
+    Reload()
+}
 
-; Focus windows
-#!h::Run("komorebic.exe focus left", , "Hide")
-#!j::Run("komorebic.exe focus down", , "Hide")
-#!k::Run("komorebic.exe focus up", , "Hide")
-#!l::Run("komorebic.exe focus right", , "Hide")
-
-#!'::Run("komorebic.exe toggle-lock", , "Hide")
-#!,::Run("komorebic.exe cycle-stack previous", , "Hide")
-#!.::Run("komorebic.exe cycle-stack next", , "Hide")
-#!/::Run("komorebic.exe unstack", , "Hide")
-#!;::Run("komorebic.exe promote", , "Hide")
-
-; Move windows
-#^h::Run("komorebic.exe move left", , "Hide")
-#^j::Run("komorebic.exe move down", , "Hide")
-#^k::Run("komorebic.exe move up", , "Hide")
-#^l::Run("komorebic.exe move right", , "Hide")
-#^.::Run("komorebic.exe cycle-move-to-monitor next", , "Hide")
-#^,::Run("komorebic.exe cycle-move-to-monitor previous", , "Hide")
-; Manipulate windows
-#^;::Run("komorebic.exe toggle-workspace-layer", , "Hide")
-#^'::Run("komorebic.exe toggle-float", , "Hide")
-#^m::Run("komorebic.exe toggle-monocle", , "Hide")
-
-; Stack windows
-#+h::Run("komorebic.exe stack left", , "Hide")
-#+j::Run("komorebic.exe stack down", , "Hide")
-#+k::Run("komorebic.exe stack up", , "Hide")
-#+l::Run("komorebic.exe stack right", , "Hide")
-#+;::Run("komorebic.exe unstack", , "Hide")
-#+,::Run("komorebic.exe cycle-stack previous", , "Hide")
-#+.::Run("komorebic.exe cycle-stack next", , "Hide")
-
-; Resize
-^!+l::Run("komorebic.exe resize-axis horizontal increase", , "Hide")
-^!+h::Run("komorebic.exe resize-axis horizontal decrease", , "Hide")
-^!+k::Run("komorebic.exe resize-axis vertical increase", , "Hide")
-^!+j::Run("komorebic.exe resize-axis vertical decrease", , "Hide")
-
-; ![::Run("komorebic.exe cycle-focus previous", , "Hide") ; SC01A is [
-; !]::Run("komorebic.exe cycle-focus next", , "Hide") ; SC01B is ]
-
-; Workspaces
-#!a::Run("komorebic.exe focus-monitor-workspace 0 0", , "Hide")
-#!s::Run("komorebic.exe focus-monitor-workspace 0 1", , "Hide")
-#!d::Run("komorebic.exe focus-monitor-workspace 0 2", , "Hide")
-#!f::Run("komorebic.exe focus-monitor-workspace 0 3", , "Hide")
-#!g::Run("komorebic.exe focus-monitor-workspace 0 4", , "Hide")
-; !#6::Run("komorebic.exe focus-monitor-workspace 1 0", , "Hide")
-; !#7::Run("komorebic.exe focus-monitor-workspace 1 1", , "Hide")
-; !#8::Run("komorebic.exe focus-monitor-workspace 1 2", , "Hide")
-; !#9::Run("komorebic.exe focus-monitor-workspace 1 3", , "Hide")
-; !#0::Run("komorebic.exe focus-monitor-workspace 1 4", , "Hide")
-
-; Move windows across workspaces
-#!^a::Run("komorebic.exe move-to-monitor-workspace 0 0", , "Hide")
-#!^s::Run("komorebic.exe move-to-monitor-workspace 0 1", , "Hide")
-#!^d::Run("komorebic.exe move-to-monitor-workspace 0 2", , "Hide")
-#!^f::Run("komorebic.exe move-to-monitor-workspace 0 3", , "Hide")
-#!^g::Run("komorebic.exe move-to-monitor-workspace 0 4", , "Hide")
-; ^#6::Run("komorebic.exe move-to-monitor-workspace 1 0", , "Hide")
-; ^#7::Run("komorebic.exe move-to-monitor-workspace 1 1", , "Hide")
-; ^#8::Run("komorebic.exe move-to-monitor-workspace 1 2", , "Hide")
-; ^#9::Run("komorebic.exe move-to-monitor-workspace 1 3", , "Hide")
-; ^#0::Run("komorebic.exe move-to-monitor-workspace 1 4", , "Hide")
+; ---------- Komorebi WM chord = LeftAlt + LeftWin ----------
+; WM = A+S with HRMs (Left Win + Left Alt)
 
 
-; Workspaces (multiple monitors)
-; ^#1::{
-;     Run("komorebic.exe focus-monitor-workspace 1 0", , "Hide")
-;     Run("komorebic.exe focus-monitor-workspace 2 0", , "Hide")
-; }
-; ^#2::{
-;     Run("komorebic.exe focus-monitor-workspace 1 1", , "Hide")
-;     Run("komorebic.exe focus-monitor-workspace 2 1", , "Hide")
-; }
-; ^#3::{
-;     Run("komorebic.exe focus-monitor-workspace 1 2", , "Hide")
-;     Run("komorebic.exe focus-monitor-workspace 2 2", , "Hide")
-; }
-; ^#4::{
-;     Run("komorebic.exe focus-monitor-workspace 1 3", , "Hide")
-;     Run("komorebic.exe focus-monitor-workspace 2 3", , "Hide")
-; }
-; ^#5::{
-;     Run("komorebic.exe focus-monitor-workspace 1 4", , "Hide")
-;     Run("komorebic.exe focus-monitor-workspace 2 4", , "Hide")
-; }
-; ^#6::{
-;     Run("komorebic.exe focus-monitor-workspace 1 5", , "Hide")
-;     Run("komorebic.exe focus-monitor-workspace 2 5", , "Hide")
-; }
-; ^#7::{
-;     Run("komorebic.exe focus-monitor-workspace 1 6", , "Hide")
-;     Run("komorebic.exe focus-monitor-workspace 2 6", , "Hide")
-; }
-; ^#8::{
-;     Run("komorebic.exe focus-monitor-workspace 1 7", , "Hide")
-;     Run("komorebic.exe focus-monitor-workspace 2 7", , "Hide")
-; }
-; ^#9::{
-;     Run("komorebic.exe focus-monitor-workspace 1 8", , "Hide")
-;     Run("komorebic.exe focus-monitor-workspace 2 8", , "Hide")
-; }
-; ^#0::{
-;     Run("komorebic.exe focus-monitor-workspace 1 9", , "Hide")
-;     Run("komorebic.exe focus-monitor-workspace 2 9", , "Hide")
-; }
+>#>!g::Komo("manage")
+>#>!>^g::Komo("unmanage")
+
+; Retile windows (RAlt+RWin+T)
+>!>#t::Komo("retile")
+; Toggle pause (LAlt+LWin+P)
+; <!<#p::Komo("toggle-pause")
+
+; Close window (RAlt+RWin+Q)
+>!>#q::Komo("close")
+; Minimize window (LAlt+LWin+M)
+; <!<#m::Komo("minimize")
+
+; Focus window left (LAlt+LWin+H)
+<!<#h::Komo("focus left")
+; Focus window down (LAlt+LWin+J)
+<!<#j::Komo("focus down")
+; Focus window up (LAlt+LWin+K)
+<!<#k::Komo("focus up")
+; Focus window right (LAlt+LWin+L)
+<!<#l::Komo("focus right")
+
+; Move window left (LAlt+LWin+LCtrl+H)
+<!<#<^h::Komo("move left")
+; Move window down (LAlt+LWin+LCtrl+J)
+<!<#<^j::Komo("move down")
+; Move window up (LAlt+LWin+LCtrl+K)
+<!<#<^k::Komo("move up")
+; Move window right (LAlt+LWin+LCtrl+L)
+<!<#<^l::Komo("move right")
+
+; Resize horizontal decrease (LAlt+LWin+LShift+H)
+<!<#<+h::Komo("resize-axis horizontal decrease")
+; Resize horizontal increase (LAlt+LWin+LShift+L)
+<!<#<+l::Komo("resize-axis horizontal increase")
+; Resize vertical decrease (LAlt+LWin+LShift+K)
+<!<#<+k::Komo("resize-axis vertical decrease")
+; Resize vertical increase (LAlt+LWin+LShift+J)
+<!<#<+j::Komo("resize-axis vertical increase")
+
+; Stack window left (LAlt+LWin+LCtrl+LShift+H)
+<!<#<^<+h::Komo("stack left")
+; Stack window down (LAlt+LWin+LCtrl+LShift+J)
+<!<#<^<+j::Komo("stack down")
+; Stack window up (LAlt+LWin+LCtrl+LShift+K)
+<!<#<^<+k::Komo("stack up")
+; Stack window right (LAlt+LWin+LCtrl+LShift+L)
+<!<#<^<+l::Komo("stack right")
+; Unstack window (LAlt+LWin+LCtrl+LShift+;)
+<!<#<^<+;::Komo("unstack")
+; Promote window (LAlt+LWin+LCtrl+LShift+')
+<!<#<^<+'::Komo("promote")
+
+; Cycle layout previous (LAlt+LWin+,)
+<!<#,::Komo("cycle-layout previous")
+; Cycle layout next (LAlt+LWin+.)
+<!<#.::Komo("cycle-layout next")
+
+; Flip layout horizontal (LAlt+LWin+\)
+<!<#\::Komo("flip-layout horizontal")
+; Flip layout vertical (LAlt+LWin+/)
+<!<#/::Komo("flip-layout vertical")
+
+; Cycle stack previous (LAlt+LWin+U)
+<!<#<^u::Komo("cycle-stack previous")
+; Cycle stack next (LAlt+LWin+I)
+<!<#<^i::Komo("cycle-stack next")
+
+; Cycle focus previous (LAlt+LWin+Y)
+<!<#u::Komo("cycle-focus previous")
+; Cycle focus next (LAlt+LWin+O)
+<!<#i::Komo("cycle-focus next")
+
+; Cycle workspace previous (LAlt+LWin+LCtrl+U)
+<!<#y::Komo("cycle-workspace previous")
+; Cycle workspace next (LAlt+LWin+LCtrl+I)
+<!<#o::Komo("cycle-workspace next")
+
+; Move window to previous workspace (LAlt+LWin+LCtrl+LShift+U)
+<!<#<^y::Komo("cycle-move-to-workspace previous")
+; Move window to next workspace (LAlt+LWin+LCtrl+LShift+I)
+<!<#<^o::Komo("cycle-move-to-workspace next")
+
+; Cycle monitor previous (LAlt+LWin+LCtrl+Y)
+<!<#n::Komo("cycle-monitor previous")
+; Cycle monitor next (LAlt+LWin+LCtrl+O)
+<!<#m::Komo("cycle-monitor next")
+
+; Move window to previous monitor (LAlt+LWin+LCtrl+LShift+Y)
+<!<#<^n::Komo("cycle-move-to-monitor previous")
+; Move window to next monitor (LAlt+LWin+LCtrl+LShift+O)
+<!<#<^m::Komo("cycle-move-to-monitor next")
 
 
+; Toggle workspace layer (LAlt+LWin+;)
+<!<#;::Komo("toggle-workspace-layer")
+; Toggle float (LAlt+LWin+LCtrl;)
+<!<#<^;::Komo("toggle-float")
+; Toggle monocle (LAlt+LWin+LCtrl+LShift+;)
+<!<#<^'::Komo("toggle-monocle")
+
+; ---------- Workspaces: Right-hand mods ----------
+; Focus workspace 1 on monitor 0 (RAlt+RWin+Z)
+>!>#z::Komo("focus-monitor-workspace 0 0")
+; Focus workspace 2 on monitor 0 (RAlt+RWin+X)
+>!>#x::Komo("focus-monitor-workspace 0 1")
+; Focus workspace 3 on monitor 0 (RAlt+RWin+C)
+>!>#c::Komo("focus-monitor-workspace 0 2")
+; Focus workspace 4 on monitor 0 (RAlt+RWin+V)
+>!>#v::Komo("focus-monitor-workspace 0 3")
+; Focus workspace 5 on monitor 0 (RAlt+RWin+B)
+>!>#b::Komo("focus-monitor-workspace 0 4")
+
+; Focus workspace 1 on monitor 0 (RAlt+RWin+1)
+>!>#1::Komo("focus-monitor-workspace 0 0")
+; Focus workspace 2 on monitor 0 (RAlt+RWin+2)
+>!>#2::Komo("focus-monitor-workspace 0 1")
+; Focus workspace 3 on monitor 0 (RAlt+RWin+3)
+>!>#3::Komo("focus-monitor-workspace 0 2")
+; Focus workspace 4 on monitor 0 (RAlt+RWin+4)
+>!>#4::Komo("focus-monitor-workspace 0 3")
+; Focus workspace 5 on monitor 0 (RAlt+RWin+5)
+>!>#5::Komo("focus-monitor-workspace 0 4")
+
+; Move window to workspace 1 on monitor 0 (RAlt+RWin+RShift+Z)
+>!>#>^z::Komo("move-to-monitor-workspace 0 0")
+; Move window to workspace 2 on monitor 0 (RAlt+RWin+RShift+X)
+>!>#>^x::Komo("move-to-monitor-workspace 0 1")
+; Move window to workspace 3 on monitor 0 (RAlt+RWin+RShift+C)
+>!>#>^c::Komo("move-to-monitor-workspace 0 2")
+; Move window to workspace 4 on monitor 0 (RAlt+RWin+RShift+V)
+>!>#>^v::Komo("move-to-monitor-workspace 0 3")
+; Move window to workspace 5 on monitor 0 (RAlt+RWin+RShift+B)
+>!>#>^b::Komo("move-to-monitor-workspace 0 4")
+
+; Move window to workspace 1 on monitor 0 (RCtrl+RWin+RShift+1)
+>!>#>^1::Komo("move-to-monitor-workspace 0 0")
+; Move window to workspace 2 on monitor 0 (RCtrl+RWin+RShift+2)
+>!>#>^2::Komo("move-to-monitor-workspace 0 1")
+; Move window to workspace 3 on monitor 0 (RCtrl+RWin+RShift+3)
+>!>#>^3::Komo("move-to-monitor-workspace 0 2")
+; Move window to workspace 4 on monitor 0 (RCtrl+RWin+RShift+4)
+>!>#>^4::Komo("move-to-monitor-workspace 0 3")
+; Move window to workspace 5 on monitor 0 (RCtrl+RWin+RShift+5)
+>!>#>^5::Komo("move-to-monitor-workspace 0 4")

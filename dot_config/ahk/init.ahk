@@ -5,6 +5,7 @@
 ; #Include %A_ScriptDir%\Macros.ahk 
 ; #Include %A_ScriptDir%\VD.ahk 
 #Include %A_ScriptDir%\komorebi.ahk 
+; #Include %A_ScriptDir%\reaperfix.ahk 
 
 ; +^A::WinMove(1280,0,2560,1440,'A')
 ; +^D::Send("edd{Tab}{Tab}{Tab}{Tab}{Enter}")
