@@ -277,7 +277,7 @@
 .apps-widget .widget-container,
 .komorebi-workspaces .widget-container,
 .komorebi-active-layout .widget-container {
-    background-color: var(--container-background-color);  /* Dark container */
+    background-color: var(--background-color);  /* Dark container */
     border-radius: 12px;                                  /* Rounded corners */
     margin: 4px 0;
     /* border: 1px solid var(--border-color); */  /* Optional border */
@@ -495,7 +495,7 @@
  * - Configure timezones in config.yaml
  */
 .clock-widget {
-    background-color: var(--crust);  /* Darker background for emphasis */
+    background-color: var(--background-color);  /* Darker background for emphasis */
     margin: 4px 0;
     border-radius: 12px;             /* Rounded pill shape */
     border: 0;
