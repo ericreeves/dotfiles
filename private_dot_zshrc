@@ -129,8 +129,19 @@ unset key
 # }}} End configuration added by Zim install
 
 eval "$(mise activate zsh)"
+eval "$(direnv hook zsh)"
 
 # Source my custom config
 if [[ -e ${HOME}/.zshrc.config ]]; then
   source ${HOME}/.zshrc.config
 fi
+
+# bun completions
+[ -s "/home/eric/.bun/_bun" ] && source "/home/eric/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# OpenClaw Completion
+source "/home/eric/.openclaw/completions/openclaw.zsh"

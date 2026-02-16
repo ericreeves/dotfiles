@@ -4,15 +4,13 @@ starship = "latest"
 node = "lts"
 go = "latest"
 lazydocker = "latest"
-gh = "latest"
-neovim = "latest"
 tmux = "latest"
 python = "3.12"
-direnv = "latest"
-zoxide = "latest"
 rust = "latest"
-"cargo:git-profile" = "latest"
 lazygit = "latest"
+delta = "latest"
+zoxide = "latest"
+neovim = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["python"]
