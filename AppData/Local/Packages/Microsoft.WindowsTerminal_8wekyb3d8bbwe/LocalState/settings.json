@@ -2,7 +2,7 @@
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
     "actions": [],
-    "alwaysShowTabs": false,
+    "alwaysShowTabs": true,
     "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
     "keybindings": [],
     "launchMode": "focus",
@@ -75,20 +75,6 @@
                 "startingDirectory": "C:\\Users\\eric"
             },
             {
-                "commandline": "%WINDIR%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy ByPass -NoExit -Command \"& 'C:\\Users\\eric\\anaconda3\\shell\\condabin\\conda-hook.ps1' ; conda activate 'C:\\Users\\eric\\anaconda3' \"",
-                "guid": "{eed49005-877d-5de2-94d5-5ce5e370f8c3}",
-                "icon": "C:\\Users\\eric\\anaconda3\\Menu\\anaconda_powershell_prompt.ico",
-                "name": "Anaconda PowerShell Prompt (anaconda3)",
-                "startingDirectory": "C:\\Users\\eric"
-            },
-            {
-                "commandline": "%WINDIR%\\System32\\cmd.exe \"/K\" C:\\Users\\eric\\anaconda3\\Scripts\\activate.bat C:\\Users\\eric\\anaconda3",
-                "guid": "{e78b37b4-0017-568b-9279-1abde5e14cde}",
-                "icon": "C:\\Users\\eric\\anaconda3\\Menu\\anaconda_prompt.ico",
-                "name": "Anaconda Prompt (anaconda3)",
-                "startingDirectory": "C:\\Users\\eric"
-            },
-            {
                 "guid": "{bf35c02e-2610-5dc0-b2a3-b1a9dc1de824}",
                 "hidden": false,
                 "name": "Ubuntu-24.04",
@@ -119,20 +105,6 @@
                 "hidden": true,
                 "name": "Developer PowerShell for VS 2019",
                 "source": "Windows.Terminal.VisualStudio"
-            },
-            {
-                "commandline": "%WINDIR%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy ByPass -NoExit -Command \"& 'C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.7.0-2\\shell\\condabin\\conda-hook.ps1' ; conda activate 'C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.7.0-2' \"",
-                "guid": "{97cb339c-590d-5afc-8cb3-8741fe7041c0}",
-                "icon": "C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.7.0-2\\Menu\\anaconda_powershell_prompt.ico",
-                "name": "Anaconda PowerShell Prompt (25.7.0-2)",
-                "startingDirectory": "C:\\Users\\eric"
-            },
-            {
-                "commandline": "%WINDIR%\\System32\\cmd.exe \"/K\" C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.7.0-2\\Scripts\\activate.bat C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.7.0-2",
-                "guid": "{8634052e-dfbd-531d-95fe-8957340c7e04}",
-                "icon": "C:\\Users\\eric\\scoop\\apps\\miniconda3\\25.7.0-2\\Menu\\anaconda_prompt.ico",
-                "name": "Anaconda Prompt (25.7.0-2)",
-                "startingDirectory": "C:\\Users\\eric"
             }
         ]
     },
@@ -190,5 +162,6 @@
             }
         }
     ],
-    "useAcrylicInTabRow": true
+    "useAcrylicInTabRow": true,
+    "windowingBehavior": "useAnyExisting"
 }
