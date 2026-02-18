@@ -33,6 +33,19 @@ elseif platform.is_linux then
       { label = 'Fish', args = { 'fish', '-l' } },
       { label = 'Zsh', args = { 'zsh', '-l' } },
    }
+else
+   options.default_prog = { 'pwsh', '-NoLogo' }
+   options.launch_menu = {
+      { label = 'PowerShell Core', args = { 'pwsh', '-NoLogo' } },
+      { label = 'PowerShell Desktop', args = { 'powershell' } },
+      { label = 'Command Prompt', args = { 'cmd' } },
+      { label = 'Nushell', args = { 'nu' } },
+      { label = 'Msys2', args = { 'ucrt64.cmd' } },
+      {
+         label = 'Git Bash',
+         args = { 'C:\\Users\\eric\\scoop\\apps\\git\\current\\bin\\bash.exe' },
+      },
+   }
 end
 
 return options
