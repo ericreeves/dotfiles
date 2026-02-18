@@ -5,10 +5,11 @@
   ],
   "window_hiding_behaviour": "Cloak",
   "cross_monitor_move_behaviour": "Insert",
-  "cross_boundary_behaviour": "Monitor",
+  "cross_boundary_behaviour": "Workspace",
   "display_index_preferences": {
     "0": "SAME028-5&1339745c&0&UID4357",
-    "1": "Default_Monitor-2&180ef493&0&UID256"
+    "1": "Default_Monitor-2&180ef493&0&UID256",
+    "2": "100663728"
   },
   "transparency": false,
   "animation": {
@@ -152,7 +153,6 @@
               "matching_strategy": "Equals"
             }
           ]
-
         },
         {
           "name": "Music",
@@ -161,6 +161,75 @@
         {
           "name": "Gaming",
           "layout": "Grid"
+        }
+      ]
+    },
+    {
+      "workspaces": [
+        {
+          "name": "1",
+          "layout": "Scrolling",
+          "initial_workspace_rules": [
+            {
+              "id": "vivaldi.exe",
+              "kind": "Exe",
+              "matching_strategy": "Equals"
+            },
+            {
+              "id": "wezterm-gui.exe",
+              "kind": "Exe",
+              "matching_strategy": "Equals"
+            }
+          ]
+        },
+        {
+          "name": "2",
+          "layout": "Scrolling",
+          "initial_workspace_rules": [
+            {
+              "id": "Chrome.exe",
+              "kind": "Exe",
+              "matching_strategy": "Equals"
+            }
+          ]
+        },
+        {
+          "name": "3",
+          "layout": "Scrolling"
+        },
+        {
+          "name": "4",
+          "layout": "Scrolling",
+          "initial_workspace_rules": [
+            {
+              "id": "Spotify.exe",
+              "kind": "Exe",
+              "matching_strategy": "Equals"
+            }
+          ]
+        },
+        {
+          "name": "5",
+          "layout": "Scrolling",
+          "initial_workspace_rules": [
+            {
+              "id": "reaper.exe",
+              "kind": "Exe",
+              "matching_strategy": "Equals"
+            }
+          ],
+          "intial_workspace_rules": [
+            {
+              "kind": "Path",
+              "id": "C:\\Program Files (x86)\\Steam",
+              "matching_strategy": "StartsWith"
+            },
+            {
+              "kind": "Path",
+              "id": "G:\\Games",
+              "matching_strategy": "StartsWith"
+            }
+          ]
         }
       ]
     }
