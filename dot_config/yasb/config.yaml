@@ -8,7 +8,7 @@ komorebi:
 bars:
   primary-bar:
     enabled: true
-    screens: ['*'] 
+    screens: ["*"]
     class_name: "yasb-bar"
     animation:
       enabled: true
@@ -17,7 +17,7 @@ bars:
       position: "top"
       center: true
     blur_effect:
-      enabled: true 
+      enabled: true
       acrylic: false
       dark_mode: true
       round_corners: true
@@ -37,26 +37,10 @@ bars:
       # left: ["power_menu","apps"]
       # center: ["komorebi_workspaces","komorebi_active_layout","active_window"]
       # right: ["systray","wallpapers","weather","wifi","volume", "clock"]
-      left: [
-          "home", 
-          "active_window",
-      ]
-      center: [
-        "komorebi_workspaces", 
-        "komorebi_active_layout",
-        "komorebi_control",
-        "clock"
-        ]
-      right: [
-          "memory",
-          "disk",
-          "weather",
-          "wifi",
-          "volume",
-          "battery",
-          "power_menu",
-          "clock"
-      ]
+      left: ["home", "power_menu", "active_window"]
+      center:
+        ["komorebi_workspaces", "komorebi_active_layout", "komorebi_control"]
+      right: ["memory", "disk", "volume", "wifi", "battery"]
 widgets:
   systray:
     type: "yasb.systray.SystrayWidget"
@@ -92,7 +76,18 @@ widgets:
     options:
       hide_if_offline: false
       label: "{icon} {layout_name}"
-      layouts: ['bsp', 'columns', 'rows', 'grid', 'scrolling', 'vertical_stack', 'horizontal_stack', 'ultrawide_vertical_stack','right_main_vertical_stack']
+      layouts:
+        [
+          "bsp",
+          "columns",
+          "rows",
+          "grid",
+          "scrolling",
+          "vertical_stack",
+          "horizontal_stack",
+          "ultrawide_vertical_stack",
+          "right_main_vertical_stack",
+        ]
       layout_icons:
         bsp: "[\\\\]"
         columns: "[||]"
@@ -118,7 +113,7 @@ widgets:
         enabled: true
         color: "black"
         radius: 3
-        offset: [ 1, 1 ]
+        offset: [1, 1]
   komorebi_control:
     type: "komorebi.control.KomorebiControlWidget"
     options:
@@ -166,10 +161,10 @@ widgets:
       label: "<span>\udb80\udf5c</span>"
       menu_list:
         - { title: "Home", path: "~" }
-        - { title: "Downloads", path: "~\\Downloads"}
-        - { title: "Documents", path: "~\\Documents"}
-        - { title: "Pictures", path: "~\\Pictures"}
-        - { title: "Videos", path: "~\\Videos"}
+        - { title: "Downloads", path: "~\\Downloads" }
+        - { title: "Documents", path: "~\\Documents" }
+        - { title: "Pictures", path: "~\\Pictures" }
+        - { title: "Videos", path: "~\\Videos" }
       system_menu: true
       power_menu: false
       blur: true
@@ -196,19 +191,45 @@ widgets:
   disk:
     type: "yasb.disk.DiskWidget"
     options:
-        label: "<span>\uf473</span> disks"
-        label_alt: "<span>\uf473</span>"
-        group_label:
-          volume_labels: ["C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-          show_label_name: false 
-          blur: true
-          round_corners: true
-          round_corners_type: "small"
-          border_color: '#7aa2f7'
-          alignment: 'center'
-          offset_top: 0
-        callbacks:
-          on_left: "toggle_group"
+      label: "<span>\uf473</span>"
+      label_alt: "<span>\uf473</span>"
+      group_label:
+        volume_labels:
+          [
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "U",
+            "V",
+            "W",
+            "X",
+            "Y",
+            "Z",
+          ]
+        show_label_name: false
+        blur: true
+        round_corners: true
+        round_corners_type: "small"
+        border_color: "#7aa2f7"
+        alignment: "center"
+        offset_top: 0
+      callbacks:
+        on_left: "toggle_group"
   active_window:
     type: "yasb.active_window.ActiveWindowWidget"
     options:
@@ -238,7 +259,7 @@ widgets:
     options:
       label: "<span>{icon}</span> {temp}"
       label_alt: "{location}: {conditions}, Min {min_temp}, Max {max_temp}, Humidity {humidity}"
-      api_key: 'd62fa13e38a642fa8c745809222004'
+      api_key: "d62fa13e38a642fa8c745809222004"
       update_interval: 600
       hide_decimal: true
       location: "Houston, TX"
@@ -279,23 +300,23 @@ widgets:
         on_middle: "do_nothing"
         on_right: "toggle_label"
       wifi_icons: [
-        "\udb82\udd2e",  # Icon for 0% strength
-        "\udb82\udd1f",  # Icon for 1-20% strength
-        "\udb82\udd22",  # Icon for 21-40% strength
-        "\udb82\udd25",  # Icon for 41-80% strength
-        "\udb82\udd28"   # Icon for 81-100% strength
-      ]
+          "\udb82\udd2e", # Icon for 0% strength
+          "\udb82\udd1f", # Icon for 1-20% strength
+          "\udb82\udd22", # Icon for 21-40% strength
+          "\udb82\udd25", # Icon for 41-80% strength
+          "\udb82\udd28", # Icon for 81-100% strength
+        ]
   volume:
     type: "yasb.volume.VolumeWidget"
     options:
       label: "<span>{icon}</span> {level}"
       label_alt: "{volume}"
       volume_icons:
-        - "\ueee8"  # Icon for muted
-        - "\uf026"  # Icon for 0-10% volume
-        - "\uf027"  # Icon for 11-30% volume
-        - "\uf027"  # Icon for 31-60% volume
-        - "\uf028"  # Icon for 61-100% volume
+        - "\ueee8" # Icon for muted
+        - "\uf026" # Icon for 0-10% volume
+        - "\uf027" # Icon for 11-30% volume
+        - "\uf027" # Icon for 31-60% volume
+        - "\uf028" # Icon for 61-100% volume
       audio_menu:
         blur: true
         round_corners: true
@@ -313,7 +334,7 @@ widgets:
       label_alt: "<span>{icon}</span> {percent}% | time: {time_remaining}"
       #hide_unsupported: true
       charging_options:
-        icon_format: "{charging_icon}" 
+        icon_format: "{charging_icon}"
   power_menu:
     type: "yasb.power_menu.PowerMenuWidget"
     options:
