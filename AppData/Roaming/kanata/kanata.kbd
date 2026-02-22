@@ -1,0 +1,138 @@
+(defcfg
+  concurrent-tap-hold yes
+  log-layer-changes no
+  process-unmapped-keys yes
+)
+(defvar
+  tt 200 ;; tap-time
+  ht 200 ;; hold-time
+  left-keys (q w e r t a s d f g z x c v b)
+  right-keys (y u i o p h j k l ; ' n m , . /)
+)
+
+;; ---------------------------------------------------------------
+;; Layout overview
+;;
+;; LEFT HOLD (right hand = vim motions)    RIGHT HOLD (left hand = targets)
+;;   W (ring)   = focus direction            O (ring)   = workspace focus
+;;   E (middle) = move direction             I (middle) = workspace move + util
+;;   R (index)  = resize
+;;   T (index)  = stack
+;;
+;; Tab hold = Hyper (C+A+M+S) for app launchers
+;; Space hold = extend layer (arrows, pgup/dn, etc.)
+;; Homerow mods unchanged
+;; ---------------------------------------------------------------
+
+(defalias
+  ;; Tab: tap=tab, hold=extend
+  tab (tap-hold $tt $ht tab (layer-while-held extend))
+  ;; Space: tap=space, hold=extend
+  spc (tap-hold $tt $ht spc (layer-while-held extend))
+  ;; Caps: tap=esc, hold=lctrl
+  cap (tap-hold $tt $ht esc lctl)
+
+  ;; Homerow mods — same-hand keys trigger tap, opposite-hand activates hold
+  a (tap-hold-release-keys $tt $ht a rmet $left-keys)
+  s (tap-hold-release-keys $tt $ht s ralt $left-keys)
+  d (tap-hold-release-keys $tt $ht d rctl $left-keys)
+  f (tap-hold-release-keys $tt $ht f rsft $left-keys)
+  j (tap-hold-release-keys $tt $ht j rsft $right-keys)
+  k (tap-hold-release-keys $tt $ht k rctl $right-keys)
+  l (tap-hold-release-keys $tt $ht l ralt $right-keys)
+  ; (tap-hold-release-keys $tt $ht ; rmet $right-keys)
+
+  ;; WM — left hand hold (same-hand taps, opposite-hand activates layer)
+  w (tap-hold-release-keys $tt $ht w (layer-while-held wm-focus) $left-keys)
+  e (tap-hold-release-keys $tt $ht e (layer-while-held wm-move) $left-keys)
+  r (tap-hold-release-keys $tt $ht r (layer-while-held wm-resize) $left-keys)
+  t (tap-hold-release-keys $tt $ht t (layer-while-held wm-stack) $left-keys)
+
+  ;; WM — right hand hold (same-hand taps, opposite-hand activates layer)
+  o (tap-hold-release-keys $tt $ht o (layer-while-held wm-ws-focus) $right-keys)
+  i (tap-hold-release-keys $tt $ht i (layer-while-held wm-ws-move) $right-keys)
+)
+
+(defsrc
+  grv  1    2    3    4    5         6    7    8    9    0    min  eql  bspc
+  tab  q    w    e    r    t         y    u    i    o    p    [
+  caps a    s    d    f    g         h    j    k    l    ;    '
+  lsft z    x    c    v    b         n    m    ,    .    /    rsft
+  lctl           lmet lalt    spc  ralt
+)
+
+(deflayer default
+  _    _    _    _    _    _         _    _    _    _    _    _    _    _
+  @tab _    @w   @e   @r   @t        _    _    @i   @o   _    _
+  @cap @a   @s   @d   @f   _         _    @j   @k   @l   @;   _
+  _    _    _    _    _    _         _    _    _    _    _    _
+  _              _    _       @spc _
+)
+
+(deflayer extend
+  _    _    _    _    _    _         _    _    _    _    _    _    _    _
+  _    _    _    _    lrld _         end    pgdn  pgup     home       _    _
+  _    _    _    _    _    _         left   down  up       right      _    _
+  _    _    _    _    _    _         A-left C-tab C-S-tab  A-right    _    _
+  _              _    _       _      _
+)
+
+;; W (left ring) = Focus / Navigate
+;; h/j/k/l=dir  u/i=cycle focus  y/o=cycle ws  ,/.=cycle layout  /=flip  spc=ws-layer
+(deflayer wm-focus
+  _    _    _    _    _    _         _    _    _    _    _    _    _    _
+  _    _    _    _    _    _         A-M-y   A-M-u   A-M-i    A-M-o   _    _
+  _    _    _    _    _    _         A-M-h   A-M-j   A-M-k    A-M-l   _    _
+  _    _    _    _    _    _         _       _       A-M-,    A-M-.   A-M-/  _
+  _              _    _       A-M-;  _
+)
+
+;; E (left middle) = Move / Exchange
+;; h/j/k/l=dir  y/o=cycle-move-to-ws  m=monocle  spc=float
+(deflayer wm-move
+  _    _    _    _    _    _         _    _    _    _    _    _    _    _
+  _    _    _    _    _    _         A-M-C-y  _       _        A-M-C-o  _    _
+  _    _    _    _    _    _         A-M-C-h  A-M-C-j A-M-C-k  A-M-C-l  _    _
+  _    _    _    _    _    _         _        A-M-C-' _        _        _    _
+  _              _    _       A-M-C-;  _
+)
+
+;; R (left index) = Resize
+;; h/l=horizontal  j/k=vertical
+(deflayer wm-resize
+  _    _    _    _    _    _         _    _    _    _    _    _    _    _
+  _    _    _    _    _    _         _        _       _        _       _    _
+  _    _    _    _    _    _         A-M-S-h  A-M-S-j A-M-S-k  A-M-S-l _    _
+  _    _    _    _    _    _         _        _       _        _       _    _
+  _              _    _       _      _
+)
+
+;; T (left index) = Stack
+;; h/j/k/l=dir  u/i=cycle stack  ;=unstack  '=promote
+(deflayer wm-stack
+  _    _    _    _    _    _         _    _    _    _    _    _    _    _
+  _    _    _    _    _    _         _         A-M-C-u   A-M-C-i    _         _    _
+  _    _    _    _    _    _         A-M-C-S-h A-M-C-S-j A-M-C-S-k  A-M-C-S-l A-M-C-S-; A-M-C-S-'
+  _    _    _    _    _    _         _         _         _          _         _    _
+  _              _    _       _      _
+)
+
+;; O (right ring) = Workspace Focus
+;; 1-5 or z/x/c/v/b = focus ws 1-5
+(deflayer wm-ws-focus
+  _    A-M-1 A-M-2 A-M-3 A-M-4 A-M-5    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _         _    _    _    _    _    _
+  _    _    _    _    _    _         _    _    _    _    _    _
+  _    A-M-z A-M-x A-M-c A-M-v A-M-b    _    _    _    _    _    _
+  _              _    _       _      _
+)
+
+;; I (right middle) = Workspace Move + Utility
+;; 1-5 or z/x/v/b = move to ws  c=close  r=retile
+(deflayer wm-ws-move
+  _    A-M-C-1 A-M-C-2 A-M-C-3 A-M-C-4 A-M-C-5    _    _    _    _    _    _    _    _
+  _    _    _    _    A-M-t _         _    _    _    _    _    _
+  _    _    _    _    _    _         _    _    _    _    _    _
+  _    A-M-C-z A-M-C-x A-M-q A-M-C-v A-M-C-b    _    _    _    _    _    _
+  _              _    _       _      _
+)
