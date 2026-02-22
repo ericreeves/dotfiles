@@ -13,7 +13,7 @@
   },
   "transparency": false,
   "animation": {
-    "enabled": false,
+    "enabled": true,
     "duration": 500,
     "fps": 120,
     "style": "EaseInOutExpo"
@@ -168,30 +168,11 @@
       "workspaces": [
         {
           "name": "1",
-          "layout": "Scrolling",
-          "initial_workspace_rules": [
-            {
-              "id": "vivaldi.exe",
-              "kind": "Exe",
-              "matching_strategy": "Equals"
-            },
-            {
-              "id": "wezterm-gui.exe",
-              "kind": "Exe",
-              "matching_strategy": "Equals"
-            }
-          ]
+          "layout": "Scrolling"
         },
         {
           "name": "2",
-          "layout": "Scrolling",
-          "initial_workspace_rules": [
-            {
-              "id": "Chrome.exe",
-              "kind": "Exe",
-              "matching_strategy": "Equals"
-            }
-          ]
+          "layout": "Scrolling"
         },
         {
           "name": "3",
@@ -199,37 +180,11 @@
         },
         {
           "name": "4",
-          "layout": "Scrolling",
-          "initial_workspace_rules": [
-            {
-              "id": "Spotify.exe",
-              "kind": "Exe",
-              "matching_strategy": "Equals"
-            }
-          ]
+          "layout": "Scrolling"
         },
         {
           "name": "5",
-          "layout": "Scrolling",
-          "initial_workspace_rules": [
-            {
-              "id": "reaper.exe",
-              "kind": "Exe",
-              "matching_strategy": "Equals"
-            }
-          ],
-          "intial_workspace_rules": [
-            {
-              "kind": "Path",
-              "id": "C:\\Program Files (x86)\\Steam",
-              "matching_strategy": "StartsWith"
-            },
-            {
-              "kind": "Path",
-              "id": "G:\\Games",
-              "matching_strategy": "StartsWith"
-            }
-          ]
+          "layout": "Scrolling"
         }
       ]
     }
