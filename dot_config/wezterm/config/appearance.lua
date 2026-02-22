@@ -21,32 +21,32 @@ return {
    -- color scheme
    color_scheme = 'catppuccin-mocha',
 
-  colors = {
-    split = '#6272a4',  -- Dracula purple for dividers
-    tab_bar = {
-      background = '#11111b',
-      active_tab = {
-        bg_color = '#1e1e2e',
-        fg_color = '#cdd6f4',
+   colors = {
+      split = '#6272a4', -- Dracula purple for dividers
+      tab_bar = {
+         background = '#11111b',
+         active_tab = {
+            bg_color = '#1e1e2e',
+            fg_color = '#cdd6f4',
+         },
+         inactive_tab = {
+            bg_color = '#11111b',
+            fg_color = '#313244',
+         },
+         inactive_tab_hover = {
+            bg_color = '#585b70',
+            fg_color = '#cdd6f4',
+         },
+         new_tab = {
+            bg_color = '#11111b',
+            fg_color = '#cdd6f4',
+         },
+         new_tab_hover = {
+            bg_color = '#585b70',
+            fg_color = '#cdd6f4',
+         },
       },
-      inactive_tab = {
-        bg_color = '#11111b',
-        fg_color = '#313244',
-      },
-      inactive_tab_hover = {
-        bg_color = '#585b70',
-        fg_color = '#cdd6f4',
-      },
-      new_tab = {
-        bg_color = '#11111b',
-        fg_color = '#cdd6f4',
-      },
-      new_tab_hover = {
-        bg_color = '#585b70',
-        fg_color = '#cdd6f4',
-      },
-    },
-  },
+   },
 
    -- background
    -- background = backdrops:initial_options(false), -- set to true if you want wezterm to start on focus mode
@@ -56,7 +56,7 @@ return {
 
    -- tab bar
    enable_tab_bar = true,
-   hide_tab_bar_if_only_one_tab = false,
+   hide_tab_bar_if_only_one_tab = true,
    use_fancy_tab_bar = true,
    tab_max_width = 100,
    show_tab_index_in_tab_bar = true,
@@ -88,7 +88,7 @@ return {
       brightness = 0.7,
    },
 
-   audible_bell = "Disabled",
+   audible_bell = 'Disabled',
    visual_bell = {
       fade_in_function = 'EaseIn',
       fade_in_duration_ms = 250,
