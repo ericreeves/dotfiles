@@ -14,11 +14,12 @@ alt + shift - l         : komorebic move right
 alt + shift - return    : komorebic promote
 
 # Stack windows
-ctrl + alt - h          : komorebic stack left
-ctrl + alt - j          : komorebic stack down
-ctrl + alt - k          : komorebic stack up
-ctrl + alt - l          : komorebic stack right
-ctrl + alt - 0x29       : komorebic unstack # 0x29 is ;
+#
+ctrl + alt - y          : komorebic stack left
+ctrl + alt - u          : komorebic stack down
+ctrl + alt - i          : komorebic stack up
+ctrl + alt - o          : komorebic stack right
+ctrl + alt - p          : komorebic unstack # 0x29 is ;
 alt - u                 : komorebic cycle-stack previous # 0x21 is [
 alt - i                 : komorebic cycle-stack next # 0x1E is ]
 
@@ -30,29 +31,31 @@ alt - 0x29      : komorebic toggle-workspace-layer # 0x29 is ;
 # alt - 0x1B              : komorebic resize-axis horizontal decrease # 0x1B is -
 # alt + shift - 0x18      : komorebic resize-axis vertical increase
 # alt + shift - 0x1B      : komorebic resize-axis vertical decrease
-ctrl + alt + shift - l  : komorebic resize-axis horizontal increase # 0x18 is +
-ctrl + alt + shift - h  : komorebic resize-axis horizontal decrease # 0x1B is -
-ctrl + alt + shift - k  : komorebic resize-axis vertical increase
-ctrl + alt + shift - j  : komorebic resize-axis vertical decrease
-alt - f  : komorebic resize-axis horizontal increase # 0x18 is +
-alt - s  : komorebic resize-axis horizontal decrease # 0x1B is -
-alt - e  : komorebic resize-axis vertical increase
-alt - d  : komorebic resize-axis vertical decrease
+ctrl + alt - l  : komorebic resize-axis horizontal increase # 0x18 is +
+ctrl + alt - h  : komorebic resize-axis horizontal decrease # 0x1B is -
+ctrl + alt - k  : komorebic resize-axis vertical increase
+ctrl + alt - j  : komorebic resize-axis vertical decrease
 
 # Manipulate windows
-alt - t                 : komorebic toggle-float
-alt + shift - t         : komorebic toggle-workspace-float-override
-alt - f                 : komorebic toggle-monocle
+alt + shift - 0x29      : komorebic toggle-float
+# alt + shift - t         : komorebic toggle-workspace-float-override
+alt - m                 : komorebic toggle-monocle
 
 # Window manager options
 alt - r                 : komorebic retile
-alt - p                 : komorebic toggle-pause
-alt - 0                 : komorebic toggle-window-container-behaviour
+# alt - p                 : komorebic toggle-pause
+# alt - 0                 : komorebic toggle-window-container-behaviour
 
 # Layouts
-alt - x                 : komorebic flip-layout horizontal
-alt - y                 : komorebic flip-layout vertical
-alt + shift - x         : komorebic session-float-rule
+# alt - x                 : komorebic flip-layout horizontal
+# alt - y                 : komorebic flip-layout vertical
+# alt + shift - x         : komorebic session-float-rule
+
+# Workspace Nav
+alt - y                 : komorebic cycle-workspace previous
+alt - o                 : komorebic cycle-workspace next
+alt + shift - y         : komorebic cycle-move-to-workspace previous
+alt + shift - o         : komorebic cycle-move-to-workspace next
 
 # Workspaces
 alt - 1                 : komorebic focus-workspace 0
