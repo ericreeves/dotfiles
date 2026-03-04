@@ -144,4 +144,4 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 # OpenClaw Completion
-source "/home/eric/.openclaw/completions/openclaw.zsh"
+# source "/home/eric/.openclaw/completions/openclaw.zsh"

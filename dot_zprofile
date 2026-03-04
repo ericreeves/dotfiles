@@ -1,4 +1,18 @@
-export PATH="$HOME/.local/bin:$PATH"
+# Executable Paths
+# Any Paths Here That Exist Will Be Added To $PATH
+for P in \
+  /usr/local/sbin \
+  /usr/local/bin \
+	$HOME/.local/bin \
+	$HOME/bin \
+	$HOME/.cargo/bin \
+	; do
+		if [ -d "$P" ]; then
+			export PATH=$P:$PATH
+		fi
+done
+
+# Enable mise
 eval "$(mise activate zsh --shims)"
 
 # Set Editor Variable
@@ -27,19 +41,6 @@ export XDG_CACHE_HOME="$HOME/.cache"
 
 # Tmux Plugin Manager
 export TMUX_PLUGIN_MANAGER_PATH="$HOME/.config/tmux/plugins"
-
-# Executable Paths
-# Any Paths Here That Exist Will Be Added To $PATH
-for P in \
-  /usr/local/sbin \
-  /usr/local/bin \
-	$HOME/.local/bin \
-	$HOME/bin \
-	; do
-		if [ -d "$P" ]; then
-			export PATH=$P:$PATH
-		fi
-done
 
 ############################################################
 # HomeBrew
