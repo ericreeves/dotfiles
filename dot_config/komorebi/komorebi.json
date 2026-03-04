@@ -1,29 +1,33 @@
 {
-  "$schema": "./schema.json",
+  "$schema": "$HOME/.config/komorebi/schema.json",
   "app_specific_configuration_path": [
-    "C:\\Users\\eric\\.config\\komorebi/applications.json"
+    "$HOME/.config/komorebi/applications.json"
+  ],
+  "bar_configurations": [
+    "$HOME/.config/komorebi/komorebi.bar.1.json",
+    "$HOME/.config/komorebi/komorebi.bar.2.json"
   ],
   "window_hiding_behaviour": "Cloak",
   "cross_monitor_move_behaviour": "Insert",
   "cross_boundary_behaviour": "Workspace",
-  "display_index_preferences": {
-    "0": "SAME028-5&1339745c&0&UID4357",
-    "1": "Default_Monitor-2&180ef493&0&UID256",
-    "2": "100663728"
-  },
   "transparency": false,
   "animation": {
-    "enabled": true,
+    "enabled": false,
     "duration": 500,
     "fps": 120,
     "style": "EaseInOutExpo"
   },
+  "display_index_preferences": {
+    "0": "0",
+    "1": "4251086178"
+  },
   "default_workspace_padding": 15,
   "default_container_padding": 15,
   "border_style": "System",
-  "border_width": 3,
+  "border_width": 1,
   "border": true,
-  "border_offset": 0,
+  "border_offset": -5,
+  "border_radius": 20,
   "theme": {
     "name": "Mocha",
     "palette": "Catppuccin",
@@ -33,7 +37,7 @@
     "unfocused_locked_border": "Pink",
     "floating_border": "Green",
     "single_border": "Lavender",
-    "stack_border": "Lavender",
+    "stack_border": "Green",
     "stackbar_background": "Crust",
     "stackbar_focused_text": "Lavender",
     "stackbar_unfocused_text": "Surface0"
@@ -44,7 +48,7 @@
     "label": "Title",
     "tabs": {
       "width": 400,
-      "font_family": "Segoe UI",
+      "font_family": "SF Pro",
       "font_size": 18
     }
   },
@@ -60,7 +64,16 @@
       "workspaces": [
         {
           "name": "1",
-          "layout": "Scrolling",
+          "layout": "UltrawideVerticalStack",
+          "layout_options": {
+            "column_ratios": [
+              0.5,
+              0.25
+            ],
+            "row_ratios": [
+              0.4
+            ]
+          },
           "initial_workspace_rules": [
             {
               "id": "vivaldi.exe",
@@ -76,7 +89,16 @@
         },
         {
           "name": "2",
-          "layout": "Scrolling",
+          "layout": "UltrawideVerticalStack",
+          "layout_options": {
+            "column_ratios": [
+              0.5,
+              0.25
+            ],
+            "row_ratios": [
+              0.4
+            ]
+          },
           "initial_workspace_rules": [
             {
               "id": "Chrome.exe",
@@ -87,11 +109,29 @@
         },
         {
           "name": "3",
-          "layout": "Scrolling"
+          "layout": "UltrawideVerticalStack",
+          "layout_options": {
+            "column_ratios": [
+              0.5,
+              0.25
+            ],
+            "row_ratios": [
+              0.4
+            ]
+          }
         },
         {
           "name": "4",
-          "layout": "Scrolling",
+          "layout": "UltrawideVerticalStack",
+          "layout_options": {
+            "column_ratios": [
+              0.5,
+              0.25
+            ],
+            "row_ratios": [
+              0.4
+            ]
+          },
           "initial_workspace_rules": [
             {
               "id": "Spotify.exe",
@@ -102,7 +142,16 @@
         },
         {
           "name": "5",
-          "layout": "Scrolling",
+          "layout": "UltrawideVerticalStack",
+          "layout_options": {
+            "column_ratios": [
+              0.5,
+              0.25
+            ],
+            "row_ratios": [
+              0.4
+            ]
+          },
           "initial_workspace_rules": [
             {
               "id": "reaper.exe",
@@ -128,63 +177,24 @@
     {
       "workspaces": [
         {
-          "name": "Main",
-          "layout": "Grid",
-          "initial_workspace_rules": [
-            {
-              "id": "Discord.exe",
-              "kind": "Exe",
-              "matching_strategy": "Equals"
-            },
-            {
-              "id": "Ferdium.exe",
-              "kind": "Exe",
-              "matching_strategy": "Equals"
-            }
-          ]
-        },
-        {
-          "name": "Utils",
-          "layout": "Grid",
-          "initial_workspace_rules": [
-            {
-              "id": "slack.exe",
-              "kind": "Exe",
-              "matching_strategy": "Equals"
-            }
-          ]
-        },
-        {
-          "name": "Music",
-          "layout": "Grid"
-        },
-        {
-          "name": "Gaming",
-          "layout": "Grid"
-        }
-      ]
-    },
-    {
-      "workspaces": [
-        {
           "name": "1",
-          "layout": "Scrolling"
+          "layout": "BSP"
         },
         {
           "name": "2",
-          "layout": "Scrolling"
+          "layout": "BSP"
         },
         {
           "name": "3",
-          "layout": "Scrolling"
+          "layout": "BSP"
         },
         {
           "name": "4",
-          "layout": "Scrolling"
+          "layout": "BSP"
         },
         {
           "name": "5",
-          "layout": "Scrolling"
+          "layout": "BSP"
         }
       ]
     }
