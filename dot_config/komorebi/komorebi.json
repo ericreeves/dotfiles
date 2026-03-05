@@ -1,7 +1,7 @@
 {
   "$schema": "$HOME/.config/komorebi/schema.json",
   "app_specific_configuration_path": [
-    "$HOME/.config/komorebi/applications.json"
+    "/Users/eric/.config/komorebi/applications.json"
   ],
   "bar_configurations": [
     "$HOME/.config/komorebi/komorebi.bar.1.json",
@@ -18,15 +18,15 @@
     "style": "EaseInOutExpo"
   },
   "display_index_preferences": {
-    "0": "0",
-    "1": "42510.4178"
+    "0": "H1AK500000",
+    "1": "425104178"
   },
   "default_workspace_padding": 15,
   "default_container_padding": 15,
   "border_style": "System",
-  "border_width": 1,
+  "border_width": 5,
   "border": true,
-  "border_offset": -5,
+  "border_offset": -4,
   "border_radius": 20,
   "theme": {
     "name": "Mocha",
