@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:ghostty.org)",
+      "Bash(gh api:*)"
+    ]
+  }
+}
