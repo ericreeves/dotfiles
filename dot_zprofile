@@ -42,6 +42,9 @@ export XDG_CACHE_HOME="$HOME/.cache"
 # Tmux Plugin Manager
 export TMUX_PLUGIN_MANAGER_PATH="$HOME/.config/tmux/plugins"
 
+# Komorebi
+export KOMOREBI_CONFIG_HOME="$HOME/.config/komorebi"
+
 ############################################################
 # HomeBrew
 ############################################################
