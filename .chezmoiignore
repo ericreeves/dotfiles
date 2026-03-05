@@ -1,0 +1,5 @@
+# Linux-only files
+{{ if ne .chezmoi.os "linux" }}
+.config/mise/config.toml
+.config/mise
+{{ end }}
