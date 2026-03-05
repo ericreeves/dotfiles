@@ -120,6 +120,15 @@
       }
     ]
   },
+  "Elgato Stream Deck Mac": {
+    "floating": [
+      {
+        "kind": "Exe",
+        "id": "Stream Deck",
+        "matching_strategy": "Equals"
+      }
+    ]
+  },
   "Elgato Wave Link": {
     "floating": [
       {
@@ -138,7 +147,7 @@
       }
     ]
   },
-  "Bitwig Studio":{
+  "Bitwig Studio": {
     "floating": [
       {
         "kind": "Class",
@@ -147,7 +156,7 @@
       }
     ]
   },
-  "SwitchBar":{
+  "SwitchBar": {
     "floating": [
       {
         "kind": "Exe",
