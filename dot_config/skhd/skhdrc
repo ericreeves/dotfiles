@@ -3,8 +3,10 @@ alt - h                 : komorebic focus left
 alt - j                 : komorebic focus down
 alt - k                 : komorebic focus up
 alt - l                 : komorebic focus right
-# alt + shift - 0x21      : komorebic cycle-focus previous # 0x21 is [
-# alt + shift - 0x1E      : komorebic cycle-focus next # 0x1E is ]
+alt - 0x2B      : komorebic cycle-focus previous # 0x2B is ,
+alt - 0x2F      : komorebic cycle-focus next # 0x2F is .
+alt - 0x2C      : komorebic cycle-monitor next # 0x2C is /
+alt + shift - 0x2C      : komorebic cycle-move-to-monitor next # 0x2C is /
 
 # Move windows
 alt + shift - h         : komorebic move left
