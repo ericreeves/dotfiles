@@ -19,7 +19,7 @@
   },
   "display_index_preferences": {
     "0": "0",
-    "1": "4251086178"
+    "1": "42510.4178"
   },
   "default_workspace_padding": 15,
   "default_container_padding": 15,
@@ -67,11 +67,11 @@
           "layout": "UltrawideVerticalStack",
           "layout_options": {
             "column_ratios": [
-              0.5,
-              0.25
+              0.4,
+              0.3
             ],
             "row_ratios": [
-              0.4
+              0.5
             ]
           },
           "initial_workspace_rules": [
@@ -92,11 +92,11 @@
           "layout": "UltrawideVerticalStack",
           "layout_options": {
             "column_ratios": [
-              0.5,
-              0.25
+              0.4,
+              0.3
             ],
             "row_ratios": [
-              0.4
+              0.5
             ]
           },
           "initial_workspace_rules": [
@@ -112,11 +112,11 @@
           "layout": "UltrawideVerticalStack",
           "layout_options": {
             "column_ratios": [
-              0.5,
-              0.25
+              0.4,
+              0.3
             ],
             "row_ratios": [
-              0.4
+              0.5
             ]
           }
         },
@@ -125,11 +125,11 @@
           "layout": "UltrawideVerticalStack",
           "layout_options": {
             "column_ratios": [
-              0.5,
-              0.25
+              0.4,
+              0.3
             ],
             "row_ratios": [
-              0.4
+              0.5
             ]
           },
           "initial_workspace_rules": [
@@ -145,11 +145,11 @@
           "layout": "UltrawideVerticalStack",
           "layout_options": {
             "column_ratios": [
-              0.5,
-              0.25
+              0.4,
+              0.3
             ],
             "row_ratios": [
-              0.4
+              0.5
             ]
           },
           "initial_workspace_rules": [
