@@ -8,10 +8,17 @@ case "$1" in
   dp1)
     smartthings devices:commands $G9_DEVICE_ID 'samsungvd.mediaInputSource:setInputSource("Display Port")'
     ;;
+  ss)
+    for key in HOME LEFT DOWN RIGHT RIGHT OK; do
+      smartthings devices:commands $G9_DEVICE_ID "samsungvd.remoteControl:send(\"$key\")"
+      sleep 0.5
+    done
+    ;;
   *)
-    echo "Usage: g9.sh <hdmi1|dp1>"
+    echo "Usage: g9ctl <hdmi1|dp1|ss>"
     echo "  hdmi1  - Switch to HDMI 1"
     echo "  dp1    - Switch to DisplayPort"
+    echo "  ss     - Split screen (PBP): DP1 left, HDMI1 right"
     exit 1
     ;;
 esac
