@@ -39,7 +39,6 @@ window-inherit-font-size = true
 window-inherit-working-directory = true
 quick-terminal-position = center
 quick-terminal-animation-duration = 0.25
-# custom-shader = gcc
 macos-dock-drop-behavior = window
 
 # custom-shader = ./shaders/bettercrt.glsl
@@ -54,7 +53,7 @@ macos-dock-drop-behavior = window
 # custom-shader = ./shaders/starfield.glsl
 # custom-shader = ./shaders/tft.glsl
 
-# custom-shader = ./shaders/bloom.glsl
+custom-shader = ./shaders/bloom.glsl
 
 # https://github.com/KroneCorylus/ghostty-shader-playground
 # custom-shader = ./shaders/WIP.glsl
@@ -84,6 +83,7 @@ macos-dock-drop-behavior = window
 #custom-shader = ./shaders/zoom_and_aberration.glsl
 
 keybind = global:super+grave_accent=toggle_quick_terminal
+
 # cursor-style = block
 # shell-integration-features = no-cursor
 mouse-hide-while-typing = true
@@ -93,3 +93,11 @@ macos-icon-frame = plastic
 macos-icon-ghost-color = FFFFFF
 macos-icon-screen-color = 000000
 # macos-titlebar-style = hidden
+
+keybind = ctrl+backslash=new_split:right
+keybind = ctrl+slash=new_split:down
+keybind = ctrl+h=goto_split:left
+keybind = ctrl+j=goto_split:bottom
+keybind = ctrl+k=goto_split:top
+keybind = ctrl+l=goto_split:right
+keybind = ctrl+w=close_surface
