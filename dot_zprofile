@@ -6,6 +6,7 @@ for P in \
 	$HOME/.local/bin \
 	$HOME/bin \
 	$HOME/.cargo/bin \
+  $HOME/.lmstudio/bin \
 	; do
 		if [ -d "$P" ]; then
 			export PATH=$P:$PATH
