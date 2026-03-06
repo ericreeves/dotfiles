@@ -14,6 +14,9 @@
   "center_widgets": [
     {
       "Komorebi": {
+        "layout": {
+          "enable": true
+        },
         "workspaces": {
           "enable": true,
           "hide_empty_workspaces": false
