@@ -45,6 +45,7 @@ alt - m                 : komorebic toggle-monocle
 
 # Window manager options
 alt - r                 : komorebic retile
+alt + shift - r         : skhd --restart-service; komorebic stop; sleep 1; pkill -9 komorebi; pkill komorebi-bar; sleep 1 && komorebic start --bar
 # alt - p                 : komorebic toggle-pause
 # alt - 0                 : komorebic toggle-window-container-behaviour
 
