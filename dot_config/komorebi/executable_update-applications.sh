@@ -91,14 +91,3 @@ if [[ -f "$komorebi_config_path" ]]; then
 else
   echo "Warning: komorebi.json not found at $komorebi_config_path" >&2
 fi
-
-if [[ "$success" == true ]]; then
-  echo "Replacing komorebi configuration..."
-  if komorebic replace-configuration "$komorebi_config_path"; then
-    echo "Successfully replaced komorebi configuration"
-  else
-    echo "Error: Failed to reload configuration" >&2
-  fi
-else
-  echo "Warning: Skipping configuration reload due to previous errors" >&2
-fi
