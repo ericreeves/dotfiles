@@ -102,6 +102,15 @@
       ]
     ]
   },
+  "Logi Options Mac": {
+    "floating": [
+      {
+        "kind": "Exe",
+        "id": "Logi Options+",
+        "matching_strategy": "Equals"
+      }
+    ]
+  },
   "Outlook Notifications Mac": {
     "floating": [
       {
