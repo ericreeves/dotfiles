@@ -102,6 +102,20 @@
       ]
     ]
   },
+  "Outlook Notifications Mac": {
+    "floating": [
+      {
+        "kind": "Exe",
+        "id": "Outlook",
+        "matching_strategy": "Equals"
+      },
+      {
+        "kind": "Title",
+        "id": "Reminder",
+        "matching_strategy": "Contains"
+      }
+    ]
+  },
   "1Password": {
     "floating": [
       {
