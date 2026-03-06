@@ -120,6 +120,15 @@
       }
     ]
   },
+  "Cisco Secure Client": {
+    "floating": [
+      {
+        "kind": "Exe",
+        "id": "Cisco Secure Client",
+        "matching_strategy": "Equals"
+      }
+    ]
+  },
   "Elgato Stream Deck Mac": {
     "floating": [
       {
