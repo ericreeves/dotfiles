@@ -134,6 +134,15 @@
       }
     ]
   },
+  "Claude for Mac": {
+    "floating": [
+      {
+        "kind": "Exe",
+        "id": "Claude",
+        "matching_strategy": "Equals"
+      }
+    ]
+  },
   "Elgato Stream Deck": {
     "floating": [
       {

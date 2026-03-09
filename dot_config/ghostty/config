@@ -53,7 +53,7 @@ macos-dock-drop-behavior = window
 # custom-shader = ./shaders/starfield.glsl
 # custom-shader = ./shaders/tft.glsl
 
-custom-shader = ./shaders/bloom.glsl
+# custom-shader = ./shaders/bloom.glsl
 
 # https://github.com/KroneCorylus/ghostty-shader-playground
 # custom-shader = ./shaders/WIP.glsl
