@@ -102,29 +102,6 @@
       ]
     ]
   },
-  "Logi Options Mac": {
-    "floating": [
-      {
-        "kind": "Exe",
-        "id": "Logi Options+",
-        "matching_strategy": "Equals"
-      }
-    ]
-  },
-  "Outlook Notifications Mac": {
-    "floating": [
-      {
-        "kind": "Exe",
-        "id": "Outlook",
-        "matching_strategy": "Equals"
-      },
-      {
-        "kind": "Title",
-        "id": "Reminder",
-        "matching_strategy": "Contains"
-      }
-    ]
-  },
   "1Password": {
     "floating": [
       {
@@ -134,38 +111,11 @@
       }
     ]
   },
-  "Claude for Mac": {
-    "floating": [
-      {
-        "kind": "Exe",
-        "id": "Claude",
-        "matching_strategy": "Equals"
-      }
-    ]
-  },
   "Elgato Stream Deck": {
     "floating": [
       {
         "kind": "Exe",
         "id": "StreamDeck.exe",
-        "matching_strategy": "Equals"
-      }
-    ]
-  },
-  "Cisco Secure Client": {
-    "floating": [
-      {
-        "kind": "Exe",
-        "id": "Cisco Secure Client",
-        "matching_strategy": "Equals"
-      }
-    ]
-  },
-  "Elgato Stream Deck Mac": {
-    "floating": [
-      {
-        "kind": "Exe",
-        "id": "Stream Deck",
         "matching_strategy": "Equals"
       }
     ]

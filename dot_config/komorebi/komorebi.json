@@ -52,6 +52,17 @@
       "font_size": 18
     }
   },
+  "floating_applications": [
+    { "kind": "Exe", "id": "Logi Options+", "matching_strategy": "Equals" },
+    { "kind": "Exe", "id": "iPhone Mirroring", "matching_strategy": "Equals" },
+    [
+      { "kind": "Exe", "id": "Outlook", "matching_strategy": "Equals" },
+      { "kind": "Title", "id": "Reminder", "matching_strategy": "Contains" }
+    ],
+    { "kind": "Exe", "id": "Claude", "matching_strategy": "Equals" },
+    { "kind": "Exe", "id": "Cisco Secure Client", "matching_strategy": "Equals" },
+    { "kind": "Exe", "id": "Stream Deck", "matching_strategy": "Equals" }
+  ],
   "monitors": [
     {
       "window_based_work_area_offset_limit": 1,
