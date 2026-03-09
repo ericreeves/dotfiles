@@ -1,5 +1,5 @@
 {
-  "$schema": "$HOME/.config/komorebi/schema.json",
+  "$schema": "schema.json",
   "app_specific_configuration_path": [
     "/Users/eric/.config/komorebi/applications.json"
   ],
@@ -10,10 +10,10 @@
   "window_hiding_behaviour": "Cloak",
   "cross_monitor_move_behaviour": "Insert",
   "cross_boundary_behaviour": "Workspace",
-  "transparency": false,
+  "transparency": true,
   "animation": {
     "enabled": false,
-    "duration": 500,
+    "duration": 250,
     "fps": 120,
     "style": "EaseInOutExpo"
   },
@@ -64,16 +64,7 @@
       "workspaces": [
         {
           "name": "1",
-          "layout": "UltrawideVerticalStack",
-          "layout_options": {
-            "column_ratios": [
-              0.5,
-              0.25
-            ],
-            "row_ratios": [
-              0.5
-            ]
-          },
+          "layout": "Columns",
           "initial_workspace_rules": [
             {
               "id": "vivaldi.exe",
@@ -89,16 +80,7 @@
         },
         {
           "name": "2",
-          "layout": "UltrawideVerticalStack",
-          "layout_options": {
-            "column_ratios": [
-              0.5,
-              0.25
-            ],
-            "row_ratios": [
-              0.5
-            ]
-          },
+          "layout": "Columns",
           "initial_workspace_rules": [
             {
               "id": "Chrome.exe",
@@ -109,29 +91,11 @@
         },
         {
           "name": "3",
-          "layout": "UltrawideVerticalStack",
-          "layout_options": {
-            "column_ratios": [
-              0.5,
-              0.25
-            ],
-            "row_ratios": [
-              0.5
-            ]
-          }
+          "layout": "Columns"
         },
         {
           "name": "4",
-          "layout": "UltrawideVerticalStack",
-          "layout_options": {
-            "column_ratios": [
-              0.5,
-              0.25
-            ],
-            "row_ratios": [
-              0.5
-            ]
-          },
+          "layout": "Columns",
           "initial_workspace_rules": [
             {
               "id": "Spotify.exe",
@@ -142,16 +106,7 @@
         },
         {
           "name": "5",
-          "layout": "UltrawideVerticalStack",
-          "layout_options": {
-            "column_ratios": [
-              0.5,
-              0.25
-            ],
-            "row_ratios": [
-              0.5
-            ]
-          },
+          "layout": "Columns",
           "initial_workspace_rules": [
             {
               "id": "reaper.exe",
