@@ -9,7 +9,7 @@
   ],
   "window_hiding_behaviour": "Cloak",
   "cross_monitor_move_behaviour": "Insert",
-  "cross_boundary_behaviour": "Workspace",
+  "cross_boundary_behaviour": "Monitor",
   "transparency": true,
   "animation": {
     "enabled": false,
