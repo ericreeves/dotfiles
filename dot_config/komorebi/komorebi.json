@@ -55,6 +55,11 @@
   "floating_applications": [
     {
       "kind": "Exe",
+      "id": "Elgato Wave Link",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
       "id": "Logi Options+",
       "matching_strategy": "Equals"
     },
