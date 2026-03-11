@@ -85,7 +85,7 @@ macos-dock-drop-behavior = window
 keybind = global:super+grave_accent=toggle_quick_terminal
 
 # cursor-style = block
-# shell-integration-features = no-cursor
+shell-integration-features = true
 mouse-hide-while-typing = true
 macos-titlebar-proxy-icon = hidden
 macos-icon = custom-style
