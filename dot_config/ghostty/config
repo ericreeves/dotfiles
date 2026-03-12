@@ -82,13 +82,34 @@ macos-dock-drop-behavior = window
 
 #custom-shader = ./shaders/zoom_and_aberration.glsl
 
-keybind = global:super+grave_accent=toggle_quick_terminal
+custom-shader = shaders/bloom025.glsl
+custom-shader = shaders/cursor_smear.glsl
+
+window-padding-x = 4,2
+window-padding-y = 6,0
+
+confirm-close-surface = false
+
+keybind = cmd+s=toggle_quick_terminal
+quick-terminal-animation-duration = 0.08
+
+keybind = super+i=inspector:toggle
+keybind = super+r=reload_config
+
+#command = zsh --login -c "if command -v tmux >/dev/null 2>&1; then tmux attach || tmux; else zsh; fi"
+
+macos-option-as-alt = right
+
+unfocused-split-opacity = 0.7
+
+
 
 # cursor-style = block
 shell-integration-features = true
 mouse-hide-while-typing = true
 macos-titlebar-proxy-icon = hidden
-macos-icon = custom-style
+macos-icon = official
+#macos-icon = custom-style
 macos-icon-frame = plastic
 macos-icon-ghost-color = FFFFFF
 macos-icon-screen-color = 000000
