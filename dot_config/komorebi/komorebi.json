@@ -25,7 +25,7 @@
   "default_container_padding": 15,
   "border_style": "System",
   "border_width": 5,
-  "border": true,
+  "border": false,
   "border_offset": -4,
   "border_radius": 20,
   "theme": {
