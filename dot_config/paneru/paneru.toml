@@ -3,6 +3,26 @@
 # Example configuration for Paneru.
 #
 [options]
+# Draw a border around the active (focused) window.
+# Default: false.
+border_active_window = true
+
+# Hex color for the active window border.
+# Default: "#FFFFFF" (white).
+border_color = "#b4befe"
+
+# Opacity of the active window border (0.0–1.0).
+# Default: 1.0.
+border_opacity = 1.0
+
+# Width of the active window border in pixels.
+# Default: 2.0.
+border_width = 1.5
+
+# Corner radius of the active window border in pixels.
+# Default: 10.0.
+border_radius = 10.0
+
 # Enables focus follows mouse. Enabled by default, set to false to disable.
 # focus_follows_mouse = true
 
@@ -11,7 +31,7 @@
 
 # Array of widths used by the `window_resize` action to cycle between.
 # Defaults to 25%, 33%, 50%, 66% and 75%.
-preset_column_widths = [ 0.25, 0.33, 0.50, 0.66, 0.75 ]
+preset_column_widths = [ 0.33, 0.50, 0.66 ]
 
 # How many fingers to use for moving windows left and right.
 # Make sure that it doesn't clash with OS setting for workspace switching.
@@ -28,11 +48,11 @@ swipe_gesture_fingers = 4
 # Animation speed in 1/10th of display resolution per second.
 # E.g. a value of 20 means: move at a speed of two display sizes per second.
 # To disable animations, leave this unset or set to a very large value.
-# animation_speed = 15
+animation_speed = 25
 
 # Automatically center the focused window when switching focus with keyboard,
 # i.e. 'window_focus_west' or 'window_focus_east'.
-# auto_center = false
+auto_center = true
 
 # Height of off-screen window slivers as a ratio (0.0–1.0) of the display
 # height. Lower values hide the window's corner radius at screen edges.
@@ -47,66 +67,44 @@ swipe_gesture_fingers = 4
 # Padding applied at screen edges (in pixels). Independent from the
 # between-window gaps set by per-window horizontal/vertical_padding.
 # Default: 0 on all sides.
-# padding_top = 0
-# padding_bottom = 0
-# padding_left = 0
-# padding_right = 0
+padding_top = 20
+padding_bottom = 20
+padding_left = 20
+padding_right = 20
 
 # When disabled, swiping of windows is clamped so you cannot scroll
 # past the first or last window.
 # When enabled (default) the strip slides freely, exposing the desktop behind.
-# free_slide = true
+free_slide = false
 
 [bindings]
-# Moves the focus between windows. If there are no windows when moving up or
-# down, will swtich focus to the display above or below.
+# ── Tier 1: Option (alt, hold S) — Focus & Toggle ──
 window_focus_west = ["alt - h", "alt - leftarrow"]
 window_focus_east = ["alt - l", "alt - rightarrow"]
 window_focus_north = ["alt - k", "alt - uparrow"]
 window_focus_south = ["alt - j", "alt - downarrow"]
-
-# Swaps windows in chosen direction. If there are no windows to swap, will
-# move the window to a display above or below.
-window_swap_west = "cmd + alt - h"
-window_swap_east = "cmd + alt - l"
-window_swap_north = "cmd + alt - k"
-window_swap_south = "cmd + alt - j"
-
-# Jump to the left-most or right-most windows.
-window_focus_first = "alt + ctrl - h"
-window_focus_last = "alt + ctrl - l"
-
-# Move the current window into the left-most or right-most positions.
-window_swap_first = "alt + shift - h"
-window_swap_last = "alt + shift - l"
-
-# Centers the current window on screen.
-window_center = "alt - c"
-
-# Cycles between the window sizes defined in the `preset_column_widths` option.
-window_resize = "alt - r"
-
-# Toggle full width for the current focused window.
+window_focus_first = "alt - y"         # < = leftmost
+window_focus_last = "alt - o"         # > = rightmost
 window_fullwidth = "alt - f"
-
-# Toggles the window for management. If unmanaged, the window will be "floating".
-window_manage = "ctrl + alt - t"
-
-# Stacks and unstacks a window into the left column. Each window gets a 1/N of the height.
+window_center = "alt - c"
+window_resize = "alt - r"                  # cycles preset_column_widths
 window_stack = "alt - s"
-window_unstack = "alt + shift - s"
-
-#l Moves currently focused window to the next display.
-window_nextdisplay = "alt + shift - n"
-
-# Moves the mouse pointer to the next display.
+window_equalize = "alt - b"
 mouse_nextdisplay = "alt - n"
 
-# Size stacked windows in the column to equal heights.
-window_equalize = "alt + shift - e"
+# ── Tier 2: Option+Ctrl (alt+ctrl, hold S+A) — Move & Transfer ──
+window_swap_west = "alt + ctrl - h"
+window_swap_east = "alt + ctrl - l"
+window_swap_north = "alt + ctrl - k"
+window_swap_south = "alt + ctrl - j"
+window_nextdisplay = "alt + ctrl - n"
+window_unstack = "alt + ctrl - s"
+window_manage = "alt + ctrl - t"
+quit = "alt + ctrl - q"
 
-# Quits the window manager.
-quit = "ctrl + alt - q"
+# ── Tier 3: Option+Shift (alt+shift, hold S+F) — Swap to Edges ──
+window_swap_first = "alt + shift - y"
+window_swap_last = "alt + shift - o"
 
 # Window properties, matched by a RegExp title string.
 [windows]
