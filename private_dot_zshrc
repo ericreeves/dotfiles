@@ -145,3 +145,4 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 # OpenClaw Completion
 # source "/home/eric/.openclaw/completions/openclaw.zsh"
+source /Users/eric/.config/op/plugins.sh
