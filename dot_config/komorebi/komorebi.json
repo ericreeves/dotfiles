@@ -4,16 +4,16 @@
     "/Users/eric/.config/komorebi/applications.json"
   ],
   "bar_configurations": [
-    "$HOME/.config/komorebi/komorebi.bar.1.json",
-    "$HOME/.config/komorebi/komorebi.bar.2.json"
+    "$HOME/.config/komorebi/komorebi.bar.g9.json",
+    "$HOME/.config/komorebi/komorebi.bar.mbp.json"
   ],
   "window_hiding_behaviour": "Cloak",
   "cross_monitor_move_behaviour": "Insert",
   "cross_boundary_behaviour": "Monitor",
   "transparency": true,
   "animation": {
-    "enabled": false,
-    "duration": 250,
+    "enabled": true,
+    "duration": 150,
     "fps": 120,
     "style": "EaseInOutExpo"
   },
@@ -136,6 +136,11 @@
           "layout": "Columns",
           "initial_workspace_rules": [
             {
+              "id": "Safari",
+              "kind": "Exe",
+              "matching_strategy": "Equals"
+            },
+            {
               "id": "vivaldi.exe",
               "kind": "Exe",
               "matching_strategy": "Equals"
@@ -151,6 +156,11 @@
           "name": "2",
           "layout": "Columns",
           "initial_workspace_rules": [
+            {
+              "id": "cmux",
+              "kind": "Exe",
+              "matching_strategy": "Equals"
+            },
             {
               "id": "Chrome.exe",
               "kind": "Exe",
@@ -185,6 +195,11 @@
           ],
           "intial_workspace_rules": [
             {
+              "id": "Discord",
+              "kind": "Exe",
+              "matching_strategy": "Equals"
+            },
+            {
               "kind": "Path",
               "id": "C:\\Program Files (x86)\\Steam",
               "matching_strategy": "StartsWith"
@@ -199,26 +214,32 @@
       ]
     },
     {
+      "work_area_offset": {
+        "top": 20,
+        "left": 0,
+        "right": 0,
+        "bottom": 20
+      },
       "workspaces": [
         {
           "name": "1",
-          "layout": "BSP"
+          "layout": "Grid"
         },
         {
           "name": "2",
-          "layout": "BSP"
+          "layout": "Grid"
         },
         {
           "name": "3",
-          "layout": "BSP"
+          "layout": "Grid"
         },
         {
           "name": "4",
-          "layout": "BSP"
+          "layout": "Grid"
         },
         {
           "name": "5",
-          "layout": "BSP"
+          "layout": "Grid"
         }
       ]
     }
