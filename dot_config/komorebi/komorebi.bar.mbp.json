@@ -60,11 +60,6 @@
   ],
   "right_widgets": [
     {
-      "Update": {
-        "enable": true
-      }
-    },
-    {
       "Storage": {
         "enable": false
       }
