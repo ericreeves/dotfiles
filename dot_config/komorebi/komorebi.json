@@ -24,9 +24,9 @@
   "default_workspace_padding": 15,
   "default_container_padding": 15,
   "border_style": "System",
-  "border_width": 5,
-  "border": false,
-  "border_offset": -4,
+  "border_width": 1,
+  "border": true,
+  "border_offset": -3,
   "border_radius": 20,
   "theme": {
     "name": "Mocha",
@@ -223,23 +223,53 @@
       "workspaces": [
         {
           "name": "1",
-          "layout": "Grid"
+          "layout": "Scrolling",
+          "layout_options": {
+            "scrolling": {
+              "columns": 2,
+              "center_focused_column": true
+            }
+          }
         },
         {
           "name": "2",
-          "layout": "Grid"
+          "layout": "Scrolling",
+          "layout_options": {
+            "scrolling": {
+              "columns": 2,
+              "center_focused_column": true
+            }
+          }
         },
         {
           "name": "3",
-          "layout": "Grid"
+          "layout": "Scrolling",
+          "layout_options": {
+            "scrolling": {
+              "columns": 2,
+              "center_focused_column": true
+            }
+          }
         },
         {
           "name": "4",
-          "layout": "Grid"
+          "layout": "Scrolling",
+          "layout_options": {
+            "scrolling": {
+              "columns": 2,
+              "center_focused_column": true
+            }
+          }
         },
         {
           "name": "5",
-          "layout": "Grid"
+          "layout": "Scrolling",
+          "layout_options": {
+            "scrolling": {
+              "columns": 2,
+              "center_focused_column": true
+            }
+          }
         }
       ]
     }
