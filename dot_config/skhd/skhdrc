@@ -9,11 +9,10 @@ alt + shift - h         : komorebic move left
 alt + shift - j         : komorebic move down
 alt + shift - k         : komorebic move up
 alt + shift - l         : komorebic move right
-alt + shift - 0x27      : komorebic promote
-alt - 0x27      : komorebic toggle-lock
-alt - m                 : komorebic minimize
-alt + shift - m                 : komorebic toggle-monocle
-alt + shift - f         : komorebic toggle-workspace-float-override
+alt + shift - 0x27      : komorebic promote # 0x27 is '
+alt - 0x27              : komorebic toggle-lock # 0x27 is '
+alt - m                 : komorebic toggle-monocle
+# alt + shift - f         : komorebic toggle-workspace-float-override
 
 
 # Resize
@@ -29,6 +28,8 @@ alt + shift - u          : komorebic stack left
 alt + shift - i          : komorebic stack right
 alt + shift - p          : komorebic unstack # 0x29 is ;
 
+# 0x29 is ;
+
 # Flaoting Layer
 alt - 0x29      : komorebic toggle-workspace-layer # 0x29 is ;
 alt + shift - 0x29      : komorebic toggle-float
@@ -41,8 +42,8 @@ alt + shift - 0x2F      : komorebic cycle-layout next # 0x2F is .
 
 # Window manager options
 alt - r                 : komorebic retile
-alt + shift - r         : komorebic stop; pkill komorebi-bar; sleep 1 && komorebic start --bar
-alt + cmd - r           : skhd --restart-service
+alt + cmd - r         : komorebic stop; pkill komorebi-bar; sleep 1 && komorebic start --bar
+alt + shift - r           : skhd --restart-service
 
 # Workspace Nav
 alt - y                 : komorebic cycle-workspace previous
