@@ -270,6 +270,46 @@
               "center_focused_column": true
             }
           }
+        },
+        {
+          "name": "6",
+          "layout": "Scrolling",
+          "layout_options": {
+            "scrolling": {
+              "columns": 2,
+              "center_focused_column": true
+            }
+          }
+        },
+        {
+          "name": "7",
+          "layout": "Scrolling",
+          "layout_options": {
+            "scrolling": {
+              "columns": 2,
+              "center_focused_column": true
+            }
+          }
+        },
+        {
+          "name": "8",
+          "layout": "Scrolling",
+          "layout_options": {
+            "scrolling": {
+              "columns": 2,
+              "center_focused_column": true
+            }
+          }
+        },
+        {
+          "name": "9",
+          "layout": "Scrolling",
+          "layout_options": {
+            "scrolling": {
+              "columns": 2,
+              "center_focused_column": true
+            }
+          }
         }
       ]
     }
