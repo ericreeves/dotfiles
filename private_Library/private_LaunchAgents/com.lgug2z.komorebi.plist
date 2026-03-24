@@ -1,0 +1,28 @@
+
+           <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+        <key>EnvironmentVariables</key>
+        <dict>
+                <key>PATH</key>
+                <string>$HOME/.nix-profile/bin:/etc/profiles/per-user/$USER/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        </dict>
+        <key>RunAtLoad</key>
+        <true/>
+        <key>KeepAlive</key>
+        <true/>
+        <key>Label</key>
+        <string>com.lgug2z.komorebi</string>
+        <key>ProcessType</key>
+        <string>Interactive</string>
+        <key>ProgramArguments</key>
+        <array>
+                <string>/opt/homebrew/bin/komorebi</string>
+        </array>
+        <key>StandardOutPath</key>
+        <string>/tmp/komorebi.out.log</string>
+        <key>StandardErrorPath</key>
+        <string>/tmp/komorebi.err.log</string>
+</dict>
+</plist>
