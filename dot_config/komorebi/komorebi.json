@@ -24,7 +24,7 @@
   "default_workspace_padding": 15,
   "default_container_padding": 15,
   "border_style": "System",
-  "border_width": 1,
+  "border_width": 2,
   "border": true,
   "border_offset": -3,
   "border_radius": 20,
