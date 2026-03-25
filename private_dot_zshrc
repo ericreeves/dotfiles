@@ -137,12 +137,11 @@ if [[ -e ${HOME}/.zshrc.config ]]; then
 fi
 
 # bun completions
-[ -s "/home/eric/.bun/_bun" ] && source "/home/eric/.bun/_bun"
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
 
 # OpenClaw Completion
 # source "/home/eric/.openclaw/completions/openclaw.zsh"
-source /Users/eric/.config/op/plugins.sh
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/eric/.lmstudio/bin"
+# End of LM Studio CLI section
+
