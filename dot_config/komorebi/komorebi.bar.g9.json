@@ -3,17 +3,48 @@
   "monitor": {
     "index": 0
   },
-  "font_family": "SF Pro",
-  "font_size": 14,
-  "transparency_alpha": 0,
-  "height": 30,
-  "theme": {
-    "palette": "Catppuccin",
-    "name": "Mocha",
-    "accent": "Lavender"
+  "margin": {
+    "top": 30.0,
+    "bottom": 0.0,
+    "left": 0.0,
+    "right": 0.0
   },
-  "left_widgets": [],
-  "right_widgets": [],
+  "font_family": "SF Pro Display",
+  "font_size": 12,
+  "transparency_alpha": 0,
+  "height": 40,
+  "theme": {
+    "palette": "Custom",
+    "accent": "Base0D",
+    "colours": {
+      "base_00": "#1c1c1e",
+      "base_01": "#2c2c2e",
+      "base_02": "#3a3a3c",
+      "base_03": "#48484a",
+      "base_04": "#636366",
+      "base_05": "#ebebf5",
+      "base_06": "#f2f2f7",
+      "base_07": "#ffffff",
+      "base_08": "#ff453a",
+      "base_09": "#ff9f0a",
+      "base_0a": "#ffd60a",
+      "base_0b": "#30d158",
+      "base_0c": "#64d2ff",
+      "base_0d": "#e0e0e4",
+      "base_0e": "#bf5af2",
+      "base_0f": "#ff375f"
+    }
+  },
+  "left_widgets": [
+    {
+      "Komorebi": {
+        "focused_container": {
+          "enable": true,
+          "show_icon": true
+        }
+      }
+    }
+  ],
   "center_widgets": [
     {
       "Komorebi": {
@@ -23,11 +54,31 @@
         "workspaces": {
           "enable": true,
           "hide_empty_workspaces": false
-        },
-        "focused_container": {
-          "enable": true,
-          "show_icon": true
         }
+      }
+    }
+  ],
+  "right_widgets": [
+    {
+      "Storage": {
+        "enable": false
+      }
+    },
+    {
+      "Cpu": {
+        "enable": true
+      }
+    },
+    {
+      "Memory": {
+        "enable": true
+      }
+    },
+    {
+      "Network": {
+        "enable": true,
+        "show_activity": true,
+        "show_total_activity": false
       }
     }
   ]
