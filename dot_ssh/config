@@ -1,3 +1,8 @@
+# Added by OrbStack: 'orb' SSH host for Linux machines
+# This only works if it's at the top of ssh_config (before any Host blocks).
+# This won't be added again if you remove it.
+Include ~/.orbstack/ssh/config
+
 Host 192.168.1.17
   HostName 192.168.1.17
   User eric
@@ -47,6 +52,15 @@ Host ops
   User eric
   Hostname 192.168.1.6
 
+Host analog
+  User eric
+  Hostname 192.168.1.240
+
+Host analog-wsl
+  User eric
+  Hostname 192.168.1.240
+  Port 2222
+
 Host github-harnoldcodes
   User git
   Hostname github.com
@@ -56,3 +70,6 @@ Host github-ericreeves
   User git
   Hostname github.com
   IdentityFile ~/.ssh/github-ericreeves
+
+Host *
+  IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
