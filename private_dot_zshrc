@@ -141,7 +141,5 @@ fi
 # OpenClaw Completion
 # source "/home/eric/.openclaw/completions/openclaw.zsh"
 
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/eric/.lmstudio/bin"
-# End of LM Studio CLI section
-
+export PATH="$PATH:$HOME/.lmstudio/bin"
+export PATH="$PATH:$HOME/.local/bin"
