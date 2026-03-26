@@ -1,1 +1,4 @@
 eval "$(mise activate bash --shims)"
+
+export PATH="$PATH:$HOME/.lmstudio/bin"
+export PATH="$PATH:$HOME/.local/bin"
