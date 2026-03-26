@@ -42,7 +42,7 @@ alt + shift - 0x2F      : komorebic cycle-layout next # 0x2F is .
 
 # Window manager options
 alt - r                 : komorebic retile
-alt + cmd - r         : komorebic stop; pkill komorebi-bar; sleep 1 && komorebic start --bar
+alt + cmd - r         : pkill komorebi-bar; sleep 1 ; pkill komorebi
 alt + shift - r           : skhd --restart-service
 
 # Workspace Nav
