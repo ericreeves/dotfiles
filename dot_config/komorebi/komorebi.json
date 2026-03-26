@@ -119,6 +119,115 @@
       "kind": "Exe",
       "id": "Stream Deck",
       "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "obs64.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "SuperDisplay.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "ScreenToGif.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "localsend_app.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "ShareX.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "GoBorderless.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "REAL-Video-Enhancer.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "1Password.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "StreamDeck.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "WaveLink.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Class",
+      "id": "vst3window",
+      "matching_strategy": "Legacy"
+    },
+    {
+      "kind": "Exe",
+      "id": "Switchbar.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Exe",
+      "id": "Zoom.exe",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Class",
+      "id": "TeamsWebView",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Title",
+      "id": "Microsoft Teams Notification",
+      "matching_strategy": "Legacy"
+    },
+    {
+      "kind": "Title",
+      "id": "Microsoft Teams Call",
+      "matching_strategy": "Legacy"
+    },
+    {
+      "kind": "Exe",
+      "id": "gzdoom.exe",
+      "matching_strategy": "Equals"
+    }
+  ],
+  "ignore_rules": [
+    {
+      "kind": "Exe",
+      "id": "handy.exe",
+      "matching_strategy": "Equals"
+    },
+    [
+      {
+        "kind": "Class",
+        "id": "Qt5QWindowIcon",
+        "matching_strategy": "Equals"
+      },
+      {
+        "kind": "Exe",
+        "id": "Winxvideo AI.exe",
+        "matching_strategy": "Equals"
+      }
+    ],
+    {
+      "kind": "Exe",
+      "id": "yasb.exe",
+      "matching_strategy": "Equals"
     }
   ],
   "monitors": [
