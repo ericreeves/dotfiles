@@ -1,0 +1,2 @@
+#!/bin/bash
+$HOME/.local/bin/kanata-service install /opt/homebrew/bin/kanata ~/.config/kanata/kanata-novars.kbd
