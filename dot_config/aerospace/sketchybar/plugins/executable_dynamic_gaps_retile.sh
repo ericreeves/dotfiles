@@ -16,11 +16,20 @@ MONITOR=$(aerospace list-windows --workspace "$WORKSPACE" --format '%{monitor-na
 case "$MONITOR" in
   *Odyssey*|*G95*) ;; # G9 — continue with centering logic
   *)
-    # Not G9 — retile any floating windows that arrived from centering
-    for wid in $(aerospace list-windows --workspace "$WORKSPACE" --format '%{window-id}' 2>/dev/null); do
-      aerospace layout --window-id "$wid" tiling 2>/dev/null || true
+    # Not G9 — retile only windows that were auto-centered (not user-floated)
+    # Check all workspace state files for windows that were auto-centered
+    for sf in "$STATE_DIR"/ws_*; do
+      [ -f "$sf" ] || continue
+      PREV=$(cat "$sf")
+      if echo "$PREV" | grep -q "^centered"; then
+        AUTO_WID=$(echo "$PREV" | awk '{print $2}')
+        # If this auto-centered window is now on this workspace, retile it
+        if aerospace list-windows --workspace "$WORKSPACE" --format '%{window-id}' 2>/dev/null | grep -qx "$AUTO_WID"; then
+          aerospace layout --window-id "$AUTO_WID" tiling 2>/dev/null || true
+          rm -f "$sf"
+        fi
+      fi
     done
-    rm -f "$STATE_DIR/ws_${WORKSPACE}"
     exit 0
     ;;
 esac

@@ -89,7 +89,12 @@ if [ "$COUNT" -eq 1 ]; then
 
 elif [ "$COUNT" -ge 2 ]; then
   if echo "$PREV_STATE" | grep -q "^centered"; then
+    # Only retile the window that was auto-centered, not user-floated windows
+    AUTO_WID=$(echo "$PREV_STATE" | awk '{print $2}')
+    aerospace layout --window-id "$AUTO_WID" tiling 2>/dev/null || true
+    # Also tile the new arrival (it's likely tiling already, but be safe)
     for wid in "${VISIBLE_WIDS[@]}"; do
+      [ "$wid" = "$AUTO_WID" ] && continue
       aerospace layout --window-id "$wid" tiling 2>/dev/null || true
     done
   fi
