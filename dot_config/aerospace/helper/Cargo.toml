@@ -1,6 +1,6 @@
 [package]
 name = "aerospace-helper"
-version = "0.4.0"
+version = "0.5.0"
 edition = "2024"
 
 [[bin]]
@@ -17,6 +17,15 @@ objc2-app-kit = { version = "0.3", features = [
   "NSRunningApplication",
   "NSWorkspace",
 ] }
+objc2-foundation = { version = "0.3", features = [
+  "NSDate",
+  "NSNotification",
+  "NSRunLoop",
+  "NSString",
+  "NSObjCRuntime",
+  "NSThread",
+] }
+block2 = "0.6"
 
 [profile.release]
 opt-level = "s"

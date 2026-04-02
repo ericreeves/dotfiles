@@ -1,13 +1,17 @@
 use std::collections::HashMap;
 use std::fs;
-use std::io::{BufRead, BufReader};
+use std::io::{BufRead, BufReader, Write};
 use std::os::unix::net::{UnixListener, UnixStream};
 use std::process::Command;
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::{Duration, Instant};
 
+use std::ptr::NonNull;
+
+use block2::RcBlock;
 use objc2_app_kit::NSWorkspace;
+use objc2_foundation::{NSNotification, NSString};
 
 const SOCKET_PATH: &str = "/tmp/aerospace-helper.sock";
 const G9_PATTERN: &str = "Odyssey";
@@ -249,8 +253,14 @@ fn handle_event(raw_event: &str, state: &mut HelperState) {
         }
         "focus_changed" => {
             update_borders();
-            // Check if window count changed (new window opened/closed)
             handle_gaps(&workspace, state);
+        }
+        "app_visibility_changed" => {
+            // Fired by NSWorkspace observer when an app is hidden/unhidden
+            // Re-evaluate gaps since visible window count may have changed
+            eprintln!("[helper] app visibility changed, re-evaluating gaps");
+            handle_gaps(&workspace, state);
+            trigger_sketchybar(&workspace);
         }
         _ => {}
     }
@@ -268,21 +278,81 @@ fn handle_client(stream: UnixStream, state: Arc<Mutex<HelperState>>) {
     }
 }
 
+/// Send an event to ourselves via the Unix socket
+fn send_self_event(event: &str) {
+    if let Ok(mut stream) = UnixStream::connect(SOCKET_PATH) {
+        let _ = writeln!(stream, "{}", event);
+    }
+}
+
+/// Start observing NSWorkspace notifications for app hide/unhide.
+/// Runs on a background thread with its own run loop.
+
 fn main() {
     let _ = fs::remove_file(SOCKET_PATH);
-    let listener = UnixListener::bind(SOCKET_PATH).expect("Failed to bind socket");
-    eprintln!("aerospace-helper v0.4 listening on {}", SOCKET_PATH);
+    eprintln!("aerospace-helper v0.5 starting");
 
     let state = Arc::new(Mutex::new(HelperState::new()));
     update_borders();
 
-    for stream in listener.incoming() {
-        match stream {
-            Ok(stream) => {
-                let state = Arc::clone(&state);
-                thread::spawn(move || handle_client(stream, state));
+    // Socket listener on a background thread
+    let state_socket = Arc::clone(&state);
+    thread::spawn(move || {
+        let listener = UnixListener::bind(SOCKET_PATH).expect("Failed to bind socket");
+        eprintln!("[helper] socket listener ready on {}", SOCKET_PATH);
+
+        for stream in listener.incoming() {
+            match stream {
+                Ok(stream) => {
+                    let state = Arc::clone(&state_socket);
+                    thread::spawn(move || handle_client(stream, state));
+                }
+                Err(e) => eprintln!("Connection error: {}", e),
             }
-            Err(e) => eprintln!("Connection error: {}", e),
         }
+    });
+
+    // Give socket a moment to bind
+    thread::sleep(Duration::from_millis(100));
+
+    // Main thread: register workspace notifications and run NSRunLoop
+    // NSWorkspace notifications require the main thread's run loop
+    let workspace = NSWorkspace::sharedWorkspace();
+    let center = workspace.notificationCenter();
+
+    let hide_block = RcBlock::new(|_notif: NonNull<NSNotification>| {
+        eprintln!("[helper] NSWorkspace: app hidden");
+        send_self_event("app_visibility_changed");
+    });
+
+    let unhide_block = RcBlock::new(|_notif: NonNull<NSNotification>| {
+        eprintln!("[helper] NSWorkspace: app unhidden");
+        send_self_event("app_visibility_changed");
+    });
+
+    let hide_name = objc2_foundation::NSNotificationName::from_str("NSWorkspaceDidHideApplicationNotification");
+    let unhide_name = objc2_foundation::NSNotificationName::from_str("NSWorkspaceDidUnhideApplicationNotification");
+
+    unsafe {
+        center.addObserverForName_object_queue_usingBlock(
+            Some(&hide_name),
+            None,
+            None,
+            &hide_block,
+        );
+        center.addObserverForName_object_queue_usingBlock(
+            Some(&unhide_name),
+            None,
+            None,
+            &unhide_block,
+        );
+    }
+
+    eprintln!("[helper] workspace observer registered on main thread");
+
+    // Run the main thread's run loop forever to receive notifications
+    loop {
+        objc2_foundation::NSRunLoop::currentRunLoop()
+            .runUntilDate(&objc2_foundation::NSDate::dateWithTimeIntervalSinceNow(1.0));
     }
 }
