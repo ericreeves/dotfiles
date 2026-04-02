@@ -13,7 +13,7 @@ exec-on-workspace-change = ['/bin/bash', '-c',
 
 on-focus-changed = [
     'exec-and-forget /bin/bash -c "$HOME/.config/aerospace/scripts/notify-helper.sh focus_changed"',
-    'exec-and-forget osascript -e " tell application \"System Events\" to     if (get name of every process) contains \"AeroSpaceBar\" then         tell application \"AeroSpaceBar\" to «event ascrpsbr» \"updateOnFocusChanged\" "'
+    # 'exec-and-forget osascript -e " tell application \"System Events\" to     if (get name of every process) contains \"AeroSpaceBar\" then         tell application \"AeroSpaceBar\" to «event ascrpsbr» \"updateOnFocusChanged\" "'
 ]
 
 start-at-login = false
