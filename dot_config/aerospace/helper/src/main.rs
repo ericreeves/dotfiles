@@ -213,9 +213,7 @@ fn trigger_sketchybar(workspace: &str) {
 
 fn handle_gaps(workspace: &str, state: &mut HelperState) {
     if !is_on_g9(workspace) {
-        // Not on G9 — ensure normal gaps
-        set_gaps(&GapState::Normal, state);
-        return;
+        return; // MBP always gets 15px via per-monitor syntax; don't touch G9 gaps
     }
 
     float_hidden_windows(workspace);
