@@ -4,19 +4,12 @@
 # Only activates on the Odyssey G95SC monitor
 # 1 visible window: float and center at 2560px
 # 2+ visible windows: retile all
+#
+# Positioning: float the window, then use aerospace resize to shrink it.
+# Aerospace places floating windows centered on the monitor by default.
 
-G9_WIDTH=5120
-CENTER_W=2560
-TOP_Y=85
-BOTTOM_PAD=15
 STATE_DIR="/tmp/aerospace_dynamic_gaps"
-LOCK_FILE="/tmp/aerospace_dynamic_gaps.lock"
 mkdir -p "$STATE_DIR"
-
-# Prevent concurrent runs
-if [ -f "$LOCK_FILE" ]; then
-  exit 0
-fi
 
 WORKSPACE=$(aerospace list-workspaces --focused 2>/dev/null)
 [ -z "$WORKSPACE" ] && exit 0
@@ -67,28 +60,13 @@ if [ "$COUNT" -eq 1 ]; then
   # Already centered — skip
   [ "$PREV_STATE" = "centered $WID" ] && exit 0
 
-  # Float and center using enable off/on to allow osascript positioning
-  # Lock to prevent concurrent runs during the brief disable
-  touch "$LOCK_FILE"
-  trap 'rm -f "$LOCK_FILE"; aerospace enable on 2>/dev/null' EXIT
-
+  # Float the window — aerospace places it centered on the monitor
   aerospace layout --window-id "$WID" floating 2>/dev/null
 
-  H=$((1440 - TOP_Y - BOTTOM_PAD))
-  X=$(( (G9_WIDTH - CENTER_W) / 2 ))
-  APP_NAME=$(aerospace list-windows --format '%{window-id}|%{app-name}' --workspace "$WORKSPACE" 2>/dev/null | grep "^${WID}|" | cut -d'|' -f2)
-
-  aerospace enable off 2>/dev/null
-  osascript -e "
-  tell application \"System Events\"
-    tell application process \"$APP_NAME\"
-      set position of front window to {$X, $TOP_Y}
-      set size of front window to {$CENTER_W, $H}
-    end tell
-  end tell" 2>/dev/null
-  aerospace enable on 2>/dev/null
-  rm -f "$LOCK_FILE"
-  trap - EXIT
+  # Resize to 2560px wide using absolute width
+  # The window starts at full tiling size, so shrink it
+  aerospace resize --window-id "$WID" width 2560 2>/dev/null
+  aerospace resize --window-id "$WID" height 1340 2>/dev/null
 
   echo "centered $WID" > "$STATE_FILE"
 
