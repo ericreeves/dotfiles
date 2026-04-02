@@ -7,7 +7,7 @@
 
 G9_WIDTH=5120
 CENTER_W=2560
-TOP_Y=40
+TOP_Y=50
 BOTTOM_PAD=15
 STATE_DIR="/tmp/aerospace_dynamic_gaps"
 LOCK_DIR="/tmp/aerospace_dynamic_gaps.lock"

@@ -2,11 +2,12 @@ config-version = 2
 
 after-startup-command = [
     'exec-and-forget /bin/bash -c "$HOME/.config/aerospace/borders/bordersrc"',
+    'exec-and-forget /bin/bash -c "sketchybar --config $HOME/.config/aerospace/sketchybar/sketchybarrc"',
 ]
 
-# Update borders + auto-center single windows on workspace change
+# Update sketchybar + borders + auto-center single windows on workspace change
 exec-on-workspace-change = ['/bin/bash', '-c',
-    '$HOME/.config/aerospace/scripts/border_update.sh; $HOME/.config/aerospace/scripts/dynamic_gaps.sh'
+    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE; $HOME/.config/aerospace/scripts/border_update.sh; $HOME/.config/aerospace/scripts/dynamic_gaps.sh'
 ]
 
 # Update borders + retile check on focus change
@@ -45,7 +46,7 @@ on-mode-changed = []
     inner.vertical = 15
     outer.left = 15
     outer.bottom = 15
-    outer.top = [{ monitor.'main' = 40 }, 15]
+    outer.top = [{ monitor.'main' = 50 }, 50]
     outer.right = 15
 
 # Workspace-to-monitor assignment

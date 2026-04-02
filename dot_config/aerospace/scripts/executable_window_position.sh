@@ -7,7 +7,7 @@
 POSITION="${1:-center}"
 G9_WIDTH=5120
 PANE_W=2530
-TOP_Y=40
+TOP_Y=50
 BOTTOM_PAD=15
 
 # Get focused window ID
