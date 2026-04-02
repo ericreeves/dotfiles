@@ -71,6 +71,7 @@ All configs live under `~/.config/aerospace/` (the stack folder):
 13. **T13: Minimize with 2 windows** — minimize one → remaining window centers; unminimize → both retile
 14. **T15: Hide with 2 windows** — Cmd+H hide one → remaining window centers (NSWorkspace notification triggers re-evaluation)
 15. **T17: Unhide retiles** — after hide→center→unhide, both windows retile at half width (not floating)
+16. **T18: Quit app from different workspace** — 2 windows on ws1, switch to ws6, quit one → remaining window on ws1 re-centers (NSWorkspaceDidTerminateApplicationNotification)
 
 ### Other Notes
 
