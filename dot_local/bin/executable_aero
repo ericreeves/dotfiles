@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-PROCS=(AeroSpace sketchybar borders)
+PROCS=(AeroSpace AeroSpaceBar borders)
 
 usage() {
   echo "Usage: $(basename "$0") {start|stop|restart|status}"
@@ -17,7 +17,7 @@ force_kill() {
 
 do_stop() {
   pkill -x borders 2>/dev/null || true
-  pkill -x sketchybar 2>/dev/null || true
+  osascript -e 'quit app "AeroSpaceBar"' 2>/dev/null || true
   osascript -e 'quit app "AeroSpace"' 2>/dev/null || true
   sleep 1
   force_kill
@@ -25,9 +25,10 @@ do_stop() {
 }
 
 do_start() {
-  # AeroSpace after-startup-command launches borders and sketchybar
+  # AeroSpace after-startup-command launches borders
   open -a AeroSpace
-  echo "Started AeroSpace (borders and sketchybar launch via after-startup-command)."
+  open -a AeroSpaceBar
+  echo "Started AeroSpace + AeroSpaceBar + borders."
 }
 
 do_restart() {
