@@ -33,8 +33,8 @@ All configs live under `~/.config/aerospace/` (the stack folder):
 - Central colorscheme: `~/.config/colorscheme.sh`
 - **Border colors by window state** (Catppuccin Mocha palette):
   - Lavender `#b4befe` (glow) — normal tiling
-  - Blue `#89b4fa` — accordion/stacked
-  - Green `#a6e3a1` — fullscreen
+  - Green `#a6e3a1` — accordion/stacked
+  - Blue `#89b4fa` — fullscreen
   - Mauve `#cba6f7` — floating
   - Inactive: Crust `#11111b`
 

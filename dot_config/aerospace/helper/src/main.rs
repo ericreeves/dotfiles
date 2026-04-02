@@ -235,9 +235,9 @@ fn update_borders() {
 
     // Catppuccin Mocha border colors by state
     let active_color = if is_fullscreen {
-        "0xffa6e3a1"  // Green — fullscreen
+        "0xff89b4fa"  // Blue — fullscreen
     } else if layout.contains("accordion") {
-        "0xff89b4fa"  // Blue — accordion/stacked
+        "0xffa6e3a1"  // Green — accordion/stacked
     } else if *layout == "floating" {
         "0xffcba6f7"  // Mauve — floating
     } else {

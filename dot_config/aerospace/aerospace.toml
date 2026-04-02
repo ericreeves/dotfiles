@@ -43,10 +43,10 @@ on-mode-changed = []
 [gaps]
     inner.horizontal = 15
     inner.vertical = 15
-    outer.left = 15
+    outer.left = [{ monitor.'main' = 1280 }, 15]
     outer.bottom = 15
     outer.top = [{ monitor.'main' = 50 }, 70]
-    outer.right = 15
+    outer.right = [{ monitor.'main' = 1280 }, 15]
 
 # Workspace-to-monitor assignment
 [workspace-to-monitor-force-assignment]
