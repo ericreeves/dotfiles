@@ -161,14 +161,20 @@ fn set_gaps(target: &GapState, state: &mut HelperState) {
         }
     };
 
-    // Replace outer.left and outer.right values
+    // Replace outer.left and outer.right with per-monitor syntax
+    // so only the main monitor (G9) gets large gaps, secondary stays at 15
+    let formatted = match target {
+        GapState::Centered => format!("[{{ monitor.'main' = {} }}, {}]", GAP_CENTERED, GAP_NORMAL),
+        GapState::Normal => GAP_NORMAL.to_string(),
+    };
+
     let mut new_config = String::new();
     for line in config.lines() {
         let trimmed = line.trim_start();
         if trimmed.starts_with("outer.left") {
-            new_config.push_str(&format!("    outer.left = {}\n", gap_value));
+            new_config.push_str(&format!("    outer.left = {}\n", formatted));
         } else if trimmed.starts_with("outer.right") {
-            new_config.push_str(&format!("    outer.right = {}\n", gap_value));
+            new_config.push_str(&format!("    outer.right = {}\n", formatted));
         } else {
             new_config.push_str(line);
             new_config.push('\n');
