@@ -15,7 +15,7 @@ All files under `~/.config/` are managed by [chezmoi](https://www.chezmoi.io/). 
 - Used in three configurations: G9 only, MacBook only, or both together
 - When both connected: AeroSpace workspaces 1-5 on G9 (main), 6-9 on MBP (secondary)
 - On the G9, single windows should be centered at 2560px wide (half the ultrawide) — full 5120px is too wide for one app
-- The macOS menu bar is 25px, sketchybar is 40px tall — tiled windows start at Y=85 on the G9
+- The macOS menu bar is ~25px — tiled windows start at Y=40 on the G9 (menu bar + 15px padding)
 
 ## Config Organization Pattern
 
@@ -25,10 +25,11 @@ Configs are grouped by **WM stack** — the tiling WM folder contains all relate
 
 All configs live under `~/.config/aerospace/` (the stack folder):
 - **AeroSpace** — tiling window manager (`~/.config/aerospace/aerospace.toml`)
-- **SketchyBar** — status bar (`~/.config/aerospace/sketchybar/`) — launched with `sketchybar --config`
+- **AeroSpaceBar** — menu bar workspace indicator (native SwiftUI app, no config files — settings via Cmd+,)
 - **JankyBorders** — window borders (`~/.config/aerospace/borders/bordersrc`) — sourced directly as bash script
+- **Scripts** — `~/.config/aerospace/scripts/` (dynamic_gaps.sh, border_update.sh, window_position.sh, etc.)
 - **Management script:** `~/.local/bin/aero` (start/stop/restart/status)
-- Theme: iOS dark (`#1c1c1e` bg), Catppuccin Lavender borders, SF Pro Display font
+- Theme: Catppuccin Lavender borders
 - Central colorscheme: `~/.config/colorscheme.sh`
 
 ### AeroSpace Behavioral Notes
@@ -65,5 +66,5 @@ All configs live under `~/.config/komorebi/` (the stack folder):
 ## Documentation References
 
 - AeroSpace: <https://nikitabobko.github.io/AeroSpace/guide>
-- SketchyBar: <https://felixkratz.github.io/SketchyBar/config/bar>
+- AeroSpaceBar: <https://github.com/rdrkr/AeroSpaceBar>
 - JankyBorders: <https://github.com/FelixKratz/JankyBorders>
