@@ -45,7 +45,7 @@ on-mode-changed = []
     inner.vertical = 15
     outer.left = 15
     outer.bottom = 15
-    outer.top = [{ monitor.'main' = 50 }, 50]
+    outer.top = [{ monitor.'main' = 50 }, 45]
     outer.right = 15
 
 # Workspace-to-monitor assignment
