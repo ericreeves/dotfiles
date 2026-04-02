@@ -17,7 +17,8 @@ const SOCKET_PATH: &str = "/tmp/aerospace-helper.sock";
 const G9_PATTERN: &str = "Odyssey";
 const G9_WIDTH: f64 = 5120.0;
 const CENTER_W: f64 = 2560.0;
-const TOP_Y: f64 = 50.0;
+// Match aerospace's tiled window position: menu bar (~25px) + outer.top (50px) + border ≈ 80px
+const TOP_Y: f64 = 80.0;
 const BOTTOM_PAD: f64 = 15.0;
 
 const AX_POSITION: &str = "AXPosition";
@@ -291,28 +292,31 @@ fn center_window(win: &WindowInfo) -> bool {
     let h = 1440.0 - TOP_Y - BOTTOM_PAD;
     let x = (G9_WIDTH - CENTER_W) / 2.0;
 
-    // Set size first, then retry position — aerospace may override briefly after floating
-    set_window_size_native(pid, CENTER_W, h);
-
-    let mut positioned = false;
-    for attempt in 0..5 {
+    // Retry position+size until both stick
+    // Aerospace may override position multiple times after floating transition
+    for attempt in 0..8 {
         set_window_position_native(pid, x, TOP_Y);
+        set_window_size_native(pid, CENTER_W, h);
+        std::thread::sleep(Duration::from_millis(50));
+
         if let Some(actual_x) = get_window_x(pid) {
             if (actual_x - x).abs() < 5.0 {
-                eprintln!("[helper] centered on attempt {}", attempt + 1);
-                positioned = true;
-                break;
+                // Position looks good, wait longer and verify it sticks
+                std::thread::sleep(Duration::from_millis(150));
+                if let Some(final_x) = get_window_x(pid) {
+                    if (final_x - x).abs() < 5.0 {
+                        eprintln!("[helper] centered on attempt {} (verified)", attempt + 1);
+                        return true;
+                    }
+                    eprintln!("[helper] attempt {}: position reverted to {}", attempt + 1, final_x);
+                    continue;
+                }
             }
             eprintln!("[helper] attempt {}: actual_x={} expected={}", attempt + 1, actual_x, x);
         }
-        std::thread::sleep(Duration::from_millis(30));
     }
 
-    if positioned {
-        return true;
-    }
-
-    eprintln!("[helper] centering FAILED after 5 attempts, retiling");
+    eprintln!("[helper] centering FAILED after 8 attempts, retiling");
     let _ = aerospace_cmd(&["layout", "--window-id", &win.wid, "tiling"]);
     false
 }
