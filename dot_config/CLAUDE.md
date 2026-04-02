@@ -65,6 +65,9 @@ All configs live under `~/.config/aerospace/` (the stack folder):
 7. **T7: Cross-monitor** — ws6(MBP)→ws1(G9) → window centered
 8. **T8: Sketchybar highlights** — correct workspace highlighted after switch
 9. **T9: MBP gaps** — MBP windows use normal 15px gaps, not G9's 1280px centered gaps
+10. **T10: G9 stays centered when MBP focused** — switch to ws6(MBP) → G9 window stays centered
+11. **T11: Hide window** — Cmd+H hide a window → sketchybar removes icon, centering unaffected; unhide → icon returns, re-centers
+12. **T12: Minimize window** — minimize → sketchybar still shows icon (known gap: `isHidden` doesn't detect minimize), aerospace still lists the window; unminimize → re-centers properly
 
 ### Other Notes
 
