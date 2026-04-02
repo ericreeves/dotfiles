@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Lightweight focus-change handler for dynamic gaps.
-# Detects window count changes on the current workspace:
+# Focus-change handler for dynamic gaps.
+# Detects window count changes and delegates to full script when needed:
 #   - Was centered, now 2+ windows → retile all
-#   - Was tiled/no state, now 1 window → center (delegates to full script)
-#   - 2+ windows but some floating → retile all (catches cross-workspace moves)
+#   - Was tiled/empty, now 1 window → delegate to dynamic_gaps.sh to center
+#   - No state + 1 window (new app launched) → delegate to center
 
 STATE_DIR="/tmp/aerospace_dynamic_gaps"
 
@@ -18,7 +18,7 @@ PREV_STATE=$(cat "$STATE_FILE" 2>/dev/null)
 COUNT=$(aerospace list-windows --workspace "$WORKSPACE" --count 2>/dev/null)
 
 if [ "${COUNT:-0}" -ge 2 ]; then
-  # 2+ windows — ensure all are tiled (handles centered→multi AND floating arrivals)
+  # 2+ windows — retile if we were centered
   if echo "$PREV_STATE" | grep -q "^centered"; then
     for wid in $(aerospace list-windows --workspace "$WORKSPACE" --format '%{window-id}' 2>/dev/null); do
       aerospace layout --window-id "$wid" tiling 2>/dev/null || true
@@ -26,10 +26,14 @@ if [ "${COUNT:-0}" -ge 2 ]; then
     echo "tiled $COUNT" > "$STATE_FILE"
   fi
 
-elif [ "${COUNT:-0}" -le 1 ]; then
-  # 1 or 0 windows — if previously tiled, center the remaining one
-  if echo "$PREV_STATE" | grep -q "^tiled"; then
-    rm -f "$STATE_FILE"
+elif [ "${COUNT:-0}" -eq 1 ]; then
+  # 1 window — center if not already centered
+  if ! echo "$PREV_STATE" | grep -q "^centered"; then
+    # Trigger sketchybar update for workspace icons
+    sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE="$WORKSPACE" 2>/dev/null
     exec "$HOME/.config/aerospace/sketchybar/plugins/dynamic_gaps.sh"
   fi
+
+elif [ "${COUNT:-0}" -eq 0 ]; then
+  rm -f "$STATE_FILE"
 fi
