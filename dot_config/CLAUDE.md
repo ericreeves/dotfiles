@@ -34,7 +34,7 @@ All configs live under `~/.config/aerospace/` (the stack folder):
 
 ### AeroSpace Behavioral Notes
 
-- **Single-window centering on the G9** is achieved by editing `outer.left`/`outer.right` gaps in `aerospace.toml` via the Rust helper, then calling `aerospace reload-config`. Windows stay tiled — no floating, no AX API positioning. This is the community-proven approach from [issue #60](https://github.com/nikitabobko/AeroSpace/issues/60).
+- **Single-window centering on the G9** is achieved by editing `outer.left`/`outer.right` gaps in `aerospace.toml` via the Rust helper, then calling `aerospace reload-config`. Windows stay tiled — no floating, no AX API positioning. This is the community-proven approach from [issue #60](https://github.com/nikitabobko/AeroSpace/issues/60). See [`AEROSPACE-ULTRAWIDE-FORK.md`](~/.config/aerospace/AEROSPACE-ULTRAWIDE-FORK.md) for a plan to replace this with a native solution via cherry-picking [PR #1512](https://github.com/nikitabobko/AeroSpace/pull/1512).
 - **Per-monitor gap syntax** is critical: `outer.left = [{ monitor.'main' = 1280 }, 15]` applies 1280 only to the main monitor, 15 to all others. Without this, large gaps apply to the MBP too.
 - **`exec-on-workspace-change`** must pass workspace in the event: `aero-notify "workspace_changed:$AEROSPACE_FOCUSED_WORKSPACE"`. Querying `aerospace list-workspaces --focused` from the helper is racy.
 - **All binaries in aerospace.toml callbacks must use absolute paths** — aerospace's exec environment has a minimal PATH.
