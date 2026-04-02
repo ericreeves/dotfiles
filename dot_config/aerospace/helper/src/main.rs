@@ -223,10 +223,32 @@ fn set_gaps(target: &GapState, state: &mut HelperState) {
 // --- Event handling ---
 
 fn update_borders() {
-    let _ = Command::new("/bin/bash")
-        .arg("-c")
-        .arg("source $HOME/.config/colorscheme.sh; /opt/homebrew/bin/borders active_color=\"glow(0xff${COLOR_LAVENDER})\" inactive_color=\"0xff${COLOR_BG}\"")
-        .spawn();
+    // Query focused window state for dynamic border color
+    let state_info = aerospace_cmd(&[
+        "list-windows", "--focused",
+        "--format", "%{window-layout}|%{window-is-fullscreen}",
+    ]).unwrap_or_default();
+
+    let parts: Vec<&str> = state_info.lines().next().unwrap_or("").split('|').collect();
+    let layout = parts.first().unwrap_or(&"");
+    let is_fullscreen = parts.get(1).unwrap_or(&"false") == &"true";
+
+    // Catppuccin Mocha border colors by state
+    let active_color = if is_fullscreen {
+        "0xffa6e3a1"  // Green — fullscreen
+    } else if layout.contains("accordion") {
+        "0xff89b4fa"  // Blue — accordion/stacked
+    } else if *layout == "floating" {
+        "0xffcba6f7"  // Mauve — floating
+    } else {
+        "glow(0xffb4befe)"  // Lavender glow — normal tiling
+    };
+
+    let cmd = format!(
+        "/opt/homebrew/bin/borders active_color=\"{}\" inactive_color=\"0xff11111b\"",
+        active_color
+    );
+    let _ = Command::new("/bin/bash").arg("-c").arg(&cmd).spawn();
 }
 
 fn trigger_sketchybar(workspace: &str) {

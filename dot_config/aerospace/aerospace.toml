@@ -108,6 +108,39 @@ run = 'layout floating'
 if.app-name-regex-substring = 'meetily'
 run = 'layout floating'
 
+[[on-window-detected]]
+if.app-name-regex-substring = 'Elgato Wave Link'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Raycast'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'System Settings'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Calculator'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Activity Monitor'
+run = 'layout floating'
+
+# Window-title-based floating rules
+[[on-window-detected]]
+if.window-title-regex-substring = 'Preferences'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.window-title-regex-substring = 'Picture in Picture'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.window-title-regex-substring = 'Reminder'
+run = 'layout floating'
+
 # -------------------------------------------------------------------
 # Main keybindings
 # -------------------------------------------------------------------

@@ -29,8 +29,14 @@ All configs live under `~/.config/aerospace/` (the stack folder):
 - **JankyBorders** — window borders (`~/.config/aerospace/borders/bordersrc`) — sourced directly as bash script
 - **Scripts** — `~/.config/aerospace/scripts/` (dynamic_gaps.sh, border_update.sh, window_position.sh, etc.)
 - **Management script:** `~/.local/bin/aero` (start/stop/restart/status)
-- Theme: Catppuccin Lavender borders
+- Theme: Catppuccin Mocha with Lavender accent
 - Central colorscheme: `~/.config/colorscheme.sh`
+- **Border colors by window state** (Catppuccin Mocha palette):
+  - Lavender `#b4befe` (glow) — normal tiling
+  - Blue `#89b4fa` — accordion/stacked
+  - Green `#a6e3a1` — fullscreen
+  - Mauve `#cba6f7` — floating
+  - Inactive: Crust `#11111b`
 
 ### AeroSpace Behavioral Notes
 
