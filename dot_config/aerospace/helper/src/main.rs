@@ -19,7 +19,7 @@ const G9_WIDTH: f64 = 5120.0;
 const CENTER_W: f64 = 2560.0;
 // Match aerospace's tiled window position: menu bar (~25px) + outer.top (50px) + border ≈ 80px
 const TOP_Y: f64 = 80.0;
-const BOTTOM_PAD: f64 = 15.0;
+const BOTTOM_PAD: f64 = 30.0;
 
 const AX_POSITION: &str = "AXPosition";
 const AX_SIZE: &str = "AXSize";
