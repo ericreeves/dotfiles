@@ -277,21 +277,39 @@ fn handle_event(raw_event: &str, state: &mut HelperState) {
             handle_gaps(&workspace, state);
         }
         "app_visibility_changed" => {
-            // Fired by NSWorkspace observer when an app is hidden/unhidden
-            eprintln!("[helper] app visibility changed, re-evaluating gaps");
-            let prev_gaps = state.gap_state.clone();
-            handle_gaps(&workspace, state);
-            // If gaps changed (e.g. Centered→Normal on unhide), schedule a
-            // delayed retile to ensure windows rejoin tiling after reload-config
-            if state.gap_state != prev_gaps && is_on_g9(&workspace) {
-                let ws = workspace.clone();
-                thread::spawn(move || {
-                    // Wait for aerospace reload-config to complete
-                    std::thread::sleep(Duration::from_millis(500));
-                    send_self_event(&format!("retile:{}", ws));
-                });
+            // Fired by NSWorkspace observer when an app is hidden/unhidden/quit/launched
+            // Find the visible workspace on the G9 and re-evaluate its gaps
+            eprintln!("[helper] app visibility changed");
+
+            // Find G9 monitor ID by name
+            let monitors = aerospace_cmd(&["list-monitors", "--format", "%{monitor-id}|%{monitor-name}"]).unwrap_or_default();
+            let g9_mid = monitors.lines()
+                .find(|l| l.contains(G9_PATTERN))
+                .and_then(|l| l.split('|').next())
+                .unwrap_or("")
+                .to_string();
+
+            let g9_ws = if !g9_mid.is_empty() {
+                aerospace_cmd(&["list-workspaces", "--monitor", &g9_mid, "--visible"])
+                    .unwrap_or_default().trim().to_string()
+            } else {
+                String::new()
+            };
+
+            if !g9_ws.is_empty() {
+                eprintln!("[helper] re-evaluating G9 ws{}", g9_ws);
+                let prev_gaps = state.gap_state.clone();
+                handle_gaps(&g9_ws, state);
+
+                if state.gap_state != prev_gaps {
+                    let ws = g9_ws.clone();
+                    thread::spawn(move || {
+                        std::thread::sleep(Duration::from_millis(500));
+                        send_self_event(&format!("retile:{}", ws));
+                    });
+                }
+                trigger_sketchybar(&g9_ws);
             }
-            trigger_sketchybar(&workspace);
         }
         "retile" => {
             eprintln!("[helper] delayed retile for ws{}", workspace);
@@ -365,21 +383,33 @@ fn main() {
         send_self_event("app_visibility_changed");
     });
 
+    let terminate_block = RcBlock::new(|_notif: NonNull<NSNotification>| {
+        eprintln!("[helper] NSWorkspace: app terminated");
+        send_self_event("app_visibility_changed");
+    });
+
+    let launch_block = RcBlock::new(|_notif: NonNull<NSNotification>| {
+        eprintln!("[helper] NSWorkspace: app launched");
+        send_self_event("app_visibility_changed");
+    });
+
     let hide_name = objc2_foundation::NSNotificationName::from_str("NSWorkspaceDidHideApplicationNotification");
     let unhide_name = objc2_foundation::NSNotificationName::from_str("NSWorkspaceDidUnhideApplicationNotification");
+    let terminate_name = objc2_foundation::NSNotificationName::from_str("NSWorkspaceDidTerminateApplicationNotification");
+    let launch_name = objc2_foundation::NSNotificationName::from_str("NSWorkspaceDidLaunchApplicationNotification");
 
     unsafe {
         center.addObserverForName_object_queue_usingBlock(
-            Some(&hide_name),
-            None,
-            None,
-            &hide_block,
+            Some(&hide_name), None, None, &hide_block,
         );
         center.addObserverForName_object_queue_usingBlock(
-            Some(&unhide_name),
-            None,
-            None,
-            &unhide_block,
+            Some(&unhide_name), None, None, &unhide_block,
+        );
+        center.addObserverForName_object_queue_usingBlock(
+            Some(&terminate_name), None, None, &terminate_block,
+        );
+        center.addObserverForName_object_queue_usingBlock(
+            Some(&launch_name), None, None, &launch_block,
         );
     }
 
