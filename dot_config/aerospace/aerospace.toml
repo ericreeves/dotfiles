@@ -3,16 +3,16 @@ config-version = 2
 after-startup-command = [
     'exec-and-forget /bin/bash -c "$HOME/.config/aerospace/borders/bordersrc"',
     'exec-and-forget /bin/bash -c "sketchybar --config $HOME/.config/aerospace/sketchybar/sketchybarrc"',
+    'exec-and-forget aerospace-helper',
 ]
 
-# Update sketchybar + borders + auto-center single windows on workspace change
+# Send events to the helper daemon (sequential processing, no races)
 exec-on-workspace-change = ['/bin/bash', '-c',
-    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE; $HOME/.config/aerospace/scripts/border_update.sh; $HOME/.config/aerospace/scripts/dynamic_gaps.sh'
+    '$HOME/.config/aerospace/scripts/notify-helper.sh workspace_changed'
 ]
 
-# Update borders + retile check on focus change
 on-focus-changed = [
-    'exec-and-forget /bin/bash -c "$HOME/.config/aerospace/scripts/border_update.sh; $HOME/.config/aerospace/scripts/dynamic_gaps_retile.sh"',
+    'exec-and-forget /bin/bash -c "$HOME/.config/aerospace/scripts/notify-helper.sh focus_changed"',
     'exec-and-forget osascript -e " tell application \"System Events\" to     if (get name of every process) contains \"AeroSpaceBar\" then         tell application \"AeroSpaceBar\" to «event ascrpsbr» \"updateOnFocusChanged\" "'
 ]
 
