@@ -62,7 +62,7 @@ impl HelperState {
 }
 
 fn aerospace_cmd(args: &[&str]) -> Option<String> {
-    let output = Command::new("aerospace").args(args).output().ok()?;
+    let output = Command::new("/opt/homebrew/bin/aerospace").args(args).output().ok()?;
     if output.status.success() {
         Some(String::from_utf8_lossy(&output.stdout).trim().to_string())
     } else {
@@ -322,14 +322,14 @@ fn retile_window(wid: &str) {
 }
 
 fn update_borders() {
-    let _ = Command::new("bash")
+    let _ = Command::new("/bin/bash")
         .arg("-c")
-        .arg("source $HOME/.config/colorscheme.sh; borders active_color=\"glow(0xff${COLOR_LAVENDER})\" inactive_color=\"0xff${COLOR_BG}\"")
+        .arg("source $HOME/.config/colorscheme.sh; /opt/homebrew/bin/borders active_color=\"glow(0xff${COLOR_LAVENDER})\" inactive_color=\"0xff${COLOR_BG}\"")
         .spawn();
 }
 
 fn trigger_sketchybar(workspace: &str) {
-    let _ = Command::new("sketchybar")
+    let _ = Command::new("/opt/homebrew/bin/sketchybar")
         .args(["--trigger", "aerospace_workspace_change",
                &format!("FOCUSED_WORKSPACE={}", workspace)])
         .spawn();
