@@ -162,8 +162,8 @@ run = 'layout floating'
     # Stack cycling (accordion = aerospace's stacking)
     alt-u = 'focus dfs-prev'
     alt-i = 'focus dfs-next'
-    alt-shift-u = 'join-with left'
-    alt-shift-i = 'join-with right'
+    alt-shift-u = ['join-with left', 'layout accordion']
+    alt-shift-i = ['join-with right', 'layout accordion']
 
     # Back and forth
     alt-tab = 'workspace-back-and-forth'
