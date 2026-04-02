@@ -10,7 +10,19 @@ CENTER_W=2560
 TOP_Y=85
 BOTTOM_PAD=15
 STATE_DIR="/tmp/aerospace_dynamic_gaps"
+LOCK_DIR="/tmp/aerospace_dynamic_gaps.lock"
 mkdir -p "$STATE_DIR"
+
+# Prevent concurrent runs — mkdir is atomic
+# Clean stale locks older than 5 seconds
+if [ -d "$LOCK_DIR" ]; then
+  LOCK_AGE=$(( $(date +%s) - $(stat -f %m "$LOCK_DIR" 2>/dev/null || echo 0) ))
+  [ "$LOCK_AGE" -gt 5 ] && rmdir "$LOCK_DIR" 2>/dev/null
+fi
+if ! mkdir "$LOCK_DIR" 2>/dev/null; then
+  exit 0
+fi
+trap 'rmdir "$LOCK_DIR" 2>/dev/null' EXIT
 
 WORKSPACE=$(aerospace list-workspaces --focused 2>/dev/null)
 [ -z "$WORKSPACE" ] && exit 0
