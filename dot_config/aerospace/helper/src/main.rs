@@ -279,13 +279,23 @@ fn handle_event(raw_event: &str, state: &mut HelperState) {
         "app_visibility_changed" => {
             // Fired by NSWorkspace observer when an app is hidden/unhidden
             eprintln!("[helper] app visibility changed, re-evaluating gaps");
+            let prev_gaps = state.gap_state.clone();
             handle_gaps(&workspace, state);
-            // After gap change, retile all visible windows to ensure unhidden
-            // windows rejoin the tiling layout (they may be stuck floating)
-            if is_on_g9(&workspace) {
-                retile_all_visible(&workspace);
+            // If gaps changed (e.g. Centered→Normal on unhide), schedule a
+            // delayed retile to ensure windows rejoin tiling after reload-config
+            if state.gap_state != prev_gaps && is_on_g9(&workspace) {
+                let ws = workspace.clone();
+                thread::spawn(move || {
+                    // Wait for aerospace reload-config to complete
+                    std::thread::sleep(Duration::from_millis(500));
+                    send_self_event(&format!("retile:{}", ws));
+                });
             }
             trigger_sketchybar(&workspace);
+        }
+        "retile" => {
+            eprintln!("[helper] delayed retile for ws{}", workspace);
+            retile_all_visible(&workspace);
         }
         _ => {}
     }
