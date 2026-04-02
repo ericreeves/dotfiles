@@ -3,7 +3,7 @@ config-version = 2
 after-startup-command = [
     'exec-and-forget /bin/bash -c "$HOME/.config/aerospace/borders/bordersrc"',
     'exec-and-forget /bin/bash -c "sketchybar --config $HOME/.config/aerospace/sketchybar/sketchybarrc"',
-    'exec-and-forget aerospace-helper',
+    'exec-and-forget /bin/bash -c "aerospace-helper & sleep 1 && aero-notify workspace_changed"',
 ]
 
 # Send events to the Rust helper daemon — no shell involved
@@ -63,6 +63,10 @@ on-mode-changed = []
 # -------------------------------------------------------------------
 # Floating app rules
 # -------------------------------------------------------------------
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Mantle'
+run = 'layout floating'
 
 [[on-window-detected]]
 if.app-name-regex-substring = '1Password'

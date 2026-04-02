@@ -26,7 +26,7 @@ else
     background.color=0x00000000
 fi
 
-# Build app icon string — only visible (non-hidden) apps
+# Build app icon string — exclude hidden apps and always-floating apps
 HIDDEN_BIDS=$(osascript -e '
 tell application "System Events"
   set output to ""
@@ -36,6 +36,9 @@ tell application "System Events"
   return output
 end tell' 2>/dev/null)
 
+# Always-floating apps (from aerospace on-window-detected rules)
+FLOATING_BIDS="com.mantle.app com.1password.1password com.microsoft.teams2 com.wispr.flow com.logi.cp-dev-mgr.common com.apple.ScreenMirroring com.anthropic.claudefordesktop com.cisco.secureclient.gui com.elgato.StreamDeck us.zoom.xos"
+
 APPS=$(aerospace list-windows --workspace "$SID" --format '%{app-name}|%{app-bundle-id}' 2>/dev/null)
 ICON_STRIP=""
 
@@ -43,6 +46,9 @@ if [ -n "$APPS" ]; then
   while IFS='|' read -r app bid; do
     [ -z "$app" ] && continue
     if [ -n "$HIDDEN_BIDS" ] && echo "$HIDDEN_BIDS" | grep -qx "$bid"; then
+      continue
+    fi
+    if echo "$FLOATING_BIDS" | grep -qw "$bid"; then
       continue
     fi
     __icon_map "$app"

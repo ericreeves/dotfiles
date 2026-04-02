@@ -35,3 +35,7 @@ objc2-app-kit = { version = "0.3", features = [
 opt-level = "s"
 lto = true
 strip = true
+
+[[bin]]
+name = "test-position"
+path = "src/test_position.rs"
