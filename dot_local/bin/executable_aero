@@ -1,0 +1,58 @@
+#!/bin/bash
+
+set -euo pipefail
+
+PROCS=(AeroSpace sketchybar borders)
+
+usage() {
+  echo "Usage: $(basename "$0") {start|stop|restart|status}"
+  exit 1
+}
+
+force_kill() {
+  for proc in "${PROCS[@]}"; do
+    pkill -9 -x "$proc" 2>/dev/null || true
+  done
+}
+
+do_stop() {
+  pkill -x borders 2>/dev/null || true
+  pkill -x sketchybar 2>/dev/null || true
+  osascript -e 'quit app "AeroSpace"' 2>/dev/null || true
+  sleep 1
+  force_kill
+  echo "Stopped all processes."
+}
+
+do_start() {
+  # AeroSpace after-startup-command launches borders and sketchybar
+  open -a AeroSpace
+  echo "Started AeroSpace (borders and sketchybar launch via after-startup-command)."
+}
+
+do_restart() {
+  do_stop
+  sleep 1
+  do_start
+}
+
+do_status() {
+  for proc in "${PROCS[@]}"; do
+    echo -n "$proc: "
+    if pgrep -x "$proc" >/dev/null; then
+      echo "running (pid $(pgrep -x "$proc" | tr '\n' ' '))"
+    else
+      echo "not running"
+    fi
+  done
+}
+
+[[ $# -eq 1 ]] || usage
+
+case "$1" in
+  start)   do_start ;;
+  stop)    do_stop ;;
+  restart) do_restart ;;
+  status)  do_status ;;
+  *)       usage ;;
+esac
