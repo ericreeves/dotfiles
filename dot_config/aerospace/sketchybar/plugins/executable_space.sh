@@ -4,6 +4,15 @@ source "$CONFIG_DIR/icon_map.sh"
 
 SID="${NAME##*.}"
 
+# Assign workspace to its monitor's display (multi-monitor: show only relevant workspaces per bar)
+MONITOR_COUNT=$(aerospace list-monitors --count 2>/dev/null)
+if [ "${MONITOR_COUNT:-1}" -gt 1 ]; then
+  WS_MONITOR=$(aerospace list-workspaces --monitor all --format '%{workspace}|%{monitor-id}' 2>/dev/null | grep "^${SID}|" | cut -d'|' -f2)
+  if [ -n "$WS_MONITOR" ]; then
+    sketchybar --set "$NAME" associated_display="$WS_MONITOR"
+  fi
+fi
+
 # Highlight focused workspace
 if [ "$SID" = "$FOCUSED_WORKSPACE" ]; then
   sketchybar --set "$NAME" \
