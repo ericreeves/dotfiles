@@ -11,6 +11,20 @@ STATE_DIR="/tmp/aerospace_dynamic_gaps"
 WORKSPACE=$(aerospace list-workspaces --focused 2>/dev/null)
 [ -z "$WORKSPACE" ] && exit 0
 
+# On non-G9 workspaces, ensure no windows are stuck floating from centering
+MONITOR=$(aerospace list-windows --workspace "$WORKSPACE" --format '%{monitor-name}' 2>/dev/null | head -1)
+case "$MONITOR" in
+  *Odyssey*|*G95*) ;; # G9 — continue with centering logic
+  *)
+    # Not G9 — retile any floating windows that arrived from centering
+    for wid in $(aerospace list-windows --workspace "$WORKSPACE" --format '%{window-id}' 2>/dev/null); do
+      aerospace layout --window-id "$wid" tiling 2>/dev/null || true
+    done
+    rm -f "$STATE_DIR/ws_${WORKSPACE}"
+    exit 0
+    ;;
+esac
+
 STATE_FILE="$STATE_DIR/ws_${WORKSPACE}"
 PREV_STATE=$(cat "$STATE_FILE" 2>/dev/null)
 
