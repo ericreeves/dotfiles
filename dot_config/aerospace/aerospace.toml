@@ -6,14 +6,13 @@ after-startup-command = [
     'exec-and-forget aerospace-helper',
 ]
 
-# Send events to the helper daemon (sequential processing, no races)
-exec-on-workspace-change = ['/bin/bash', '-c',
-    '$HOME/.config/aerospace/scripts/notify-helper.sh workspace_changed'
+# Send events to the Rust helper daemon — no shell involved
+exec-on-workspace-change = [
+    'exec-and-forget aero-notify workspace_changed',
 ]
 
 on-focus-changed = [
-    'exec-and-forget /bin/bash -c "$HOME/.config/aerospace/scripts/notify-helper.sh focus_changed"',
-    # 'exec-and-forget osascript -e " tell application \"System Events\" to     if (get name of every process) contains \"AeroSpaceBar\" then         tell application \"AeroSpaceBar\" to «event ascrpsbr» \"updateOnFocusChanged\" "'
+    'exec-and-forget aero-notify focus_changed',
 ]
 
 start-at-login = false

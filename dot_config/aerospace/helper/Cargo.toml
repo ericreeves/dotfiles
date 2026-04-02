@@ -1,9 +1,35 @@
 [package]
 name = "aerospace-helper"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 
+[[bin]]
+name = "aerospace-helper"
+path = "src/main.rs"
+
+[[bin]]
+name = "aero-notify"
+path = "src/notify.rs"
+
 [dependencies]
+objc2 = { version = "0.6", default-features = false, features = ["std"] }
+objc2-application-services = { version = "0.3", features = [
+  "AXUIElement",
+  "AXValue",
+  "AXError",
+  "AXAttributeConstants",
+  "Accessibility",
+] }
+objc2-core-foundation = { version = "0.3", features = [
+  "CFString",
+] }
+objc2-core-graphics = { version = "0.3", features = [
+  "CGGeometry",
+] }
+objc2-app-kit = { version = "0.3", features = [
+  "NSRunningApplication",
+  "NSWorkspace",
+] }
 
 [profile.release]
 opt-level = "s"
