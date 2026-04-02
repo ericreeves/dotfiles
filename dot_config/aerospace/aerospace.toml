@@ -2,16 +2,15 @@ config-version = 2
 
 after-startup-command = [
     'exec-and-forget /bin/bash -c "$HOME/.config/aerospace/borders/bordersrc"',
-    'exec-and-forget /bin/bash -c "sketchybar --config $HOME/.config/aerospace/sketchybar/sketchybarrc"',
 ]
 
-# Notify sketchybar + update borders + auto-center single windows
+# Update borders + auto-center single windows on workspace change
 exec-on-workspace-change = ['/bin/bash', '-c',
-    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE; $HOME/.config/aerospace/sketchybar/plugins/border_update.sh; $HOME/.config/aerospace/sketchybar/plugins/dynamic_gaps.sh'
+    '$HOME/.config/aerospace/scripts/border_update.sh; $HOME/.config/aerospace/scripts/dynamic_gaps.sh'
 ]
 
-# Update borders + check if we need to retile on focus change
-on-focus-changed = ['exec-and-forget /bin/bash -c "$HOME/.config/aerospace/sketchybar/plugins/border_update.sh; $HOME/.config/aerospace/sketchybar/plugins/dynamic_gaps_retile.sh"']
+# Update borders + retile check on focus change
+on-focus-changed = ['exec-and-forget /bin/bash -c "$HOME/.config/aerospace/scripts/border_update.sh; $HOME/.config/aerospace/scripts/dynamic_gaps_retile.sh"']
 
 start-at-login = false
 
@@ -43,7 +42,7 @@ on-mode-changed = []
     inner.vertical = 15
     outer.left = 15
     outer.bottom = 15
-    outer.top = [{ monitor.'main' = 55 }, 60]
+    outer.top = [{ monitor.'main' = 40 }, 15]
     outer.right = 15
 
 # Workspace-to-monitor assignment
@@ -212,8 +211,8 @@ run = 'layout floating'
 
 [mode.position.binding]
     esc = 'mode main'
-    h = ['exec-and-forget $HOME/.config/aerospace/sketchybar/plugins/window_position.sh left', 'mode main']
-    l = ['exec-and-forget $HOME/.config/aerospace/sketchybar/plugins/window_position.sh right', 'mode main']
-    k = ['exec-and-forget $HOME/.config/aerospace/sketchybar/plugins/window_position.sh center', 'mode main']
+    h = ['exec-and-forget $HOME/.config/aerospace/scripts/window_position.sh left', 'mode main']
+    l = ['exec-and-forget $HOME/.config/aerospace/scripts/window_position.sh right', 'mode main']
+    k = ['exec-and-forget $HOME/.config/aerospace/scripts/window_position.sh center', 'mode main']
     # Re-tile the window (exit floating)
     j = ['layout tiling', 'mode main']
