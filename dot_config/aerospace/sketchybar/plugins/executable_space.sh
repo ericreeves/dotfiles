@@ -18,7 +18,7 @@ if [ "$SID" = "$FOCUSED_WORKSPACE" ]; then
   sketchybar --set "$NAME" \
     icon.highlight=on \
     label.highlight=on \
-    background.color=0xff2c2c2e
+    background.color=0xff313244
 else
   sketchybar --set "$NAME" \
     icon.highlight=off \
