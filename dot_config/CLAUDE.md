@@ -34,23 +34,46 @@ All configs live under `~/.config/aerospace/` (the stack folder):
 
 ### AeroSpace Behavioral Notes
 
-- **No runtime gap adjustment** — `aerospace gaps` subcommand doesn't exist. Gaps are config-only. Single-window centering on the G9 is achieved by floating + osascript repositioning, not gap changes.
-- **`exec-on-workspace-change`** fires on workspace switches. Use for centering logic.
-- **`on-focus-changed`** fires on every focus change (window switch, monitor switch, new window spawn). Runs very frequently — keep callbacks lightweight. Never put osascript positioning here (causes flicker/races).
-- **Dynamic gaps split into two scripts:**
-  - `dynamic_gaps.sh` — full logic (center/retile), runs on workspace change only
-  - `dynamic_gaps_retile.sh` — lightweight retile-only check, runs on focus change. Catches new windows spawned on same workspace.
-- **State files** in `/tmp/aerospace_dynamic_gaps/` track per-workspace centering state to avoid redundant repositioning.
-- **Hidden windows:** macOS apps can be hidden (`Cmd+H`) but AeroSpace still lists them as windows. Use `osascript` to query `visible is false` app processes. Match by bundle ID (`%{app-bundle-id}`), not app name — aerospace app names often differ from System Events process names (e.g., "Mantle" vs "mantle-tauri").
-- **Per-monitor gaps:** Use `[{ monitor.'main' = X }, Y]` syntax. `'main'` = whichever display is set as primary in macOS (has the menu bar), not a specific physical monitor.
-- **Secondary display has no menu bar** — sketchybar sits at Y=0. The dock takes space at the bottom. AeroSpace automatically accounts for the dock in its tiling area.
-- **Retina scaling:** The MBP is 3024x1964 Retina, rendered as ~1512x982 points. Aerospace gap values are in points.
-- **osascript window positioning:** Y coordinates are in global screen space. With stacked displays, the MBP starts at Y=1440 (below G9). Target the specific app process by name, not "frontmost app" — avoids positioning wrong window during monitor switches.
-- **AeroSpace installed via Homebrew cask** (`nikitabobko/tap/aerospace`). The `.app` must be in `/Applications/` — if missing, `brew reinstall --cask aerospace` fixes it.
+- **Single-window centering on the G9** is achieved by editing `outer.left`/`outer.right` gaps in `aerospace.toml` via the Rust helper, then calling `aerospace reload-config`. Windows stay tiled — no floating, no AX API positioning. This is the community-proven approach from [issue #60](https://github.com/nikitabobko/AeroSpace/issues/60).
+- **Per-monitor gap syntax** is critical: `outer.left = [{ monitor.'main' = 1280 }, 15]` applies 1280 only to the main monitor, 15 to all others. Without this, large gaps apply to the MBP too.
+- **`exec-on-workspace-change`** must pass workspace in the event: `aero-notify "workspace_changed:$AEROSPACE_FOCUSED_WORKSPACE"`. Querying `aerospace list-workspaces --focused` from the helper is racy.
+- **All binaries in aerospace.toml callbacks must use absolute paths** — aerospace's exec environment has a minimal PATH.
+- **Rust helper** (`~/.config/aerospace/helper/`) handles centering, sketchybar, borders. Listens on Unix socket `/tmp/aerospace-helper.sock`.
+
+### What doesn't work for window centering (tried and failed)
+
+- **Floating + AX API positioning** — aerospace overrides floating window positions after callbacks return. Retry loops, delayed re-application, stability checks all fail because aerospace actively manages floating windows.
+- **`aerospace enable off/on`** — breaks sketchybar rendering.
+- **`aerospace resize width` on single tiled windows** — no-op (nothing to split against).
+- **osascript positioning** — slow, racy, targets wrong window when app has multiple windows across displays.
+- **Blocking sleeps in event handlers** — blocks processing of subsequent events, causes stale state.
+
+### What works
+
+- **`sed` + `aerospace reload-config`** — edit outer gaps in the TOML and reload. Windows stay tiled, aerospace handles all positioning. Brief visual flash during reload but 100% reliable.
+- **Hidden windows** take tiling space. Must float them (`layout floating`) AND exclude from visible window count via `ALWAYS_FLOATING` bundle ID list in the helper.
+- **Native `NSWorkspace` API** (via objc2-app-kit) to detect hidden apps — faster and more reliable than osascript.
+
+### Required Test Cases (all must pass)
+
+1. **T1: Center single window** — switch to G9 workspace with 1 window → centered at x≈1280
+2. **T2: Switch workspaces** — ws2→ws1 → window stays centered
+3. **T3: Rapid switching** — ws2→ws3→ws1 quickly → window centered on ws1
+4. **T4: Add window** — move second window to workspace → both tile at full width (x≈15, x≈2567)
+5. **T5: Remove window** — remove second window → remaining window re-centers
+6. **T6: Repeat switch** — ws2→ws1 after retile/re-center → centered
+7. **T7: Cross-monitor** — ws6(MBP)→ws1(G9) → window centered
+8. **T8: Sketchybar highlights** — correct workspace highlighted after switch
+9. **T9: MBP gaps** — MBP windows use normal 15px gaps, not G9's 1280px centered gaps
+
+### Other Notes
+
+- **Per-monitor gaps:** Use `[{ monitor.'main' = X }, Y]` syntax. `'main'` = whichever display is set as primary in macOS.
+- **Secondary display has no menu bar** — sketchybar sits at Y=0. The dock takes space at the bottom (auto-calculated by aerospace).
+- **AeroSpace installed via Homebrew cask** (`nikitabobko/tap/aerospace`). The `.app` must be in `/Applications/`.
 - **Accordion layout** = aerospace's stacking. Use `join-with` to group windows, `focus dfs-prev/dfs-next` to cycle within groups.
-- **Never use `aerospace enable off/on`** to reposition windows — it breaks sketchybar rendering and causes race conditions. Use `aerospace resize` with absolute values on floating windows instead (aerospace auto-centers them).
-- **Prefer consistency over speed.** Always prefer deterministic, sequential operations over fast async ones. Avoid `&` backgrounding for positioning operations.
-- **Avoid arbitrary sleeps/delays** — they are non-deterministic and can cause race conditions. Instead, confirm the previous action completed (e.g., query state, check return code) before proceeding. Only use sleep as a last resort when no verification method exists.
+- **Prefer consistency over speed.** Always prefer deterministic, sequential operations over fast async ones.
+- **Avoid arbitrary sleeps/delays** — they are non-deterministic and can cause race conditions.
 
 ## Window Management Stack (Windows — komorebi)
 
