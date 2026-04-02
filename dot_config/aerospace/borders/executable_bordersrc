@@ -1,0 +1,13 @@
+#!/bin/bash
+
+source "$HOME/.config/colorscheme.sh"
+
+options=(
+  style=round
+  width=5.0
+  hidpi=off
+  active_color="glow(0xff${COLOR_LAVENDER})"
+  inactive_color="0xff${COLOR_BG}"
+)
+
+borders "${options[@]}"
