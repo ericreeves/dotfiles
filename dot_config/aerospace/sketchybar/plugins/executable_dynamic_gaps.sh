@@ -4,19 +4,24 @@
 # Only activates on the Odyssey G95SC monitor
 # 1 visible window: float and center at 2560px
 # 2+ visible windows: retile all
-# State tracked per workspace to avoid redundant repositioning
 
 G9_WIDTH=5120
 CENTER_W=2560
 TOP_Y=85
 BOTTOM_PAD=15
 STATE_DIR="/tmp/aerospace_dynamic_gaps"
+LOCK_FILE="/tmp/aerospace_dynamic_gaps.lock"
 mkdir -p "$STATE_DIR"
+
+# Prevent concurrent runs
+if [ -f "$LOCK_FILE" ]; then
+  exit 0
+fi
 
 WORKSPACE=$(aerospace list-workspaces --focused 2>/dev/null)
 [ -z "$WORKSPACE" ] && exit 0
 
-# Only apply on G9 workspaces (check monitor)
+# Only apply on G9
 MONITOR=$(aerospace list-windows --workspace "$WORKSPACE" --format '%{monitor-name}' 2>/dev/null | head -1)
 if [ -z "$MONITOR" ]; then
   for mid in $(aerospace list-monitors --format '%{monitor-id}' 2>/dev/null); do
@@ -32,7 +37,7 @@ case "$MONITOR" in
   *) exit 0 ;;
 esac
 
-# Get hidden app bundle IDs (synchronous — waits for result)
+# Get hidden app bundle IDs
 HIDDEN_BIDS=$(osascript -e '
 tell application "System Events"
   set output to ""
@@ -42,7 +47,7 @@ tell application "System Events"
   return output
 end tell' 2>/dev/null)
 
-# Count visible windows (exclude hidden apps by bundle ID)
+# Count visible windows
 VISIBLE_WIDS=()
 while IFS='|' read -r wid bid; do
   [ -z "$wid" ] && continue
@@ -59,33 +64,35 @@ PREV_STATE=$(cat "$STATE_FILE" 2>/dev/null)
 if [ "$COUNT" -eq 1 ]; then
   WID="${VISIBLE_WIDS[0]}"
 
-  # Already centered with same window — skip
+  # Already centered — skip
   [ "$PREV_STATE" = "centered $WID" ] && exit 0
 
-  # Float and center
+  # Float and center using enable off/on to allow osascript positioning
+  # Lock to prevent concurrent runs during the brief disable
+  touch "$LOCK_FILE"
+  trap 'rm -f "$LOCK_FILE"; aerospace enable on 2>/dev/null' EXIT
+
   aerospace layout --window-id "$WID" floating 2>/dev/null
 
   H=$((1440 - TOP_Y - BOTTOM_PAD))
   X=$(( (G9_WIDTH - CENTER_W) / 2 ))
-
-  # Get the app name for this specific window
   APP_NAME=$(aerospace list-windows --format '%{window-id}|%{app-name}' --workspace "$WORKSPACE" 2>/dev/null | grep "^${WID}|" | cut -d'|' -f2)
 
+  aerospace enable off 2>/dev/null
   osascript -e "
   tell application \"System Events\"
     tell application process \"$APP_NAME\"
-      try
-        set position of front window to {$X, $TOP_Y}
-        set size of front window to {$CENTER_W, $H}
-      end try
+      set position of front window to {$X, $TOP_Y}
+      set size of front window to {$CENTER_W, $H}
     end tell
-  end tell
-  " 2>/dev/null
+  end tell" 2>/dev/null
+  aerospace enable on 2>/dev/null
+  rm -f "$LOCK_FILE"
+  trap - EXIT
 
   echo "centered $WID" > "$STATE_FILE"
 
 elif [ "$COUNT" -ge 2 ]; then
-  # Only retile if previously centered
   if echo "$PREV_STATE" | grep -q "^centered"; then
     for wid in "${VISIBLE_WIDS[@]}"; do
       aerospace layout --window-id "$wid" tiling 2>/dev/null || true
