@@ -335,22 +335,28 @@ fn trigger_sketchybar(workspace: &str) {
         .spawn();
 }
 
-fn handle_event(event: &str, state: &mut HelperState) {
-    let workspace = match get_focused_workspace() {
-        Some(ws) => ws,
-        None => { eprintln!("[helper] no focused workspace"); return; },
+fn handle_event(raw_event: &str, state: &mut HelperState) {
+    // Parse event format: "event_type" or "event_type:workspace"
+    let (event, workspace) = if let Some((ev, ws)) = raw_event.split_once(':') {
+        (ev.to_string(), ws.to_string())
+    } else {
+        // No workspace in event — query aerospace
+        let ws = match get_focused_workspace() {
+            Some(ws) => ws,
+            None => { eprintln!("[helper] no focused workspace"); return; },
+        };
+        (raw_event.to_string(), ws)
     };
 
     let now = Instant::now();
     if event == "focus_changed" && now.duration_since(state.last_event) < Duration::from_millis(50) {
-        eprintln!("[helper] debounced focus_changed for ws{}", workspace);
         return;
     }
     state.last_event = now;
 
     eprintln!("[helper] event={} workspace={}", event, workspace);
 
-    match event {
+    match event.as_str() {
         "workspace_changed" => {
             trigger_sketchybar(&workspace);
             update_borders();

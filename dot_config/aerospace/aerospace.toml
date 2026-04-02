@@ -3,16 +3,16 @@ config-version = 2
 after-startup-command = [
     'exec-and-forget /bin/bash -c "$HOME/.config/aerospace/borders/bordersrc"',
     'exec-and-forget /bin/bash -c "sketchybar --config $HOME/.config/aerospace/sketchybar/sketchybarrc"',
-    'exec-and-forget /bin/bash -c "aerospace-helper & sleep 1 && aero-notify workspace_changed"',
+    'exec-and-forget /bin/bash -c "$HOME/.local/bin/aerospace-helper & sleep 1 && $HOME/.local/bin/aero-notify workspace_changed"',
 ]
 
 # Send events to the Rust helper daemon — no shell involved
-exec-on-workspace-change = [
-    'exec-and-forget aero-notify workspace_changed',
+exec-on-workspace-change = ['/bin/bash', '-c',
+    '/Users/eric/.local/bin/aero-notify "workspace_changed:$AEROSPACE_FOCUSED_WORKSPACE"'
 ]
 
 on-focus-changed = [
-    'exec-and-forget aero-notify focus_changed',
+    'exec-and-forget /bin/bash -c "/Users/eric/.local/bin/aero-notify focus_changed"',
 ]
 
 start-at-login = false
