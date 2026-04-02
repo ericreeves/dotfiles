@@ -25,7 +25,7 @@ Configs are grouped by **WM stack** — the tiling WM folder contains all relate
 
 All configs live under `~/.config/aerospace/` (the stack folder):
 - **AeroSpace** — tiling window manager (`~/.config/aerospace/aerospace.toml`)
-- **AeroSpaceBar** — menu bar workspace indicator (native SwiftUI app, no config files — settings via Cmd+,)
+- **AeroSpaceBar** — menu bar workspace indicator (`~/.config/aerospacebar/aerospacebar.toml` — lives outside the stack folder because the app auto-saves settings to its XDG path; settings also accessible via Cmd+,)
 - **JankyBorders** — window borders (`~/.config/aerospace/borders/bordersrc`) — sourced directly as bash script
 - **Scripts** — `~/.config/aerospace/scripts/` (dynamic_gaps.sh, border_update.sh, window_position.sh, etc.)
 - **Management script:** `~/.local/bin/aero` (start/stop/restart/status)
