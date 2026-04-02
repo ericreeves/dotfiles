@@ -24,10 +24,10 @@ sketchybar --default \
   icon.font="$FONT:Medium:13.0" \
   icon.color=0xff6c7086 \
   icon.padding_left=8 \
-  icon.padding_right=4 \
+  icon.padding_right=6 \
   label.font="sketchybar-app-font:Regular:16.0" \
   label.color=0xff6c7086 \
-  label.padding_left=2 \
+  label.padding_left=6 \
   label.padding_right=8 \
   label.y_offset=1 \
   background.drawing=off
