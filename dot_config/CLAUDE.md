@@ -48,7 +48,8 @@ All configs live under `~/.config/aerospace/` (the stack folder):
 - **AeroSpace installed via Homebrew cask** (`nikitabobko/tap/aerospace`). The `.app` must be in `/Applications/` — if missing, `brew reinstall --cask aerospace` fixes it.
 - **Accordion layout** = aerospace's stacking. Use `join-with` to group windows, `focus dfs-prev/dfs-next` to cycle within groups.
 - **Never use `aerospace enable off/on`** to reposition windows — it breaks sketchybar rendering and causes race conditions. Use `aerospace resize` with absolute values on floating windows instead (aerospace auto-centers them).
-- **Prefer consistency over speed.** When scripting window management, always prefer deterministic, sequential operations over fast async ones. If something needs a delay to be reliable, add the delay. Avoid `&` backgrounding for positioning operations.
+- **Prefer consistency over speed.** Always prefer deterministic, sequential operations over fast async ones. Avoid `&` backgrounding for positioning operations.
+- **Avoid arbitrary sleeps/delays** — they are non-deterministic and can cause race conditions. Instead, confirm the previous action completed (e.g., query state, check return code) before proceeding. Only use sleep as a last resort when no verification method exists.
 
 ## Window Management Stack (Windows — komorebi)
 
