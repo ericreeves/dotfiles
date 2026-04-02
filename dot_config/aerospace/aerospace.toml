@@ -5,13 +5,13 @@ after-startup-command = [
     'exec-and-forget /bin/bash -c "sketchybar --config $HOME/.config/aerospace/sketchybar/sketchybarrc"',
 ]
 
-# Notify sketchybar + update smart borders + auto-center single windows
+# Notify sketchybar + update borders on workspace change
 exec-on-workspace-change = ['/bin/bash', '-c',
-    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE; $HOME/.config/aerospace/sketchybar/plugins/border_update.sh; $HOME/.config/aerospace/sketchybar/plugins/dynamic_gaps.sh'
+    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE; $HOME/.config/aerospace/sketchybar/plugins/border_update.sh'
 ]
 
-# Update borders + check if we need to retile on focus change (new window spawned)
-on-focus-changed = ['exec-and-forget /bin/bash -c "$HOME/.config/aerospace/sketchybar/plugins/border_update.sh; $HOME/.config/aerospace/sketchybar/plugins/dynamic_gaps_retile.sh"']
+# Update borders on focus change
+on-focus-changed = ['exec-and-forget /bin/bash -c "$HOME/.config/aerospace/sketchybar/plugins/border_update.sh"']
 
 start-at-login = false
 
@@ -37,15 +37,16 @@ on-mode-changed = []
 [key-mapping]
     preset = 'qwerty'
 
-# Gaps (matching komorebi 15px padding)
-# outer.top: main has menu bar (25px) + sketchybar (40px) = 55; secondary has no menu bar = 45
+# Gaps
+# G9 (main): 1280px left/right centers a single window at 2560px
+# Secondary: 15px normal gaps
 [gaps]
     inner.horizontal = 15
     inner.vertical = 15
-    outer.left = 15
+    outer.left = [{ monitor.'main' = 1280 }, 15]
     outer.bottom = 15
     outer.top = [{ monitor.'main' = 55 }, 60]
-    outer.right = 15
+    outer.right = [{ monitor.'main' = 1280 }, 15]
 
 # Workspace-to-monitor assignment
 [workspace-to-monitor-force-assignment]
