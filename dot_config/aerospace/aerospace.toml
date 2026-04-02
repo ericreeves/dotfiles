@@ -43,10 +43,10 @@ on-mode-changed = []
 [gaps]
     inner.horizontal = 15
     inner.vertical = 15
-    outer.left = [{ monitor.'main' = 1280 }, 15]
+    outer.left = 15
     outer.bottom = 15
     outer.top = [{ monitor.'main' = 50 }, 70]
-    outer.right = [{ monitor.'main' = 1280 }, 15]
+    outer.right = 15
 
 # Workspace-to-monitor assignment
 [workspace-to-monitor-force-assignment]
@@ -128,6 +128,35 @@ run = 'layout floating'
 if.app-name-regex-substring = 'Activity Monitor'
 run = 'layout floating'
 
+# System apps (from komorebi application-specific-configuration)
+[[on-window-detected]]
+if.app-name-regex-substring = 'Archive Utility'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Control Center'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Installer'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Notification Center'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'SecurityAgent'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'System Information'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'MobileDeviceUpdater'
+run = 'layout floating'
+
 # Window-title-based floating rules
 [[on-window-detected]]
 if.window-title-regex-substring = 'Preferences'
@@ -139,6 +168,22 @@ run = 'layout floating'
 
 [[on-window-detected]]
 if.window-title-regex-substring = 'Reminder'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.window-title-regex-substring = 'Software Update'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.window-title-regex-substring = 'Updating'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.window-title-regex-substring = 'File Upload'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.window-title-regex-substring = 'Info$'
 run = 'layout floating'
 
 # -------------------------------------------------------------------
