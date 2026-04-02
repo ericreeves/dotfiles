@@ -1,32 +1,22 @@
 use std::collections::HashMap;
-use std::ffi::c_void;
 use std::fs;
 use std::io::{BufRead, BufReader};
 use std::os::unix::net::{UnixListener, UnixStream};
 use std::process::Command;
-use std::ptr::NonNull;
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::{Duration, Instant};
 
 use objc2_app_kit::NSWorkspace;
-use objc2_application_services::{AXUIElement, AXValue, AXValueType};
-use objc2_core_foundation::{CFString, CFType, CGPoint, CGSize};
 
 const SOCKET_PATH: &str = "/tmp/aerospace-helper.sock";
 const G9_PATTERN: &str = "Odyssey";
-const G9_WIDTH: f64 = 5120.0;
-const CENTER_W: f64 = 2560.0;
-// Match aerospace's tiled window position: menu bar (~25px) + outer.top (50px) + border ≈ 80px
-const TOP_Y: f64 = 80.0;
-const BOTTOM_PAD: f64 = 30.0;
+const CONFIG_PATH: &str = "/Users/eric/.config/aerospace/aerospace.toml";
 
-const AX_POSITION: &str = "AXPosition";
-const AX_SIZE: &str = "AXSize";
-const AX_WINDOWS: &str = "AXWindows";
+// Gap values
+const GAP_NORMAL: &str = "15";
+const GAP_CENTERED: &str = "1280";
 
-// Apps that are always floating and should be excluded from visible window count
-// These are apps listed in aerospace's [[on-window-detected]] floating rules
 const ALWAYS_FLOATING: &[&str] = &[
     "com.mantle.app",
     "com.1password.1password",
@@ -41,38 +31,38 @@ const ALWAYS_FLOATING: &[&str] = &[
     "meetily",
 ];
 
-#[derive(Debug, Clone)]
-enum WorkspaceState {
-    Centered(String),
-    Tiled,
-    Empty,
+#[derive(Debug, Clone, PartialEq)]
+enum GapState {
+    Normal,
+    Centered,
 }
 
 struct HelperState {
-    workspaces: HashMap<String, WorkspaceState>,
-    last_event: Instant,
+    gap_state: GapState,
+    last_reload: Instant,
 }
 
 impl HelperState {
     fn new() -> Self {
         Self {
-            workspaces: HashMap::new(),
-            last_event: Instant::now(),
+            gap_state: GapState::Normal,
+            last_reload: Instant::now() - Duration::from_secs(10),
         }
     }
 }
 
+// --- Aerospace CLI ---
+
 fn aerospace_cmd(args: &[&str]) -> Option<String> {
-    let output = Command::new("/opt/homebrew/bin/aerospace").args(args).output().ok()?;
+    let output = Command::new("/opt/homebrew/bin/aerospace")
+        .args(args)
+        .output()
+        .ok()?;
     if output.status.success() {
         Some(String::from_utf8_lossy(&output.stdout).trim().to_string())
     } else {
         None
     }
-}
-
-fn get_focused_workspace() -> Option<String> {
-    aerospace_cmd(&["list-workspaces", "--focused"])
 }
 
 fn is_on_g9(workspace: &str) -> bool {
@@ -86,6 +76,7 @@ fn is_on_g9(workspace: &str) -> bool {
         }
     }
 
+    // Fallback: check workspace-to-monitor mapping
     let monitors = aerospace_cmd(&[
         "list-monitors", "--format", "%{monitor-id}|%{monitor-name}",
     ]).unwrap_or_default();
@@ -103,14 +94,6 @@ fn is_on_g9(workspace: &str) -> bool {
     false
 }
 
-struct WindowInfo {
-    wid: String,
-    #[allow(dead_code)]
-    app_name: String,
-    bundle_id: String,
-    pid: Option<i32>,
-}
-
 fn get_hidden_bundle_ids() -> Vec<String> {
     let workspace = NSWorkspace::sharedWorkspace();
     let apps = workspace.runningApplications();
@@ -125,24 +108,24 @@ fn get_hidden_bundle_ids() -> Vec<String> {
     hidden
 }
 
-fn get_pid_for_bundle_id(bundle_id: &str) -> Option<i32> {
-    let workspace = NSWorkspace::sharedWorkspace();
-    let apps = workspace.runningApplications();
-    for app in apps.iter() {
-        if let Some(bid) = app.bundleIdentifier() {
-            if bid.to_string() == bundle_id {
-                return Some(app.processIdentifier());
-            }
-        }
-    }
-    None
+fn count_visible_windows(workspace: &str) -> usize {
+    let hidden = get_hidden_bundle_ids();
+    let output = aerospace_cmd(&[
+        "list-windows", "--workspace", workspace,
+        "--format", "%{app-bundle-id}",
+    ]).unwrap_or_default();
+
+    output.lines().filter(|line| {
+        let bid = line.trim();
+        !bid.is_empty()
+            && !hidden.contains(&bid.to_string())
+            && !ALWAYS_FLOATING.contains(&bid)
+    }).count()
 }
 
-/// Float any hidden app windows on a workspace so they don't consume tiling space
 fn float_hidden_windows(workspace: &str) {
     let hidden = get_hidden_bundle_ids();
     if hidden.is_empty() { return; }
-
     let output = aerospace_cmd(&[
         "list-windows", "--workspace", workspace,
         "--format", "%{window-id}|%{app-bundle-id}",
@@ -151,179 +134,62 @@ fn float_hidden_windows(workspace: &str) {
     for line in output.lines() {
         let parts: Vec<&str> = line.split('|').collect();
         if parts.len() != 2 { continue; }
-        let wid = parts[0].trim();
-        let bid = parts[1];
-        if hidden.contains(&bid.to_string()) {
-            eprintln!("[helper] floating hidden window {} ({})", wid, bid);
-            let _ = aerospace_cmd(&["layout", "--window-id", wid, "floating"]);
+        if hidden.contains(&parts[1].to_string()) {
+            let _ = aerospace_cmd(&["layout", "--window-id", parts[0].trim(), "floating"]);
         }
     }
 }
 
-fn get_visible_windows(workspace: &str) -> Vec<WindowInfo> {
-    let hidden = get_hidden_bundle_ids();
-    let output = aerospace_cmd(&[
-        "list-windows", "--workspace", workspace,
-        "--format", "%{window-id}|%{app-name}|%{app-bundle-id}",
-    ]).unwrap_or_default();
+// --- Gap management via config editing ---
 
-    output.lines().filter_map(|line| {
-        let parts: Vec<&str> = line.split('|').collect();
-        if parts.len() != 3 { return None; }
-        let wid = parts[0].trim().to_string();
-        let app_name = parts[1].to_string();
-        let bundle_id = parts[2].to_string();
-        if wid.is_empty() { return None; }
-        if hidden.contains(&bundle_id) { return None; }
-        if ALWAYS_FLOATING.contains(&bundle_id.as_str()) { return None; }
-        let pid = get_pid_for_bundle_id(&bundle_id);
-        Some(WindowInfo { wid, app_name, bundle_id, pid })
-    }).collect()
-}
-
-// --- Native Accessibility API for window positioning ---
-
-// Raw CFArray access since the typed API requires specific Type bounds
-unsafe extern "C" {
-    fn CFArrayGetCount(array: *const c_void) -> isize;
-    fn CFArrayGetValueAtIndex(array: *const c_void, idx: isize) -> *const c_void;
-}
-
-fn get_first_window(pid: i32) -> Option<*const c_void> {
-    unsafe {
-        let app = AXUIElement::new_application(pid);
-        let attr = CFString::from_static_str(AX_WINDOWS);
-        let mut value: *const CFType = std::ptr::null();
-
-        let err = app.copy_attribute_value(&attr, NonNull::from_mut(&mut value));
-        if err.0 != 0 || value.is_null() {
-            return None;
-        }
-
-        let array = value as *const c_void;
-        let count = CFArrayGetCount(array);
-        if count == 0 {
-            return None;
-        }
-
-        let window = CFArrayGetValueAtIndex(array, 0);
-        if window.is_null() {
-            return None;
-        }
-
-        Some(window)
+fn set_gaps(target: &GapState, state: &mut HelperState) {
+    if *target == state.gap_state {
+        return; // Already in the right state
     }
-}
 
-fn set_window_position_native(pid: i32, x: f64, y: f64) -> bool {
-    unsafe {
-        let window_ptr = match get_first_window(pid) {
-            Some(p) => p,
-            None => return false,
-        };
-        let window = &*(window_ptr as *const AXUIElement);
-
-        let mut point = CGPoint { x, y };
-        let point_ptr = NonNull::from_mut(&mut point).cast::<c_void>();
-        if let Some(ax_val) = AXValue::new(AXValueType::CGPoint, point_ptr) {
-            let attr = CFString::from_static_str(AX_POSITION);
-            let err = window.set_attribute_value(&attr, &ax_val);
-            return err.0 == 0;
-        }
-        false
-    }
-}
-
-fn set_window_size_native(pid: i32, w: f64, h: f64) -> bool {
-    unsafe {
-        let window_ptr = match get_first_window(pid) {
-            Some(p) => p,
-            None => return false,
-        };
-        let window = &*(window_ptr as *const AXUIElement);
-
-        let mut size = CGSize { width: w, height: h };
-        let size_ptr = NonNull::from_mut(&mut size).cast::<c_void>();
-        if let Some(ax_val) = AXValue::new(AXValueType::CGSize, size_ptr) {
-            let attr = CFString::from_static_str(AX_SIZE);
-            let err = window.set_attribute_value(&attr, &ax_val);
-            return err.0 == 0;
-        }
-        false
-    }
-}
-
-fn get_window_x(pid: i32) -> Option<f64> {
-    unsafe {
-        let window_ptr = get_first_window(pid)?;
-        let window = &*(window_ptr as *const AXUIElement);
-
-        let attr = CFString::from_static_str(AX_POSITION);
-        let mut value: *const CFType = std::ptr::null();
-        let err = window.copy_attribute_value(&attr, NonNull::from_mut(&mut value));
-        if err.0 != 0 || value.is_null() {
-            return None;
-        }
-
-        let mut point = CGPoint { x: 0.0, y: 0.0 };
-        AXValue::value(
-            &*(value as *const AXValue),
-            AXValueType::CGPoint,
-            NonNull::from_mut(&mut point).cast::<c_void>(),
-        );
-        Some(point.x)
-    }
-}
-
-// --- Window management logic ---
-
-fn center_window(win: &WindowInfo) -> bool {
-    let pid = match win.pid {
-        Some(p) => p,
-        None => return false,
+    let gap_value = match target {
+        GapState::Centered => GAP_CENTERED,
+        GapState::Normal => GAP_NORMAL,
     };
 
-    let _ = aerospace_cmd(&["layout", "--window-id", &win.wid, "tiling"]);
-    let _ = aerospace_cmd(&["layout", "--window-id", &win.wid, "floating"]);
+    // Read the config file
+    let config = match fs::read_to_string(CONFIG_PATH) {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("[helper] failed to read config: {}", e);
+            return;
+        }
+    };
 
-    // Wait for aerospace to finish its layout pass after the tiling→floating transition
-    std::thread::sleep(Duration::from_millis(100));
-
-    let h = 1440.0 - TOP_Y - BOTTOM_PAD;
-    let x = (G9_WIDTH - CENTER_W) / 2.0;
-
-    // Retry position+size until both stick
-    // Aerospace may override position multiple times after floating transition
-    for attempt in 0..8 {
-        set_window_position_native(pid, x, TOP_Y);
-        set_window_size_native(pid, CENTER_W, h);
-        std::thread::sleep(Duration::from_millis(50));
-
-        if let Some(actual_x) = get_window_x(pid) {
-            if (actual_x - x).abs() < 5.0 {
-                // Position looks good, wait longer and verify it sticks
-                std::thread::sleep(Duration::from_millis(150));
-                if let Some(final_x) = get_window_x(pid) {
-                    if (final_x - x).abs() < 5.0 {
-                        eprintln!("[helper] centered on attempt {} (verified)", attempt + 1);
-                        return true;
-                    }
-                    eprintln!("[helper] attempt {}: position reverted to {}", attempt + 1, final_x);
-                    continue;
-                }
-            }
-            eprintln!("[helper] attempt {}: actual_x={} expected={}", attempt + 1, actual_x, x);
+    // Replace outer.left and outer.right values
+    let mut new_config = String::new();
+    for line in config.lines() {
+        let trimmed = line.trim_start();
+        if trimmed.starts_with("outer.left") {
+            new_config.push_str(&format!("    outer.left = {}\n", gap_value));
+        } else if trimmed.starts_with("outer.right") {
+            new_config.push_str(&format!("    outer.right = {}\n", gap_value));
+        } else {
+            new_config.push_str(line);
+            new_config.push('\n');
         }
     }
 
-    eprintln!("[helper] centering FAILED after 8 attempts, retiling");
-    let _ = aerospace_cmd(&["layout", "--window-id", &win.wid, "tiling"]);
-    false
+    // Write back
+    if let Err(e) = fs::write(CONFIG_PATH, &new_config) {
+        eprintln!("[helper] failed to write config: {}", e);
+        return;
+    }
+
+    // Reload aerospace config
+    let _ = aerospace_cmd(&["reload-config"]);
+
+    eprintln!("[helper] gaps set to {:?}", target);
+    state.gap_state = target.clone();
+    state.last_reload = Instant::now();
 }
 
-fn retile_window(wid: &str) {
-    let _ = aerospace_cmd(&["layout", "--window-id", wid, "tiling"]);
-}
+// --- Event handling ---
 
 fn update_borders() {
     let _ = Command::new("/bin/bash")
@@ -339,24 +205,35 @@ fn trigger_sketchybar(workspace: &str) {
         .spawn();
 }
 
+fn handle_gaps(workspace: &str, state: &mut HelperState) {
+    if !is_on_g9(workspace) {
+        // Not on G9 — ensure normal gaps
+        set_gaps(&GapState::Normal, state);
+        return;
+    }
+
+    float_hidden_windows(workspace);
+    let count = count_visible_windows(workspace);
+
+    eprintln!("[helper] ws{}: {} visible windows, gaps={:?}", workspace, count, state.gap_state);
+
+    if count <= 1 {
+        set_gaps(&GapState::Centered, state);
+    } else {
+        set_gaps(&GapState::Normal, state);
+    }
+}
+
 fn handle_event(raw_event: &str, state: &mut HelperState) {
-    // Parse event format: "event_type" or "event_type:workspace"
     let (event, workspace) = if let Some((ev, ws)) = raw_event.split_once(':') {
         (ev.to_string(), ws.to_string())
     } else {
-        // No workspace in event — query aerospace
-        let ws = match get_focused_workspace() {
+        let ws = match aerospace_cmd(&["list-workspaces", "--focused"]) {
             Some(ws) => ws,
-            None => { eprintln!("[helper] no focused workspace"); return; },
+            None => return,
         };
         (raw_event.to_string(), ws)
     };
-
-    let now = Instant::now();
-    if event == "focus_changed" && now.duration_since(state.last_event) < Duration::from_millis(50) {
-        return;
-    }
-    state.last_event = now;
 
     eprintln!("[helper] event={} workspace={}", event, workspace);
 
@@ -364,116 +241,14 @@ fn handle_event(raw_event: &str, state: &mut HelperState) {
         "workspace_changed" => {
             trigger_sketchybar(&workspace);
             update_borders();
-            handle_dynamic_gaps(&workspace, state);
+            handle_gaps(&workspace, state);
         }
         "focus_changed" => {
             update_borders();
-            handle_retile(&workspace, state);
+            // Check if window count changed (new window opened/closed)
+            handle_gaps(&workspace, state);
         }
         _ => {}
-    }
-}
-
-fn handle_dynamic_gaps(workspace: &str, state: &mut HelperState) {
-    if !is_on_g9(workspace) {
-        eprintln!("[helper] ws{} not on G9, skipping", workspace);
-        return;
-    }
-
-    // Float hidden windows so they don't consume tiling space
-    float_hidden_windows(workspace);
-
-    let windows = get_visible_windows(workspace);
-    let prev = state.workspaces.get(workspace).cloned().unwrap_or(WorkspaceState::Empty);
-
-    eprintln!("[helper] ws{}: {} visible windows, prev={:?}", workspace, windows.len(), prev);
-
-    match windows.len() {
-        1 => {
-            let win = &windows[0];
-            eprintln!("[helper] single window: wid={} app={} pid={:?}", win.wid, win.app_name, win.pid);
-            if let WorkspaceState::Centered(ref prev_wid) = prev {
-                if prev_wid == &win.wid {
-                    // Verify the window is actually still at the centered position
-                    // (user may have manually retiled it via service mode)
-                    if let Some(pid) = win.pid {
-                        let expected_x = (G9_WIDTH - CENTER_W) / 2.0;
-                        if let Some(actual_x) = get_window_x(pid) {
-                            if (actual_x - expected_x).abs() < 5.0 {
-                                eprintln!("[helper] already centered, verified");
-                                return;
-                            }
-                            eprintln!("[helper] state=centered but window at x={}, re-centering", actual_x);
-                        }
-                    } else {
-                        eprintln!("[helper] already centered, skip (no pid to verify)");
-                        return;
-                    }
-                }
-            }
-            eprintln!("[helper] centering window {}", win.wid);
-            if center_window(win) {
-                state.workspaces.insert(workspace.to_string(), WorkspaceState::Centered(win.wid.clone()));
-            } else {
-                state.workspaces.insert(workspace.to_string(), WorkspaceState::Tiled);
-            }
-        }
-        n if n >= 2 => {
-            if let WorkspaceState::Centered(ref auto_wid) = prev {
-                retile_window(auto_wid);
-                for win in &windows {
-                    if win.wid != *auto_wid {
-                        retile_window(&win.wid);
-                    }
-                }
-            }
-            state.workspaces.insert(workspace.to_string(), WorkspaceState::Tiled);
-        }
-        _ => { state.workspaces.remove(workspace); }
-    }
-}
-
-fn handle_retile(workspace: &str, state: &mut HelperState) {
-    if !is_on_g9(workspace) {
-        let windows = aerospace_cmd(&[
-            "list-windows", "--workspace", workspace, "--format", "%{window-id}",
-        ]).unwrap_or_default();
-
-        let mut to_remove = vec![];
-        for (ws, ws_state) in state.workspaces.iter() {
-            if let WorkspaceState::Centered(auto_wid) = ws_state {
-                if windows.lines().any(|w| w.trim() == auto_wid.as_str()) {
-                    retile_window(auto_wid);
-                    to_remove.push(ws.clone());
-                }
-            }
-        }
-        for ws in to_remove { state.workspaces.remove(&ws); }
-        return;
-    }
-
-    // Float hidden windows before counting
-    float_hidden_windows(workspace);
-
-    let visible = get_visible_windows(workspace);
-    let count = visible.len();
-    let prev = state.workspaces.get(workspace).cloned().unwrap_or(WorkspaceState::Empty);
-
-    eprintln!("[helper] retile: ws{} count={} prev={:?}", workspace, count, prev);
-
-    if count >= 2 {
-        if matches!(prev, WorkspaceState::Centered(_)) {
-            for win in &visible {
-                retile_window(&win.wid);
-            }
-            state.workspaces.insert(workspace.to_string(), WorkspaceState::Tiled);
-        }
-    } else if count == 1 {
-        if !matches!(prev, WorkspaceState::Centered(_)) {
-            handle_dynamic_gaps(workspace, state);
-        }
-    } else {
-        state.workspaces.remove(workspace);
     }
 }
 
@@ -492,7 +267,7 @@ fn handle_client(stream: UnixStream, state: Arc<Mutex<HelperState>>) {
 fn main() {
     let _ = fs::remove_file(SOCKET_PATH);
     let listener = UnixListener::bind(SOCKET_PATH).expect("Failed to bind socket");
-    eprintln!("aerospace-helper v0.2 listening on {}", SOCKET_PATH);
+    eprintln!("aerospace-helper v0.4 listening on {}", SOCKET_PATH);
 
     let state = Arc::new(Mutex::new(HelperState::new()));
     update_borders();

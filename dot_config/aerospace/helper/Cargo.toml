@@ -1,6 +1,6 @@
 [package]
 name = "aerospace-helper"
-version = "0.2.0"
+version = "0.4.0"
 edition = "2024"
 
 [[bin]]
@@ -13,19 +13,6 @@ path = "src/notify.rs"
 
 [dependencies]
 objc2 = { version = "0.6", default-features = false, features = ["std"] }
-objc2-application-services = { version = "0.3", features = [
-  "AXUIElement",
-  "AXValue",
-  "AXError",
-  "AXAttributeConstants",
-  "Accessibility",
-] }
-objc2-core-foundation = { version = "0.3", features = [
-  "CFString",
-] }
-objc2-core-graphics = { version = "0.3", features = [
-  "CGGeometry",
-] }
 objc2-app-kit = { version = "0.3", features = [
   "NSRunningApplication",
   "NSWorkspace",
@@ -35,7 +22,3 @@ objc2-app-kit = { version = "0.3", features = [
 opt-level = "s"
 lto = true
 strip = true
-
-[[bin]]
-name = "test-position"
-path = "src/test_position.rs"
