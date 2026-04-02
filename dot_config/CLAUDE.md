@@ -47,6 +47,8 @@ All configs live under `~/.config/aerospace/` (the stack folder):
 - **osascript window positioning:** Y coordinates are in global screen space. With stacked displays, the MBP starts at Y=1440 (below G9). Target the specific app process by name, not "frontmost app" — avoids positioning wrong window during monitor switches.
 - **AeroSpace installed via Homebrew cask** (`nikitabobko/tap/aerospace`). The `.app` must be in `/Applications/` — if missing, `brew reinstall --cask aerospace` fixes it.
 - **Accordion layout** = aerospace's stacking. Use `join-with` to group windows, `focus dfs-prev/dfs-next` to cycle within groups.
+- **Never use `aerospace enable off/on`** to reposition windows — it breaks sketchybar rendering and causes race conditions. Use `aerospace resize` with absolute values on floating windows instead (aerospace auto-centers them).
+- **Prefer consistency over speed.** When scripting window management, always prefer deterministic, sequential operations over fast async ones. If something needs a delay to be reliable, add the delay. Avoid `&` backgrounding for positioning operations.
 
 ## Window Management Stack (Windows — komorebi)
 
