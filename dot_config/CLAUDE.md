@@ -68,6 +68,9 @@ All configs live under `~/.config/aerospace/` (the stack folder):
 10. **T10: G9 stays centered when MBP focused** — switch to ws6(MBP) → G9 window stays centered
 11. **T11: Hide window** — Cmd+H hide a window → sketchybar removes icon, centering unaffected; unhide → icon returns, re-centers
 12. **T12: Minimize window** — minimize → sketchybar still shows icon (known gap: `isHidden` doesn't detect minimize), aerospace still lists the window; unminimize → re-centers properly
+13. **T13: Minimize with 2 windows** — minimize one → remaining window centers; unminimize → both retile
+14. **T15: Hide with 2 windows** — Cmd+H hide one → remaining window centers (NSWorkspace notification triggers re-evaluation)
+15. **T17: Unhide retiles** — after hide→center→unhide, both windows retile at half width (not floating)
 
 ### Other Notes
 
