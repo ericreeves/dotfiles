@@ -62,10 +62,8 @@ if [ "$COUNT" -eq 1 ]; then
   # Already centered with same window — skip
   [ "$PREV_STATE" = "centered $WID" ] && exit 0
 
-  # Float and center — brief delay to let window settle after workspace move
-  sleep 0.2
+  # Float and center
   aerospace layout --window-id "$WID" floating 2>/dev/null
-  sleep 0.1
 
   H=$((1440 - TOP_Y - BOTTOM_PAD))
   X=$(( (G9_WIDTH - CENTER_W) / 2 ))
