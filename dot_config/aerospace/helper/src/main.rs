@@ -384,8 +384,21 @@ fn handle_dynamic_gaps(workspace: &str, state: &mut HelperState) {
             eprintln!("[helper] single window: wid={} app={} pid={:?}", win.wid, win.app_name, win.pid);
             if let WorkspaceState::Centered(ref prev_wid) = prev {
                 if prev_wid == &win.wid {
-                    eprintln!("[helper] already centered, skip");
-                    return;
+                    // Verify the window is actually still at the centered position
+                    // (user may have manually retiled it via service mode)
+                    if let Some(pid) = win.pid {
+                        let expected_x = (G9_WIDTH - CENTER_W) / 2.0;
+                        if let Some(actual_x) = get_window_x(pid) {
+                            if (actual_x - expected_x).abs() < 5.0 {
+                                eprintln!("[helper] already centered, verified");
+                                return;
+                            }
+                            eprintln!("[helper] state=centered but window at x={}, re-centering", actual_x);
+                        }
+                    } else {
+                        eprintln!("[helper] already centered, skip (no pid to verify)");
+                        return;
+                    }
                 }
             }
             eprintln!("[helper] centering window {}", win.wid);
