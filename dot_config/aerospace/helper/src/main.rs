@@ -127,6 +127,27 @@ fn count_visible_windows(workspace: &str) -> usize {
     }).count()
 }
 
+/// Retile all visible (non-hidden, non-ALWAYS_FLOATING) windows on a workspace
+fn retile_all_visible(workspace: &str) {
+    let hidden = get_hidden_bundle_ids();
+    let output = aerospace_cmd(&[
+        "list-windows", "--workspace", workspace,
+        "--format", "%{window-id}|%{app-bundle-id}",
+    ]).unwrap_or_default();
+
+    for line in output.lines() {
+        let parts: Vec<&str> = line.split('|').collect();
+        if parts.len() != 2 { continue; }
+        let wid = parts[0].trim();
+        let bid = parts[1];
+        if wid.is_empty() || hidden.contains(&bid.to_string()) || ALWAYS_FLOATING.contains(&bid) {
+            continue;
+        }
+        let _ = aerospace_cmd(&["layout", "--window-id", wid, "tiling"]);
+    }
+    eprintln!("[helper] retiled all visible windows on ws{}", workspace);
+}
+
 fn float_hidden_windows(workspace: &str) {
     let hidden = get_hidden_bundle_ids();
     if hidden.is_empty() { return; }
@@ -257,9 +278,13 @@ fn handle_event(raw_event: &str, state: &mut HelperState) {
         }
         "app_visibility_changed" => {
             // Fired by NSWorkspace observer when an app is hidden/unhidden
-            // Re-evaluate gaps since visible window count may have changed
             eprintln!("[helper] app visibility changed, re-evaluating gaps");
             handle_gaps(&workspace, state);
+            // After gap change, retile all visible windows to ensure unhidden
+            // windows rejoin the tiling layout (they may be stuck floating)
+            if is_on_g9(&workspace) {
+                retile_all_visible(&workspace);
+            }
             trigger_sketchybar(&workspace);
         }
         _ => {}
