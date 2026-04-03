@@ -1,0 +1,5 @@
+#!/bin/bash
+# lazy-lock hash: {{ include "dot_config/nvim/lazy-lock.json" | sha256sum }}
+echo "lazy-lock.json changed, restoring nvim plugins..."
+nvim --headless "+Lazy! restore" +qa 2>&1
+echo "nvim plugin restore complete."
