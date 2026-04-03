@@ -11,9 +11,29 @@ AGENTS=(
 
 PROCS=(AeroSpace sketchybar borders aerospace-helper)
 
+AEROSPACE_BIN="/Applications/AeroSpace.app/Contents/MacOS/AeroSpace"
+SKETCHYBAR_BIN="/opt/homebrew/bin/sketchybar"
+
 usage() {
   echo "Usage: $(basename "$0") {start|stop|restart|status}"
   exit 1
+}
+
+check_deps() {
+  local missing=0
+  if [[ ! -x "$AEROSPACE_BIN" ]]; then
+    echo "AeroSpace not found. Install with:"
+    echo "  brew install --cask nikitabobko/tap/aerospace"
+    missing=1
+  fi
+  if [[ ! -x "$SKETCHYBAR_BIN" ]]; then
+    echo "sketchybar not found. Install with:"
+    echo "  brew tap FelixKratz/formulae; brew install sketchybar"
+    missing=1
+  fi
+  if [[ $missing -eq 1 ]]; then
+    exit 1
+  fi
 }
 
 force_kill() {
@@ -78,9 +98,9 @@ do_status() {
 [[ $# -eq 1 ]] || usage
 
 case "$1" in
-  start)   do_start ;;
+  start)   check_deps; do_start ;;
   stop)    do_stop ;;
-  restart) do_restart ;;
+  restart) check_deps; do_restart ;;
   status)  do_status ;;
   *)       usage ;;
 esac
