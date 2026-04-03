@@ -1,10 +1,6 @@
 config-version = 2
 
-after-startup-command = [
-    'exec-and-forget bash -c "$HOME/.config/aerospace/borders/bordersrc"',
-    'exec-and-forget bash -c "sketchybar --config $HOME/.config/aerospace/sketchybar/sketchybarrc"',
-    'exec-and-forget bash -c "aerospace-helper & sleep 1 && aero-notify workspace_changed"',
-]
+after-startup-command = []
 
 # Send events to the Rust helper daemon
 exec-on-workspace-change = ['/bin/bash', '-c',

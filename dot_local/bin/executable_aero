@@ -2,8 +2,14 @@
 
 set -euo pipefail
 
+AGENTS=(
+  com.nikitabobko.aerospace
+  com.felixkratz.sketchybar.aero
+  com.janky.borders.aero
+  com.aero.helper
+)
+
 PROCS=(AeroSpace sketchybar borders aerospace-helper)
-# AeroSpaceBar disabled — kept crashing. Config preserved at ~/.config/aerospacebar/
 
 usage() {
   echo "Usage: $(basename "$0") {start|stop|restart|status}"
@@ -17,20 +23,30 @@ force_kill() {
 }
 
 do_stop() {
-  pkill -x aerospace-helper 2>/dev/null || true
-  pkill -x borders 2>/dev/null || true
-  pkill -x sketchybar 2>/dev/null || true
-  osascript -e 'quit app "AeroSpace"' 2>/dev/null || true
-  rm -f /tmp/aerospace-helper.sock
+  for agent in "${AGENTS[@]}"; do
+    launchctl bootout "gui/$(id -u)/$agent" 2>/dev/null || true
+    launchctl disable "gui/$(id -u)/$agent" 2>/dev/null || true
+  done
   sleep 1
   force_kill
-  echo "Stopped all processes."
+  rm -f /tmp/aerospace-helper.sock
+  echo "Stopped and disabled all agents."
 }
 
 do_start() {
-  # AeroSpace after-startup-command launches borders
-  open -a AeroSpace
-  echo "Started AeroSpace + sketchybar + borders + helper."
+  for agent in "${AGENTS[@]}"; do
+    launchctl enable "gui/$(id -u)/$agent" 2>/dev/null || true
+    launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/${agent}.plist" 2>/dev/null || true
+  done
+  # Wait for helper socket, then trigger initial workspace state
+  (
+    for i in {1..10}; do
+      [ -S /tmp/aerospace-helper.sock ] && break
+      sleep 0.5
+    done
+    aero-notify workspace_changed
+  ) &
+  echo "Enabled and started all agents."
 }
 
 do_restart() {
@@ -40,6 +56,15 @@ do_restart() {
 }
 
 do_status() {
+  for agent in "${AGENTS[@]}"; do
+    echo -n "$agent: "
+    if launchctl print "gui/$(id -u)/$agent" &>/dev/null; then
+      echo "loaded"
+    else
+      echo "not loaded"
+    fi
+  done
+  echo ""
   for proc in "${PROCS[@]}"; do
     echo -n "$proc: "
     if pgrep -x "$proc" >/dev/null; then
