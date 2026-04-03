@@ -1,0 +1,76 @@
+#!/bin/bash
+
+set -euo pipefail
+
+AGENTS=(
+  com.lgug2z.komorebi
+  com.komorebi.bar.mbp
+  com.komorebi.bar.g9
+  com.koekeishiya.skhd
+)
+
+PROCS=(komorebi komorebi-bar skhd)
+
+usage() {
+  echo "Usage: $(basename "$0") {start|stop|restart|status}"
+  exit 1
+}
+
+force_kill() {
+  for proc in "${PROCS[@]}"; do
+    pkill -9 -x "$proc" 2>/dev/null || true
+  done
+}
+
+do_stop() {
+  for agent in "${AGENTS[@]}"; do
+    launchctl bootout "gui/$(id -u)/$agent" 2>/dev/null || true
+    launchctl disable "gui/$(id -u)/$agent" 2>/dev/null || true
+  done
+  sleep 1
+  force_kill
+  echo "Stopped and disabled all agents."
+}
+
+do_start() {
+  for agent in "${AGENTS[@]}"; do
+    launchctl enable "gui/$(id -u)/$agent" 2>/dev/null || true
+    launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/${agent}.plist" 2>/dev/null || true
+  done
+  echo "Enabled and started all agents."
+}
+
+do_restart() {
+  force_kill
+  echo "Killed all processes. LaunchAgents will restart them."
+}
+
+do_status() {
+  for agent in "${AGENTS[@]}"; do
+    echo -n "$agent: "
+    if launchctl print "gui/$(id -u)/$agent" &>/dev/null; then
+      echo "loaded"
+    else
+      echo "not loaded"
+    fi
+  done
+  echo ""
+  for proc in "${PROCS[@]}"; do
+    echo -n "$proc: "
+    if pgrep -x "$proc" >/dev/null; then
+      echo "running (pid $(pgrep -x "$proc" | tr '\n' ' '))"
+    else
+      echo "not running"
+    fi
+  done
+}
+
+[[ $# -eq 1 ]] || usage
+
+case "$1" in
+  start)   do_start ;;
+  stop)    do_stop ;;
+  restart) do_restart ;;
+  status)  do_status ;;
+  *)       usage ;;
+esac
