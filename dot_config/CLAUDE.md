@@ -1,5 +1,11 @@
 This is a macOS environment (MacBook Pro with Apple Silicon).
 
+## Terminal
+
+- **cmux** — Ghostty-based macOS terminal with vertical tabs and notifications for AI coding agents ([docs](https://cmux.com/docs/getting-started), [repo](https://github.com/manaflow-ai/cmux))
+- Terminal keybindings are read from `~/.config/ghostty/config`
+- cmux-specific shortcuts (workspaces, splits, browser, notifications) are configured via Settings UI (`Cmd+,`), not a config file
+
 ## Dotfiles Management (chezmoi)
 
 All files under `~/.config/` are managed by [chezmoi](https://www.chezmoi.io/). Source: `~/.local/share/chezmoi/`, remote: `github.com/ericreeves/dotfiles`.
