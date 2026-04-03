@@ -11,14 +11,14 @@ sketchybar --bar \
   border_width=0 \
   shadow=off \
   sticky=on \
-  topmost=window \
+  topmost=off \
   padding_left=0 \
   padding_right=0 \
   y_offset=0 \
   margin=0 \
   corner_radius=0 \
   blur_radius=0 \
-  notch_width=200
+  notch_width=0
 
 # Defaults
 sketchybar --default \
@@ -39,12 +39,12 @@ sketchybar --add event aerospace_workspace_change
 # Workspace items — centered
 SIDS=("1" "2" "3" "4" "5" "6" "7" "8" "9")
 for sid in "${SIDS[@]}"; do
-  sketchybar --add item space.$sid left \
+  sketchybar --add item space.$sid center \
     --set space.$sid \
       icon="$sid" \
       icon.font="$FONT:Semibold:14.0" \
-      icon.color=0xffbac2de \
-      icon.highlight_color=0xffcdd6f4 \
+      icon.color=0xffcdd6f4 \
+      icon.highlight_color=0xffffffff \
       label.highlight_color=0xffcdd6f4 \
       background.drawing=on \
       background.color=0x30ffffff \
