@@ -1,0 +1,86 @@
+{
+  "cmux_version": "0.62.2",
+  "shortcuts": {
+    "focusDown": {
+      "control": false,
+      "key": "j",
+      "command": true,
+      "shift": false,
+      "option": true
+    },
+    "focusLeft": {
+      "control": false,
+      "key": "h",
+      "option": true,
+      "command": true,
+      "shift": false
+    },
+    "focusRight": {
+      "control": false,
+      "key": "l",
+      "command": true,
+      "shift": false,
+      "option": true
+    },
+    "focusUp": {
+      "control": false,
+      "key": "k",
+      "option": true,
+      "command": true,
+      "shift": false
+    },
+    "nextSidebarTab": {
+      "command": true,
+      "shift": false,
+      "key": "o",
+      "option": true,
+      "control": false
+    },
+    "nextSurface": {
+      "option": true,
+      "key": "i",
+      "control": false,
+      "command": true,
+      "shift": false
+    },
+    "prevSidebarTab": {
+      "control": false,
+      "option": true,
+      "key": "y",
+      "shift": false,
+      "command": true
+    },
+    "prevSurface": {
+      "command": true,
+      "key": "u",
+      "shift": false,
+      "control": false,
+      "option": true
+    }
+  },
+  "appearance": {
+    "appearanceMode": "system",
+    "sidebarActiveTabIndicatorStyle": "leftRail",
+    "sidebarBlendMode": "withinWindow",
+    "sidebarBlurOpacity": 1.0,
+    "sidebarCornerRadius": 0.0,
+    "sidebarHideAllDetails": false,
+    "sidebarMaterial": "sidebar",
+    "sidebarPreset": "nativeSidebar",
+    "sidebarTintHex": "#000000",
+    "sidebarTintOpacity": 0.18
+  },
+  "browser": {
+    "browserHostWhitelist": "localhost, 127.0.0.1",
+    "browserInsecureHTTPAllowlist": "localhost\n127.0.0.1\n::1\n0.0.0.0\n*.localtest.me\n192.168.1.80",
+    "browserThemeMode": "system"
+  },
+  "general": {
+    "sendAnonymousTelemetry": false,
+    "socketControlMode": "automation"
+  },
+  "discovered": {
+    "sidebarHelpFeedbackEmail": "",
+    "sidebarState": "followWindow"
+  }
+}
