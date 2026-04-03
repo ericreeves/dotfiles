@@ -12,8 +12,8 @@ if [ "${MONITOR_COUNT:-1}" -gt 1 ]; then
     sketchybar --set "$NAME" associated_display="$WS_MONITOR"
   fi
 else
-  # Single monitor: show all workspaces (clear stale display assignments)
-  sketchybar --set "$NAME" associated_display=0
+  # Single monitor: show all workspaces on display 1
+  sketchybar --set "$NAME" associated_display=1
 fi
 
 # Highlight focused workspace
