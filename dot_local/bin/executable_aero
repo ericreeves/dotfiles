@@ -31,6 +31,11 @@ check_deps() {
     echo "  brew tap FelixKratz/formulae; brew install sketchybar"
     missing=1
   fi
+  if ! brew list --cask font-sketchybar-app-font &>/dev/null; then
+    echo "sketchybar app font not found. Install with:"
+    echo "  brew install --cask font-sketchybar-app-font"
+    missing=1
+  fi
   if [[ $missing -eq 1 ]]; then
     exit 1
   fi
