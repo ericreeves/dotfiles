@@ -1,5 +1,7 @@
 {
   "$schema": "schema.json",
+  "mouse_follows_focus": false,
+  "resize_delta": 100,
   "app_specific_configuration_path": [
     "/Users/eric/.config/komorebi/applications.json"
   ],
