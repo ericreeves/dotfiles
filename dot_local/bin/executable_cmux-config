@@ -1,0 +1,222 @@
+#!/bin/bash
+set -euo pipefail
+
+DOMAIN="com.cmuxterm.app"
+CONFIG_DIR="$HOME/.config/cmux"
+CONFIG_FILE="$CONFIG_DIR/config.json"
+INFO_PLIST="/Applications/cmux.app/Contents/Info.plist"
+
+usage() {
+  echo "Usage: $(basename "$0") {export|import}"
+  echo "  export  Export cmux settings to $CONFIG_FILE"
+  echo "  import  Import cmux settings from $CONFIG_FILE"
+  exit 1
+}
+
+get_installed_version() {
+  /usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$INFO_PLIST" 2>/dev/null || echo "unknown"
+}
+
+do_export() {
+  mkdir -p "$CONFIG_DIR"
+
+  local version
+  version=$(get_installed_version)
+
+  # Export full plist as XML, then parse with python3
+  local plist_xml
+  plist_xml=$(defaults export "$DOMAIN" - | plutil -convert xml1 -o - -)
+
+  python3 -c '
+import plistlib
+import json
+import base64
+import sys
+
+plist_xml = sys.stdin.buffer.read()
+plist = plistlib.loads(plist_xml)
+version = sys.argv[1]
+
+# Keys to ignore (ephemeral/internal)
+IGNORED_PREFIXES = [
+    "NS", "com.apple.", "posthog.", "__Web", "cmux.session.",
+    "cmuxWelcome", "sidebarAppearanceDefaults", "socketControlPassword",
+]
+
+# Known tracked keys by section
+TRACKED = {
+    "appearance": [
+        "appearanceMode", "sidebarPreset", "sidebarMaterial",
+        "sidebarBlendMode", "sidebarBlurOpacity", "sidebarCornerRadius",
+        "sidebarTintHex", "sidebarTintOpacity",
+        "sidebarActiveTabIndicatorStyle", "sidebarHideAllDetails",
+    ],
+    "browser": [
+        "browserHostWhitelist", "browserInsecureHTTPAllowlist",
+        "browserThemeMode",
+    ],
+    "general": [
+        "socketControlMode", "sendAnonymousTelemetry",
+    ],
+}
+
+all_tracked = set()
+for keys in TRACKED.values():
+    all_tracked.update(keys)
+
+config = {"cmux_version": version}
+
+# Export shortcuts
+shortcuts = {}
+for key, val in sorted(plist.items()):
+    if key.startswith("shortcut."):
+        name = key[len("shortcut."):]
+        if isinstance(val, bytes):
+            shortcuts[name] = json.loads(val.decode("utf-8"))
+        else:
+            shortcuts[name] = val
+config["shortcuts"] = shortcuts
+
+# Export tracked sections
+for section, keys in sorted(TRACKED.items()):
+    section_data = {}
+    for key in sorted(keys):
+        if key in plist:
+            val = plist[key]
+            if isinstance(val, bytes):
+                try:
+                    section_data[key] = json.loads(val.decode("utf-8"))
+                except (json.JSONDecodeError, UnicodeDecodeError):
+                    section_data[key] = base64.b64encode(val).decode("ascii")
+            elif isinstance(val, list):
+                section_data[key] = val
+            elif isinstance(val, bool):
+                section_data[key] = val
+            elif isinstance(val, (int, float)):
+                section_data[key] = val
+            else:
+                section_data[key] = str(val)
+    config[section] = section_data
+
+# Discover new parameters
+discovered = {}
+for key, val in sorted(plist.items()):
+    if key.startswith("shortcut."):
+        continue
+    if key in all_tracked:
+        continue
+    if any(key.startswith(p) for p in IGNORED_PREFIXES):
+        continue
+    if isinstance(val, bytes):
+        try:
+            discovered[key] = json.loads(val.decode("utf-8"))
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            discovered[key] = base64.b64encode(val).decode("ascii")
+    elif isinstance(val, bool):
+        discovered[key] = val
+    elif isinstance(val, (int, float)):
+        discovered[key] = val
+    elif isinstance(val, list):
+        discovered[key] = val
+    else:
+        discovered[key] = str(val)
+
+if discovered:
+    config["discovered"] = discovered
+    for key in sorted(discovered):
+        print(f"  New parameter found: {key} = {discovered[key]}", file=sys.stderr)
+
+print(json.dumps(config, indent=2, sort_keys=False))
+' "$version" <<< "$plist_xml" > "$CONFIG_FILE"
+
+  echo "Exported cmux config (v$version) to $CONFIG_FILE"
+
+  # Sync to chezmoi
+  if command -v chezmoi &>/dev/null; then
+    chezmoi add "$CONFIG_FILE"
+    echo "Synced to chezmoi."
+  fi
+}
+
+do_import() {
+  if [[ ! -f "$CONFIG_FILE" ]]; then
+    echo "Error: $CONFIG_FILE not found. Run 'cmux-config export' first."
+    exit 1
+  fi
+
+  local installed_version
+  installed_version=$(get_installed_version)
+
+  # Parse config and write to defaults
+  python3 -c '
+import json
+import base64
+import subprocess
+import sys
+
+config_file = sys.argv[1]
+domain = sys.argv[2]
+installed_version = sys.argv[3]
+
+with open(config_file) as f:
+    config = json.load(f)
+
+# Version check
+config_version = config.get("cmux_version", "unknown")
+if config_version != installed_version:
+    print(f"Error: Version mismatch — config exported from cmux {config_version}, "
+          f"installed version is {installed_version}.", file=sys.stderr)
+    print("Update cmux or re-export with: cmux-config export", file=sys.stderr)
+    sys.exit(1)
+
+def defaults_write(key, val):
+    """Write a value to defaults with appropriate type."""
+    if isinstance(val, bool):
+        flag = "TRUE" if val else "FALSE"
+        subprocess.run(["defaults", "write", domain, key, "-bool", flag], check=True)
+    elif isinstance(val, int):
+        subprocess.run(["defaults", "write", domain, key, "-int", str(val)], check=True)
+    elif isinstance(val, float):
+        subprocess.run(["defaults", "write", domain, key, "-float", str(val)], check=True)
+    elif isinstance(val, list):
+        cmd = ["defaults", "write", domain, key, "-array"] + [str(v) for v in val]
+        subprocess.run(cmd, check=True)
+    else:
+        subprocess.run(["defaults", "write", domain, key, "-string", str(val)], check=True)
+
+count = 0
+
+# Import shortcuts
+for name, shortcut in sorted(config.get("shortcuts", {}).items()):
+    key = f"shortcut.{name}"
+    data = json.dumps(shortcut, separators=(",", ":")).encode("utf-8")
+    hex_data = data.hex()
+    subprocess.run(["defaults", "write", domain, key, "-data", hex_data], check=True)
+    mods = []
+    if shortcut.get("command"): mods.append("⌘")
+    if shortcut.get("option"): mods.append("⌥")
+    if shortcut.get("control"): mods.append("⌃")
+    if shortcut.get("shift"): mods.append("⇧")
+    mod_str = "".join(mods)
+    key_str = shortcut.get("key", "?").upper()
+    print(f"  shortcut.{name}: {mod_str}{key_str}")
+    count += 1
+
+# Import other sections
+for section in ["appearance", "browser", "general", "discovered"]:
+    for key, val in sorted(config.get(section, {}).items()):
+        defaults_write(key, val)
+        print(f"  {key}: {val}")
+        count += 1
+
+print(f"\nImported {count} settings for cmux v{config_version}.")
+' "$CONFIG_FILE" "$DOMAIN" "$installed_version"
+}
+
+[[ $# -eq 1 ]] || usage
+
+case "$1" in
+  export) do_export ;;
+  import) do_import ;;
+  *)      usage ;;
+esac
