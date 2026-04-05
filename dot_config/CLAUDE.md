@@ -105,6 +105,47 @@ All configs live under `~/.config/komorebi/` (the stack folder):
 - Komorebi docs: <https://komorebi-starlight.lgug2z.workers.dev/>
 - Legacy docs: <https://lgug2z.github.io/komorebi/>
 
+## 1Password & SSH
+
+### SSH Config (`~/.ssh/config`)
+
+Minimal config — most host resolution is handled by DNS search domain (`lab.alluvium.cloud`) and key selection by 1Password's SSH agent.
+
+- **`Host *` block** sets `IdentityAgent` to 1Password's SSH agent socket (`~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock`)
+- Only entries that **need** to be in SSH config: hosts with non-default users, non-standard ports, explicit IdentityFile overrides (e.g., GitHub multi-account), or hostnames that don't resolve via DNS search domain
+- Short hostnames (e.g., `ssh dev`) resolve via DNS search domain to `dev.lab.alluvium.cloud`
+- GitHub multi-account: `github-ericreeves` and `github-harnoldcodes` use explicit `IdentityFile` paths, not the 1Password agent
+
+### 1Password SSH Key Items
+
+- SSH key items must have **host URLs** in the Hosts section (e.g., `ssh://dev.lab.alluvium.cloud`, `ssh://192.168.1.17`) for the 1Password agent to offer the correct key
+- Host URLs should use **FQDNs** (e.g., `ssh://dev.lab.alluvium.cloud`), not short aliases (`ssh://dev`) or `.local` domains that don't resolve
+- **Don't include `user@`** in host URLs — 1Password matches on host, not user
+- The `op` CLI **cannot edit SSH key items** — use the 1Password desktop app for SSH key host configuration
+
+### 1Password CLI (`op`)
+
+- Use `op item list`, `op item get`, `op item create`, `op item edit`, `op item delete` for managing vault items
+- `op item edit` **cannot remove individual URLs** from items with multiple URLs — must recreate the item via `op item create --template <json>` and delete the old one
+- `op item edit` **cannot edit SSH_KEY items at all** — CLI returns "SSH Key item editing in the CLI is not yet supported"
+- When using `url[index]` syntax with `op item edit`, it creates/updates custom fields, not actual URL entries — avoid this
+- `[delete]` syntax only works for custom fields, not URLs
+- To rebuild an item's URL list: export with `op item get --format=json`, modify the JSON, `op item create --template`, then `op item delete` the old one
+
+### 1Password Domain Matching (Browser Extension)
+
+- 1Password matches saved items by **registrable domain** (eTLD+1), not exact URL
+- All `*.home.alluvium.cloud` items will suggest on **any** `*.home.alluvium.cloud` site — this is browser extension behavior and cannot be changed via CLI
+- The item with the **exact matching URL** should rank first in suggestions
+- To reduce noise: ensure each service has a dedicated item with its specific URL, and remove catch-all/multi-URL items that match broadly
+- Items with many URLs (like a "Servarr" catch-all) pollute suggestions across all those services
+
+### Network / DNS
+
+- DNS search domain: `lab.alluvium.cloud`
+- Home services use `*.home.alluvium.cloud` (public reverse proxy via Pangolin) or `*.lab.alluvium.cloud` (internal DNS)
+- Internal DNS served by router at `192.168.1.254`
+
 ## Documentation References
 
 - AeroSpace: <https://nikitabobko.github.io/AeroSpace/guide>
