@@ -1,6 +1,6 @@
 [package]
 name = "aerospace-helper"
-version = "0.5.0"
+version = "0.6.0"
 edition = "2024"
 
 [[bin]]
@@ -26,6 +26,7 @@ objc2-foundation = { version = "0.3", features = [
   "NSThread",
 ] }
 block2 = "0.6"
+libc = "0.2"
 
 [profile.release]
 opt-level = "s"
