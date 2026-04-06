@@ -192,6 +192,9 @@ run = 'layout floating'
 
 [mode.main.binding]
 
+    # Window switcher
+    alt-space = 'exec-and-forget /opt/homebrew/opt/aeroswitch/bin/aeroswitch --activate'
+
     # Focus (alt+hjkl) — crosses monitor boundaries
     alt-h = 'focus --boundaries all-monitors-outer-frame left'
     alt-j = 'focus --boundaries all-monitors-outer-frame down'
