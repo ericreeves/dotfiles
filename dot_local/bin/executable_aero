@@ -7,9 +7,10 @@ AGENTS=(
   com.felixkratz.sketchybar.aero
   com.janky.borders.aero
   com.aero.helper
+  com.aero.aeroswitch
 )
 
-PROCS=(AeroSpace sketchybar borders aerospace-helper)
+PROCS=(AeroSpace sketchybar borders aerospace-helper aeroswitch)
 
 AEROSPACE_BIN="/Applications/AeroSpace.app/Contents/MacOS/AeroSpace"
 SKETCHYBAR_BIN="/opt/homebrew/bin/sketchybar"
