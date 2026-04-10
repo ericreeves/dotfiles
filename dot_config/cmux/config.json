@@ -31,10 +31,10 @@
     },
     "nextSidebarTab": {
       "command": true,
-      "shift": false,
-      "key": "o",
+      "control": false,
       "option": true,
-      "control": false
+      "shift": false,
+      "key": "j"
     },
     "nextSurface": {
       "option": true,
@@ -44,11 +44,11 @@
       "shift": false
     },
     "prevSidebarTab": {
-      "control": false,
       "option": true,
-      "key": "y",
+      "key": "k",
+      "command": true,
       "shift": false,
-      "command": true
+      "control": false
     },
     "prevSurface": {
       "command": true,
@@ -68,7 +68,7 @@
     "sidebarMaterial": "sidebar",
     "sidebarPreset": "nativeSidebar",
     "sidebarTintHex": "#000000",
-    "sidebarTintOpacity": 0.18
+    "sidebarTintOpacity": 0.18000000715255737
   },
   "browser": {
     "browserHostWhitelist": "localhost, 127.0.0.1",
