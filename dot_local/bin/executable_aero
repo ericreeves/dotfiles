@@ -22,46 +22,53 @@ usage() {
   exit 1
 }
 
-prompt_install() {
-  local name="$1"
-  shift
-  local cmds=("$@")
-
-  echo "$name not found."
-  if [[ $INSTALL_DEPS -eq 1 ]]; then
-    echo "Installing $name..."
-    for cmd in "${cmds[@]}"; do eval "$cmd"; done
-    return 0
-  fi
-
-  read -rp "Install $name? [y/N] " answer
-  if [[ "$answer" == [yY] ]]; then
-    for cmd in "${cmds[@]}"; do eval "$cmd"; done
-    return 0
-  fi
-  return 1
-}
-
 check_deps() {
-  local missing=0
+  local missing=()
+  local install_cmds=()
+
   if [[ ! -x "$AEROSPACE_BIN" ]]; then
-    prompt_install "AeroSpace" "brew install --cask nikitabobko/tap/aerospace" || missing=1
+    missing+=("AeroSpace")
+    install_cmds+=("brew install --cask nikitabobko/tap/aerospace")
   fi
   if [[ ! -x "$SKETCHYBAR_BIN" ]]; then
-    prompt_install "sketchybar" "brew tap FelixKratz/formulae" "brew install sketchybar" || missing=1
+    missing+=("sketchybar")
+    install_cmds+=("brew tap FelixKratz/formulae" "brew install sketchybar")
   fi
   if ! command -v borders &>/dev/null; then
-    prompt_install "borders" "brew tap FelixKratz/formulae" "brew install borders" || missing=1
+    missing+=("borders")
+    install_cmds+=("brew tap FelixKratz/formulae" "brew install borders")
   fi
   if ! command -v aeroswitch &>/dev/null; then
-    prompt_install "aeroswitch" "brew tap darksworm/aeroswitch" "brew install darksworm/tap/aeroswitch" || missing=1
+    missing+=("aeroswitch")
+    install_cmds+=("brew tap darksworm/aeroswitch" "brew install darksworm/tap/aeroswitch")
   fi
   if ! brew list --cask font-sketchybar-app-font &>/dev/null; then
-    prompt_install "sketchybar app font" "brew install --cask font-sketchybar-app-font" || missing=1
+    missing+=("sketchybar app font")
+    install_cmds+=("brew install --cask font-sketchybar-app-font")
   fi
-  if [[ $missing -eq 1 ]]; then
-    exit 1
+
+  [[ ${#missing[@]} -eq 0 ]] && return 0
+
+  echo "Missing dependencies:"
+  for dep in "${missing[@]}"; do
+    echo "  - $dep"
+  done
+
+  if [[ $INSTALL_DEPS -eq 0 ]]; then
+    echo ""
+    read -rp "Install all? [y/N] " answer
+    if [[ "$answer" != [yY] ]]; then
+      exit 1
+    fi
   fi
+
+  echo ""
+  for cmd in "${install_cmds[@]}"; do
+    echo "» $cmd"
+    eval "$cmd"
+  done
+  echo ""
+  echo "All dependencies installed."
 }
 
 force_kill() {
