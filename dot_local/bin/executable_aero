@@ -15,32 +15,46 @@ PROCS=(AeroSpace sketchybar borders aerospace-helper aeroswitch)
 AEROSPACE_BIN="/Applications/AeroSpace.app/Contents/MacOS/AeroSpace"
 SKETCHYBAR_BIN="/opt/homebrew/bin/sketchybar"
 
+INSTALL_DEPS=0
+
 usage() {
-  echo "Usage: $(basename "$0") {start|stop|restart|status}"
+  echo "Usage: $(basename "$0") [--install-deps] {start|stop|restart|status}"
   exit 1
+}
+
+prompt_install() {
+  local name="$1"
+  shift
+  local cmds=("$@")
+
+  echo "$name not found."
+  if [[ $INSTALL_DEPS -eq 1 ]]; then
+    echo "Installing $name..."
+    for cmd in "${cmds[@]}"; do eval "$cmd"; done
+    return 0
+  fi
+
+  read -rp "Install $name? [y/N] " answer
+  if [[ "$answer" == [yY] ]]; then
+    for cmd in "${cmds[@]}"; do eval "$cmd"; done
+    return 0
+  fi
+  return 1
 }
 
 check_deps() {
   local missing=0
   if [[ ! -x "$AEROSPACE_BIN" ]]; then
-    echo "AeroSpace not found. Install with:"
-    echo "  brew install --cask nikitabobko/tap/aerospace"
-    missing=1
+    prompt_install "AeroSpace" "brew install --cask nikitabobko/tap/aerospace" || missing=1
   fi
   if [[ ! -x "$SKETCHYBAR_BIN" ]]; then
-    echo "sketchybar not found. Install with:"
-    echo "  brew tap FelixKratz/formulae; brew install sketchybar"
-    missing=1
+    prompt_install "sketchybar" "brew tap FelixKratz/formulae" "brew install sketchybar" || missing=1
   fi
   if ! command -v borders &>/dev/null; then
-    echo "borders not found. Install with:"
-    echo "  brew tap FelixKratz/formulae; brew install borders"
-    missing=1
+    prompt_install "borders" "brew tap FelixKratz/formulae" "brew install borders" || missing=1
   fi
   if ! brew list --cask font-sketchybar-app-font &>/dev/null; then
-    echo "sketchybar app font not found. Install with:"
-    echo "  brew install --cask font-sketchybar-app-font"
-    missing=1
+    prompt_install "sketchybar app font" "brew install --cask font-sketchybar-app-font" || missing=1
   fi
   if [[ $missing -eq 1 ]]; then
     exit 1
@@ -105,6 +119,13 @@ do_status() {
     fi
   done
 }
+
+while [[ $# -gt 0 && "$1" == --* ]]; do
+  case "$1" in
+    --install-deps) INSTALL_DEPS=1; shift ;;
+    *) usage ;;
+  esac
+done
 
 [[ $# -eq 1 ]] || usage
 
