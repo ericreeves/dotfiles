@@ -1,3 +1,4 @@
 #!/bin/bash
 # config hash: {{ include "dot_config/cmux/config.json" | sha256sum }}
+# cmux version: {{ output "/usr/libexec/PlistBuddy" "-c" "Print CFBundleShortVersionString" "/Applications/cmux.app/Contents/Info.plist" | trim }}
 "$HOME/.local/bin/cmux-config" import

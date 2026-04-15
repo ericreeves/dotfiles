@@ -147,7 +147,40 @@ do_import() {
   local installed_version
   installed_version=$(get_installed_version)
 
-  # Parse config and write to defaults
+  local rc=0
+  _do_python_import "$installed_version" || rc=$?
+
+  if [[ $rc -eq 2 ]]; then
+    # Installed cmux is behind the config version
+    local config_version
+    config_version=$(python3 -c "import json; print(json.load(open('$CONFIG_FILE')).get('cmux_version','unknown'))")
+    echo "Installed cmux ($installed_version) is older than config ($config_version)."
+    read -rp "Upgrade cmux via brew? [y/N] " answer
+    if [[ "$answer" == [yY] ]]; then
+      brew upgrade --cask cmux
+      installed_version=$(get_installed_version)
+      echo "Upgraded to cmux $installed_version. Importing config..."
+      rc=0
+      _do_python_import "$installed_version" || rc=$?
+    else
+      echo "Skipping import."
+      return 1
+    fi
+  fi
+
+  if [[ $rc -eq 3 ]]; then
+    local config_version
+    config_version=$(python3 -c "import json; print(json.load(open('$CONFIG_FILE')).get('cmux_version','unknown'))")
+    echo "Config ($config_version) is older than installed cmux ($installed_version)."
+    echo "Re-export with: cmux-config export"
+    return 1
+  fi
+
+  return $rc
+}
+
+_do_python_import() {
+  local installed_version="$1"
   python3 -c '
 import json
 import base64
@@ -164,10 +197,12 @@ with open(config_file) as f:
 # Version check
 config_version = config.get("cmux_version", "unknown")
 if config_version != installed_version:
-    print(f"Error: Version mismatch — config exported from cmux {config_version}, "
-          f"installed version is {installed_version}.", file=sys.stderr)
-    print("Update cmux or re-export with: cmux-config export", file=sys.stderr)
-    sys.exit(1)
+    print(f"Version mismatch — config: cmux {config_version}, "
+          f"installed: {installed_version}.", file=sys.stderr)
+    if config_version > installed_version:
+        sys.exit(2)
+    else:
+        sys.exit(3)
 
 def defaults_write(key, val):
     """Write a value to defaults with appropriate type."""
