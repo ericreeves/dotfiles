@@ -53,6 +53,9 @@ check_deps() {
   if ! command -v borders &>/dev/null; then
     prompt_install "borders" "brew tap FelixKratz/formulae" "brew install borders" || missing=1
   fi
+  if ! command -v aeroswitch &>/dev/null; then
+    prompt_install "aeroswitch" "brew tap darksworm/aeroswitch" "brew install darksworm/tap/aeroswitch" || missing=1
+  fi
   if ! brew list --cask font-sketchybar-app-font &>/dev/null; then
     prompt_install "sketchybar app font" "brew install --cask font-sketchybar-app-font" || missing=1
   fi
