@@ -172,8 +172,14 @@ do_import() {
     local config_version
     config_version=$(python3 -c "import json; print(json.load(open('$CONFIG_FILE')).get('cmux_version','unknown'))")
     echo "Config ($config_version) is older than installed cmux ($installed_version)."
-    echo "Re-export with: cmux-config export"
-    return 1
+    read -rp "Import anyway? [y/N] " answer
+    if [[ "$answer" == [yY] ]]; then
+      rc=0
+      _do_python_import "$installed_version" --force || rc=$?
+    else
+      echo "Skipping import. Re-export with: cmux-config export"
+      return 1
+    fi
   fi
 
   return $rc
@@ -181,6 +187,7 @@ do_import() {
 
 _do_python_import() {
   local installed_version="$1"
+  local force="${2:-}"
   python3 -c '
 import json
 import base64
@@ -190,13 +197,14 @@ import sys
 config_file = sys.argv[1]
 domain = sys.argv[2]
 installed_version = sys.argv[3]
+force = sys.argv[4] == "--force" if len(sys.argv) > 4 else False
 
 with open(config_file) as f:
     config = json.load(f)
 
 # Version check
 config_version = config.get("cmux_version", "unknown")
-if config_version != installed_version:
+if not force and config_version != installed_version:
     print(f"Version mismatch — config: cmux {config_version}, "
           f"installed: {installed_version}.", file=sys.stderr)
     if config_version > installed_version:
@@ -245,7 +253,7 @@ for section in ["appearance", "browser", "general", "discovered"]:
         count += 1
 
 print(f"\nImported {count} settings for cmux v{config_version}.")
-' "$CONFIG_FILE" "$DOMAIN" "$installed_version"
+' "$CONFIG_FILE" "$DOMAIN" "$installed_version" "$force"
 }
 
 [[ $# -eq 1 ]] || usage
