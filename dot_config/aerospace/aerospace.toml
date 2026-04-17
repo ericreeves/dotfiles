@@ -240,11 +240,11 @@ run = 'layout floating'
     alt-shift-y = 'move-node-to-workspace --focus-follows-window --wrap-around prev'
     alt-shift-o = 'move-node-to-workspace --focus-follows-window --wrap-around next'
 
-    # Stack cycling (accordion = aerospace's stacking)
+    # Stack cycling (tabs layout from PR #2057)
     alt-u = 'focus dfs-prev'
     alt-i = 'focus dfs-next'
-    alt-shift-u = ['join-with left', 'layout accordion']
-    alt-shift-i = ['join-with right', 'layout accordion']
+    alt-shift-u = ['join-with left', 'layout tabs']
+    alt-shift-i = ['join-with right', 'layout tabs']
 
     # Back and forth
     alt-tab = 'workspace-back-and-forth'
