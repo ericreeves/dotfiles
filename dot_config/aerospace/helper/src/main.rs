@@ -574,6 +574,8 @@ fn update_sketchybar(focused_workspace: &str, state_arc: &Arc<Mutex<HelperState>
         let groups = ws_groups.get(&sid_str);
         let mut item_names: Vec<String> = Vec::new();
         if let Some(groups) = groups {
+            // Track the last placed item so we can chain --move after it
+            let mut move_after = format!("space.{}", sid);
             for (idx, group) in groups.iter().enumerate() {
                 let item_name = format!("ws{}.g{}", sid, idx);
                 let label = group.icons.join(" ");
@@ -611,12 +613,13 @@ fn update_sketchybar(focused_workspace: &str, state_arc: &Arc<Mutex<HelperState>
                     args.push("associated_display=1".to_string());
                 }
 
-                // Position after the space.{sid} item
+                // Position after the previous item to maintain tree order
                 args.extend([
                     "--move".to_string(), item_name.clone(),
-                    "after".to_string(), format!("space.{}", sid),
+                    "after".to_string(), move_after,
                 ]);
 
+                move_after = item_name.clone();
                 item_names.push(item_name);
             }
         }
