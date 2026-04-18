@@ -45,7 +45,7 @@ PATH = '/opt/homebrew/bin:/Users/eric/.local/bin:${PATH}'
     inner.vertical = 15
     outer.left = 15
     outer.bottom = 15
-    outer.top = [{ monitor.'main' = 50 }, 70]
+    outer.top = 70
     outer.right = 15
 
 # Workspace-to-monitor assignment
@@ -201,11 +201,11 @@ run = 'layout floating'
     alt-k = 'focus --boundaries all-monitors-outer-frame up'
     alt-l = 'focus --boundaries all-monitors-outer-frame right'
 
-    # Move (alt+shift+hjkl)
-    alt-shift-h = 'move left'
-    alt-shift-j = 'move down'
-    alt-shift-k = 'move up'
-    alt-shift-l = 'move right'
+    # Move (alt+shift+hjkl) — notify helper to update sketchybar after reorder
+    alt-shift-h = ['move left', 'exec-and-forget aero-notify "workspace_changed:$AEROSPACE_FOCUSED_WORKSPACE"']
+    alt-shift-j = ['move down', 'exec-and-forget aero-notify "workspace_changed:$AEROSPACE_FOCUSED_WORKSPACE"']
+    alt-shift-k = ['move up', 'exec-and-forget aero-notify "workspace_changed:$AEROSPACE_FOCUSED_WORKSPACE"']
+    alt-shift-l = ['move right', 'exec-and-forget aero-notify "workspace_changed:$AEROSPACE_FOCUSED_WORKSPACE"']
 
     # Resize (ctrl+alt+hjkl)
     ctrl-alt-l = 'resize smart +50'
@@ -217,15 +217,15 @@ run = 'layout floating'
     alt-m = 'fullscreen'
 
     # Retile / flatten
-    alt-r = 'flatten-workspace-tree'
+    alt-r = ['flatten-workspace-tree', 'exec-and-forget aero-notify "workspace_changed:$AEROSPACE_FOCUSED_WORKSPACE"']
 
     # Cycle focus through windows
     alt-comma = 'focus --boundaries-action wrap-around-the-workspace left'
     alt-period = 'focus --boundaries-action wrap-around-the-workspace right'
 
     # Cycle layout
-    alt-shift-comma = 'layout tiles horizontal vertical'
-    alt-shift-period = 'layout accordion horizontal vertical'
+    alt-shift-comma = ['layout tiles horizontal vertical', 'exec-and-forget aero-notify "workspace_changed:$AEROSPACE_FOCUSED_WORKSPACE"']
+    alt-shift-period = ['layout accordion horizontal vertical', 'exec-and-forget aero-notify "workspace_changed:$AEROSPACE_FOCUSED_WORKSPACE"']
 
     # Monitor focus / move
     alt-slash = 'focus-monitor --wrap-around next'
@@ -243,8 +243,8 @@ run = 'layout floating'
     # Stack cycling (accordion = aerospace's stacking)
     alt-u = 'focus dfs-prev'
     alt-i = 'focus dfs-next'
-    alt-shift-u = ['join-with left', 'layout accordion']
-    alt-shift-i = ['join-with right', 'layout accordion']
+    alt-shift-u = ['join-with left', 'layout accordion', 'exec-and-forget aero-notify "workspace_changed:$AEROSPACE_FOCUSED_WORKSPACE"']
+    alt-shift-i = ['join-with right', 'layout accordion', 'exec-and-forget aero-notify "workspace_changed:$AEROSPACE_FOCUSED_WORKSPACE"']
 
     # Back and forth
     alt-tab = 'workspace-back-and-forth'
