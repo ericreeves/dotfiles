@@ -815,9 +815,9 @@ fn handle_event(raw_event: &str, state_arc: &Arc<Mutex<HelperState>>, ws_tx: &mp
                     return;
                 }
             }
-            update_borders(state_arc);
-            // Update sketchybar to highlight the focused window's group
-            update_sketchybar(&workspace, state_arc);
+            // Route through workspace worker to avoid concurrent aerospace_cmd calls
+            // Uses __focus__ sentinel so worker skips gap/retile logic
+            let _ = ws_tx.send("__focus__".to_string());
         }
         "app_visibility_changed" => {
             // Fired by NSWorkspace observer when an app is hidden/unhidden/quit/launched
@@ -981,6 +981,12 @@ fn main() {
                         retile_all_visible(&g9_ws, &state_ws_worker);
                     }
                 }
+            } else if workspace == "__focus__" {
+                // Focus changed within same workspace — just update borders + sketchybar highlight
+                let focused_ws = aerospace_cmd(&["list-workspaces", "--focused"]).unwrap_or_default();
+                eprintln!("[helper] ws-worker: focus changed on ws{}", focused_ws);
+                update_borders(&state_ws_worker);
+                update_sketchybar(&focused_ws, &state_ws_worker);
             } else {
                 eprintln!("[helper] ws-worker processing workspace={}", workspace);
                 // Borders + gaps first (fast, visible to user), sketchybar last (slow, decorative)
