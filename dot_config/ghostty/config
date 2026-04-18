@@ -121,13 +121,9 @@ macos-icon-screen-color = 000000
 #   ctrl+?       Ghostty splits inside a window
 #   Ctrl+W + ?   tmux (local sessions + remote SSH)
 
-# Splits (ghostty, ctrl family)
-keybind = ctrl+backslash=new_split:right
-keybind = ctrl+slash=new_split:down
-keybind = ctrl+h=goto_split:left
-keybind = ctrl+j=goto_split:bottom
-keybind = ctrl+k=goto_split:top
-keybind = ctrl+l=goto_split:right
+# No ghostty-level splits — tmux handles panes. Keeping ctrl+hjkl / ctrl+\ /
+# ctrl+/ unbound lets tmux's prefix chords (C-w C-hjkl, C-w \, C-w /) reach
+# tmux through the terminal.
 keybind = ctrl+x=close_surface
 
 # Tabs (replaces cmux sidebar — cmd family)
