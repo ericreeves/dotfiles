@@ -532,6 +532,20 @@ fn update_sketchybar(focused_workspace: &str, state_arc: &Arc<Mutex<HelperState>
 
 fn handle_gaps(workspace: &str, state_arc: &Arc<Mutex<HelperState>>) {
     if !is_on_g9(workspace) {
+        // G9 not connected or workspace not on G9 — ensure gaps are Normal
+        // so the MBP doesn't get stuck with 1280px centered gaps
+        let current_state = {
+            let s = state_arc.lock().unwrap();
+            s.gap_state.clone()
+        };
+        if current_state == GapState::Centered {
+            eprintln!("[helper] G9 not detected, resetting gaps to Normal");
+            {
+                let mut s = state_arc.lock().unwrap();
+                s.gap_state = GapState::Normal;
+            }
+            spawn_and_reap_closure(move || { apply_gaps(&GapState::Normal); }, state_arc);
+        }
         return;
     }
 
@@ -798,9 +812,10 @@ fn main() {
                 }
             } else {
                 eprintln!("[helper] ws-worker processing workspace={}", workspace);
-                update_sketchybar(&workspace, &state_ws_worker);
+                // Borders + gaps first (fast, visible to user), sketchybar last (slow, decorative)
                 update_borders(&state_ws_worker);
                 handle_gaps(&workspace, &state_ws_worker);
+                update_sketchybar(&workspace, &state_ws_worker);
             }
         }
     });
