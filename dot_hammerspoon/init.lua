@@ -125,3 +125,8 @@ PaperWM:bindHotkeys({
 })
 
 PaperWM:start()
+
+-- ActiveSpace — menu bar indicator for Mission Control spaces
+ActiveSpace = hs.loadSpoon("ActiveSpace")
+ActiveSpace.compact = true
+ActiveSpace:start()
