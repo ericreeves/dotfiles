@@ -1,0 +1,93 @@
+#!/bin/bash
+
+set -euo pipefail
+
+HAMMERSPOON_APP="/Applications/Hammerspoon.app"
+HAMMERSPOON_CLI="/opt/homebrew/bin/hs"
+
+usage() {
+  echo "Usage: $(basename "$0") {start|stop|restart|status}"
+  exit 1
+}
+
+check_deps() {
+  local missing=0
+  if [[ ! -d "$HAMMERSPOON_APP" ]]; then
+    echo "Hammerspoon not found. Install with:"
+    echo "  brew install --cask hammerspoon"
+    missing=1
+  fi
+  if [[ ! -d "$HOME/.hammerspoon/Spoons/PaperWM.spoon" ]]; then
+    echo "PaperWM.spoon not found. Install with:"
+    echo "  git clone https://github.com/mogenson/PaperWM.spoon ~/.hammerspoon/Spoons/PaperWM.spoon"
+    missing=1
+  fi
+  if [[ $missing -eq 1 ]]; then
+    exit 1
+  fi
+}
+
+do_stop() {
+  # Tell PaperWM to stop tiling (restores window positions)
+  if pgrep -x Hammerspoon >/dev/null 2>&1; then
+    if [[ -x "$HAMMERSPOON_CLI" ]]; then
+      "$HAMMERSPOON_CLI" -c "if PaperWM then PaperWM:stop() end" 2>/dev/null || true
+      sleep 0.5
+    fi
+    osascript -e 'tell application "Hammerspoon" to quit' 2>/dev/null || true
+    sleep 1
+    pkill -x Hammerspoon 2>/dev/null || true
+  fi
+  echo "PaperWM stopped."
+}
+
+do_start() {
+  if pgrep -x Hammerspoon >/dev/null 2>&1; then
+    echo "Hammerspoon already running. Reloading config..."
+    if [[ -x "$HAMMERSPOON_CLI" ]]; then
+      "$HAMMERSPOON_CLI" -c "hs.reload()" 2>/dev/null || true
+    else
+      osascript -e 'tell application "Hammerspoon" to activate' 2>/dev/null || true
+    fi
+  else
+    open "$HAMMERSPOON_APP"
+  fi
+  echo "PaperWM started."
+}
+
+do_restart() {
+  do_stop
+  sleep 1
+  do_start
+}
+
+do_status() {
+  echo -n "Hammerspoon: "
+  if pgrep -x Hammerspoon >/dev/null; then
+    echo "running (pid $(pgrep -x Hammerspoon | tr '\n' ' '))"
+  else
+    echo "not running"
+  fi
+  echo -n "PaperWM.spoon: "
+  if [[ -d "$HOME/.hammerspoon/Spoons/PaperWM.spoon" ]]; then
+    echo "installed"
+  else
+    echo "not installed"
+  fi
+  echo -n "Hammerspoon CLI (hs): "
+  if [[ -x "$HAMMERSPOON_CLI" ]]; then
+    echo "available"
+  else
+    echo "not found (install: brew install hammerspoon --with-cli)"
+  fi
+}
+
+[[ $# -eq 1 ]] || usage
+
+case "$1" in
+  start)   check_deps; do_start ;;
+  stop)    do_stop ;;
+  restart) check_deps; do_restart ;;
+  status)  do_status ;;
+  *)       usage ;;
+esac
