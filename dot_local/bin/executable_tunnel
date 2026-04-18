@@ -16,6 +16,13 @@ fi
 
 URL="http://localhost:$PORT"
 
+if EXISTING=$(lsof -nP -iTCP:"$PORT" -sTCP:LISTEN 2>/dev/null) && [[ -n "$EXISTING" ]]; then
+    echo "Error: port $PORT is already in use locally:" >&2
+    echo "$EXISTING" | awk 'NR==1 || NR>1 {print "  " $0}' >&2
+    echo "Pick a different port or stop the process above." >&2
+    exit 1
+fi
+
 ssh -o ExitOnForwardFailure=yes -L "0.0.0.0:$PORT:localhost:$PORT" -N "$HOST" &
 SSH_PID=$!
 
