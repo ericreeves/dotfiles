@@ -4,6 +4,8 @@ set -euo pipefail
 
 HAMMERSPOON_APP="/Applications/Hammerspoon.app"
 HAMMERSPOON_CLI="/opt/homebrew/bin/hs"
+BORDERS_BIN="/opt/homebrew/bin/borders"
+BORDERSRC="$HOME/.config/aerospace/borders/bordersrc"
 
 usage() {
   echo "Usage: $(basename "$0") {start|stop|restart|status}"
@@ -38,6 +40,8 @@ do_stop() {
     sleep 1
     pkill -x Hammerspoon 2>/dev/null || true
   fi
+  # Stop JankyBorders
+  pkill -x borders 2>/dev/null || true
   echo "PaperWM stopped."
 }
 
@@ -51,6 +55,10 @@ do_start() {
     fi
   else
     open "$HAMMERSPOON_APP"
+  fi
+  # Start JankyBorders
+  if [[ -x "$BORDERS_BIN" ]] && ! pgrep -x borders >/dev/null; then
+    source "$BORDERSRC" &
   fi
   echo "PaperWM started."
 }
@@ -79,6 +87,12 @@ do_status() {
     echo "available"
   else
     echo "not found (install: brew install hammerspoon --with-cli)"
+  fi
+  echo -n "JankyBorders: "
+  if pgrep -x borders >/dev/null; then
+    echo "running"
+  else
+    echo "not running"
   fi
 }
 
