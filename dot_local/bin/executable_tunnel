@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ $# -lt 2 ]]; then
+    echo "Usage: $(basename "$0") <host> <port>" >&2
+    exit 1
+fi
+
+HOST="$1"
+PORT="$2"
+
+if ! [[ "$PORT" =~ ^[0-9]+$ ]] || (( PORT < 1 || PORT > 65535 )); then
+    echo "Error: port must be a number between 1 and 65535" >&2
+    exit 1
+fi
+
+URL="http://localhost:$PORT"
+
+ssh -o ExitOnForwardFailure=yes -L "0.0.0.0:$PORT:localhost:$PORT" -N "$HOST" &
+SSH_PID=$!
+
+trap 'kill "$SSH_PID" 2>/dev/null || true' EXIT INT TERM
+
+for _ in {1..20}; do
+    if nc -z localhost "$PORT" 2>/dev/null; then
+        break
+    fi
+    sleep 0.25
+done
+
+if ! kill -0 "$SSH_PID" 2>/dev/null; then
+    echo "Error: ssh tunnel failed to establish" >&2
+    exit 1
+fi
+
+echo "Tunnel up: $HOST:$PORT -> $URL (pid $SSH_PID)"
+open "$URL"
+
+wait "$SSH_PID"
