@@ -4,6 +4,7 @@ use std::io::{BufRead, BufReader, Write};
 use std::os::unix::net::{UnixListener, UnixStream};
 use std::process::Command;
 use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::mpsc;
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::{Duration, Instant};
@@ -439,10 +440,15 @@ fn update_borders(state: &Arc<Mutex<HelperState>>) {
 }
 
 fn update_sketchybar(focused_workspace: &str, state_arc: &Arc<Mutex<HelperState>>) {
-    let state = state_arc.lock().unwrap();
+    // Snapshot what we need from state, then drop the lock immediately
+    let (floating_patterns, icon_map) = {
+        let state = state_arc.lock().unwrap();
+        (state.floating_app_patterns.clone(), state.icon_map.clone())
+    };
+
     let hidden = get_hidden_bundle_ids();
 
-    // Query ALL windows in one call
+    // Query ALL windows in one call (no lock held)
     let all_windows = aerospace_cmd(&[
         "list-windows", "--all",
         "--format", "%{workspace}|%{app-name}|%{app-bundle-id}",
@@ -466,6 +472,17 @@ fn update_sketchybar(focused_workspace: &str, state_arc: &Arc<Mutex<HelperState>
         HashMap::new()
     };
 
+    // Helper closures using the snapshots
+    let is_floating = |app_name: &str| -> bool {
+        floating_patterns.iter().any(|p| app_name.to_lowercase().contains(&p.to_lowercase()))
+    };
+    let get_icon = |app_name: &str| -> &str {
+        icon_map.get(app_name)
+            .or_else(|| icon_map.get("_default"))
+            .map(|s| s.as_str())
+            .unwrap_or(":default:")
+    };
+
     // Build icon strips per workspace
     let mut ws_icons: HashMap<String, Vec<String>> = HashMap::new();
     for line in all_windows.lines() {
@@ -476,12 +493,10 @@ fn update_sketchybar(focused_workspace: &str, state_arc: &Arc<Mutex<HelperState>
         let bid = parts[2].trim();
         if app_name.is_empty() { continue; }
         if hidden.contains(&bid.to_string()) { continue; }
-        if state.is_floating_app(app_name) { continue; }
-        let icon = state.get_icon(app_name).to_string();
+        if is_floating(app_name) { continue; }
+        let icon = get_icon(app_name).to_string();
         ws_icons.entry(ws.to_string()).or_default().push(icon);
     }
-
-    drop(state); // Release lock before spawning
 
     // Build batched sketchybar command args
     let mut args: Vec<String> = Vec::new();
@@ -515,24 +530,70 @@ fn update_sketchybar(focused_workspace: &str, state_arc: &Arc<Mutex<HelperState>
     spawn_and_reap("/opt/homebrew/bin/sketchybar", &args_refs, state_arc);
 }
 
-fn handle_gaps(workspace: &str, state: &mut HelperState, state_arc: &Arc<Mutex<HelperState>>) {
+fn handle_gaps(workspace: &str, state_arc: &Arc<Mutex<HelperState>>) {
     if !is_on_g9(workspace) {
-        return; // MBP always gets 15px via per-monitor syntax; don't touch G9 gaps
+        return;
     }
 
-    float_hidden_windows(workspace, state);
-    let count = count_visible_windows(workspace, state);
+    // Get floating patterns snapshot (brief lock)
+    let floating_patterns = {
+        let s = state_arc.lock().unwrap();
+        s.floating_app_patterns.clone()
+    };
 
-    eprintln!("[helper] ws{}: {} visible windows, gaps={:?}", workspace, count, state.gap_state);
+    // These call aerospace_cmd — no lock held
+    float_hidden_windows_with_patterns(workspace, &floating_patterns);
+    let count = count_visible_windows_with_patterns(workspace, &floating_patterns);
+
+    // Brief lock to check and update gap state
+    let mut s = state_arc.lock().unwrap();
+    eprintln!("[helper] ws{}: {} visible windows, gaps={:?}", workspace, count, s.gap_state);
 
     let target = if count <= 1 { GapState::Centered } else { GapState::Normal };
-    if target == state.gap_state { return; }
-    state.gap_state = target.clone();
+    if target == s.gap_state { return; }
+    s.gap_state = target.clone();
+    drop(s);
+
     let target_clone = target;
     spawn_and_reap_closure(move || { apply_gaps(&target_clone); }, state_arc);
 }
 
-fn handle_event(raw_event: &str, state_arc: &Arc<Mutex<HelperState>>) {
+fn count_visible_windows_with_patterns(workspace: &str, floating_patterns: &[String]) -> usize {
+    let hidden = get_hidden_bundle_ids();
+    let output = aerospace_cmd(&[
+        "list-windows", "--workspace", workspace,
+        "--format", "%{app-name}|%{app-bundle-id}",
+    ]).unwrap_or_default();
+
+    output.lines().filter(|line| {
+        let parts: Vec<&str> = line.split('|').collect();
+        if parts.len() != 2 { return false; }
+        let app_name = parts[0].trim();
+        let bid = parts[1].trim();
+        !app_name.is_empty()
+            && !hidden.contains(&bid.to_string())
+            && !floating_patterns.iter().any(|p| app_name.to_lowercase().contains(&p.to_lowercase()))
+    }).count()
+}
+
+fn float_hidden_windows_with_patterns(workspace: &str, floating_patterns: &[String]) {
+    let hidden = get_hidden_bundle_ids();
+    if hidden.is_empty() { return; }
+    let output = aerospace_cmd(&[
+        "list-windows", "--workspace", workspace,
+        "--format", "%{window-id}|%{app-bundle-id}",
+    ]).unwrap_or_default();
+
+    for line in output.lines() {
+        let parts: Vec<&str> = line.split('|').collect();
+        if parts.len() != 2 { continue; }
+        if hidden.contains(&parts[1].to_string()) {
+            let _ = aerospace_cmd(&["layout", "--window-id", parts[0].trim(), "floating"]);
+        }
+    }
+}
+
+fn handle_event(raw_event: &str, state_arc: &Arc<Mutex<HelperState>>, ws_tx: &mpsc::Sender<String>) {
     let (event, workspace) = if let Some((ev, ws)) = raw_event.split_once(':') {
         (ev.to_string(), ws.to_string())
     } else {
@@ -544,7 +605,8 @@ fn handle_event(raw_event: &str, state_arc: &Arc<Mutex<HelperState>>) {
     };
 
     // Debounce: skip if we processed this event type too recently
-    {
+    // Don't debounce workspace_changed — each switch needs processing even if rapid
+    if event != "workspace_changed" {
         let mut s = state_arc.lock().unwrap();
         if !s.should_process(&event) {
             eprintln!("[helper] debounced event={} workspace={}", event, workspace);
@@ -556,10 +618,8 @@ fn handle_event(raw_event: &str, state_arc: &Arc<Mutex<HelperState>>) {
 
     match event.as_str() {
         "workspace_changed" => {
-            update_sketchybar(&workspace, state_arc);
-            update_borders(state_arc);
-            let mut s = state_arc.lock().unwrap();
-            handle_gaps(&workspace, &mut s, state_arc);
+            // Send to the workspace worker thread (serialized, no concurrent aerospace_cmd)
+            let _ = ws_tx.send(workspace);
         }
         "focus_changed" => {
             // If we're in the middle of a retile, ignore focus changes to break the loop
@@ -571,70 +631,30 @@ fn handle_event(raw_event: &str, state_arc: &Arc<Mutex<HelperState>>) {
                 }
             }
             update_borders(state_arc);
-            let mut s = state_arc.lock().unwrap();
-            handle_gaps(&workspace, &mut s, state_arc);
+            // Gap management not needed for focus_changed — window count doesn't change
+            // within the same workspace. workspace_changed and app_visibility_changed handle gaps.
         }
         "app_visibility_changed" => {
             // Fired by NSWorkspace observer when an app is hidden/unhidden/quit/launched
-            // Find the visible workspace on the G9 and re-evaluate its gaps
-            eprintln!("[helper] app visibility changed");
-
-            // Find G9 monitor ID by name
-            let monitors = aerospace_cmd(&["list-monitors", "--format", "%{monitor-id}|%{monitor-name}"]).unwrap_or_default();
-            let g9_mid = monitors.lines()
-                .find(|l| l.contains(G9_PATTERN))
-                .and_then(|l| l.split('|').next())
-                .unwrap_or("")
-                .to_string();
-
-            let g9_ws = if !g9_mid.is_empty() {
-                aerospace_cmd(&["list-workspaces", "--monitor", &g9_mid, "--visible"])
-                    .unwrap_or_default().trim().to_string()
-            } else {
-                String::new()
-            };
-
-            if !g9_ws.is_empty() {
-                eprintln!("[helper] re-evaluating G9 ws{}", g9_ws);
-                let prev_gaps;
-                {
-                    let mut s = state_arc.lock().unwrap();
-                    prev_gaps = s.gap_state.clone();
-                    handle_gaps(&g9_ws, &mut s, state_arc);
-                }
-
-                let needs_retile;
-                {
-                    let s = state_arc.lock().unwrap();
-                    needs_retile = s.gap_state != prev_gaps;
-                }
-
-                if needs_retile {
-                    let ws = g9_ws.clone();
-                    let state_clone = Arc::clone(state_arc);
-                    thread::spawn(move || {
-                        std::thread::sleep(Duration::from_millis(500));
-                        retile_all_visible(&ws, &state_clone);
-                    });
-                }
-                update_sketchybar(&g9_ws, state_arc);
-            }
+            // Route through the workspace worker to avoid concurrent aerospace_cmd calls
+            eprintln!("[helper] app visibility changed, sending to worker");
+            let _ = ws_tx.send("__visibility__".to_string());
         }
         "retile" => {
-            eprintln!("[helper] delayed retile for ws{}", workspace);
-            retile_all_visible(&workspace, state_arc);
+            eprintln!("[helper] retile request for ws{}", workspace);
+            let _ = ws_tx.send(workspace);
         }
         _ => {}
     }
 }
 
-fn handle_client(stream: UnixStream, state: Arc<Mutex<HelperState>>) {
+fn handle_client(stream: UnixStream, state: Arc<Mutex<HelperState>>, ws_tx: mpsc::Sender<String>) {
     let reader = BufReader::new(stream);
     for line in reader.lines() {
         if let Ok(event) = line {
             let event = event.trim().to_string();
             if event.is_empty() { continue; }
-            handle_event(&event, &state);
+            handle_event(&event, &state, &ws_tx);
         }
     }
 }
@@ -738,6 +758,53 @@ fn main() {
         }
     });
 
+    // Workspace worker thread — processes workspace_changed events sequentially
+    // to avoid concurrent aerospace_cmd calls (AeroSpace is single-threaded and deadlocks)
+    let (ws_tx, ws_rx) = mpsc::channel::<String>();
+    let state_ws_worker = Arc::clone(&state);
+    thread::spawn(move || {
+        for workspace in ws_rx {
+            if workspace == "__visibility__" {
+                // App visibility changed — find G9 workspace and re-evaluate
+                eprintln!("[helper] ws-worker: app visibility changed");
+                let monitors = aerospace_cmd(&["list-monitors", "--format", "%{monitor-id}|%{monitor-name}"]).unwrap_or_default();
+                let g9_mid = monitors.lines()
+                    .find(|l| l.contains(G9_PATTERN))
+                    .and_then(|l| l.split('|').next())
+                    .unwrap_or("")
+                    .to_string();
+                let g9_ws = if !g9_mid.is_empty() {
+                    aerospace_cmd(&["list-workspaces", "--monitor", &g9_mid, "--visible"])
+                        .unwrap_or_default().trim().to_string()
+                } else {
+                    String::new()
+                };
+                if !g9_ws.is_empty() {
+                    eprintln!("[helper] ws-worker: re-evaluating G9 ws{}", g9_ws);
+                    let prev_gaps = {
+                        let s = state_ws_worker.lock().unwrap();
+                        s.gap_state.clone()
+                    };
+                    update_sketchybar(&g9_ws, &state_ws_worker);
+                    handle_gaps(&g9_ws, &state_ws_worker);
+                    let needs_retile = {
+                        let s = state_ws_worker.lock().unwrap();
+                        s.gap_state != prev_gaps
+                    };
+                    if needs_retile {
+                        std::thread::sleep(Duration::from_millis(500));
+                        retile_all_visible(&g9_ws, &state_ws_worker);
+                    }
+                }
+            } else {
+                eprintln!("[helper] ws-worker processing workspace={}", workspace);
+                update_sketchybar(&workspace, &state_ws_worker);
+                update_borders(&state_ws_worker);
+                handle_gaps(&workspace, &state_ws_worker);
+            }
+        }
+    });
+
     // Socket listener on a background thread
     let state_socket = Arc::clone(&state);
     thread::spawn(move || {
@@ -749,7 +816,8 @@ fn main() {
             match stream {
                 Ok(stream) => {
                     let state = Arc::clone(&state_socket);
-                    thread::spawn(move || handle_client(stream, state));
+                    let ws_tx = ws_tx.clone();
+                    thread::spawn(move || handle_client(stream, state, ws_tx));
                 }
                 Err(e) => eprintln!("Connection error: {}", e),
             }

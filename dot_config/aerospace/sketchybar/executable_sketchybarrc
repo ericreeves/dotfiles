@@ -33,10 +33,7 @@ sketchybar --default \
   label.y_offset=1 \
   background.drawing=off
 
-# Register aerospace event
-sketchybar --add event aerospace_workspace_change
-
-# Workspace items — centered
+# Workspace items — centered (updated by aerospace-helper, not event-driven)
 SIDS=("1" "2" "3" "4" "5" "6" "7" "8" "9")
 for sid in "${SIDS[@]}"; do
   sketchybar --add item space.$sid center \
@@ -47,14 +44,12 @@ for sid in "${SIDS[@]}"; do
       icon.highlight_color=0xffffffff \
       label.highlight_color=0xffcdd6f4 \
       background.drawing=on \
-      background.color=0x30ffffff \
+      background.color=0x00000000 \
       background.corner_radius=8 \
       background.height=26 \
       background.padding_left=2 \
       background.padding_right=2 \
-      click_script="aerospace workspace $sid" \
-      script="$PLUGIN_DIR/space.sh" \
-    --subscribe space.$sid aerospace_workspace_change
+      click_script="aerospace workspace $sid"
 done
 
 sketchybar --update
