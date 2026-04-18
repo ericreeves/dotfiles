@@ -13,11 +13,15 @@ use std::ptr::NonNull;
 use block2::RcBlock;
 use objc2_app_kit::NSWorkspace;
 use objc2_foundation::NSNotification;
+use serde::Deserialize;
+use notify::{Watcher, RecursiveMode, Event, EventKind};
+use std::path::Path;
 
 const SOCKET_PATH: &str = "/tmp/aerospace-helper.sock";
 const PID_PATH: &str = "/tmp/aerospace-helper.pid";
 const G9_PATTERN: &str = "Odyssey";
 const CONFIG_PATH: &str = "/Users/eric/.config/aerospace/aerospace.toml";
+const ICON_MAP_PATH: &str = "/Users/eric/.config/aerospace/sketchybar/icon_map.toml";
 
 // Gap values
 const GAP_NORMAL: &str = "15";
@@ -28,19 +32,75 @@ const DEBOUNCE_MS: u64 = 150;
 // Max concurrent spawned processes before we start dropping events
 const MAX_CHILD_PROCS: usize = 20;
 
-const ALWAYS_FLOATING: &[&str] = &[
-    "com.mantle.app",
-    "com.1password.1password",
-    "com.microsoft.teams2",
-    "com.wispr.flow",
-    "com.logi.cp-dev-mgr.common",
-    "com.apple.ScreenMirroring",
-    "com.anthropic.claudefordesktop",
-    "com.cisco.secureclient.gui",
-    "com.elgato.StreamDeck",
-    "us.zoom.xos",
-    "meetily",
-];
+// --- TOML deserialization structs ---
+
+#[derive(Deserialize, Default)]
+struct AerospaceConfig {
+    #[serde(rename = "on-window-detected", default)]
+    on_window_detected: Vec<WindowDetectedRule>,
+}
+
+#[derive(Deserialize, Default)]
+struct WindowDetectedRule {
+    #[serde(rename = "if", default)]
+    condition: WindowCondition,
+    #[serde(default)]
+    run: String,
+}
+
+#[derive(Deserialize, Default)]
+struct WindowCondition {
+    #[serde(rename = "app-name-regex-substring", default)]
+    app_name_regex_substring: Option<String>,
+    #[serde(rename = "app-id", default)]
+    app_id: Option<String>,
+}
+
+#[derive(Deserialize, Default)]
+struct IconMapConfig {
+    #[serde(default)]
+    icons: HashMap<String, String>,
+}
+
+fn load_floating_patterns() -> Vec<String> {
+    let content = match fs::read_to_string(CONFIG_PATH) {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("[helper] failed to read aerospace config: {}", e);
+            return Vec::new();
+        }
+    };
+    let config: AerospaceConfig = match toml::from_str(&content) {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("[helper] failed to parse aerospace config: {}", e);
+            return Vec::new();
+        }
+    };
+    config.on_window_detected
+        .into_iter()
+        .filter(|rule| rule.run.contains("layout floating"))
+        .filter_map(|rule| rule.condition.app_name_regex_substring)
+        .collect()
+}
+
+fn load_icon_map() -> HashMap<String, String> {
+    let content = match fs::read_to_string(ICON_MAP_PATH) {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("[helper] failed to read icon map: {}", e);
+            return HashMap::new();
+        }
+    };
+    let config: IconMapConfig = match toml::from_str(&content) {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("[helper] failed to parse icon map: {}", e);
+            return HashMap::new();
+        }
+    };
+    config.icons
+}
 
 #[derive(Debug, Clone, PartialEq)]
 enum GapState {
@@ -54,16 +114,24 @@ struct HelperState {
     is_retiling: bool,
     last_event_times: HashMap<String, Instant>,
     child_count: usize,
+    floating_app_patterns: Vec<String>,
+    icon_map: HashMap<String, String>,
 }
 
 impl HelperState {
     fn new() -> Self {
+        let floating_app_patterns = load_floating_patterns();
+        let icon_map = load_icon_map();
+        eprintln!("[helper] loaded {} floating patterns, {} icon mappings",
+            floating_app_patterns.len(), icon_map.len());
         Self {
             gap_state: GapState::Normal,
             last_reload: Instant::now() - Duration::from_secs(10),
             is_retiling: false,
             last_event_times: HashMap::new(),
             child_count: 0,
+            floating_app_patterns,
+            icon_map,
         }
     }
 
@@ -77,6 +145,19 @@ impl HelperState {
         }
         self.last_event_times.insert(event_key.to_string(), now);
         true
+    }
+
+    fn is_floating_app(&self, app_name: &str) -> bool {
+        self.floating_app_patterns.iter().any(|pattern| {
+            app_name.to_lowercase().contains(&pattern.to_lowercase())
+        })
+    }
+
+    fn get_icon(&self, app_name: &str) -> &str {
+        self.icon_map.get(app_name)
+            .or_else(|| self.icon_map.get("_default"))
+            .map(|s| s.as_str())
+            .unwrap_or(":default:")
     }
 }
 
@@ -140,57 +221,72 @@ fn get_hidden_bundle_ids() -> Vec<String> {
     hidden
 }
 
-fn count_visible_windows(workspace: &str) -> usize {
+fn count_visible_windows(workspace: &str, state: &HelperState) -> usize {
     let hidden = get_hidden_bundle_ids();
     let output = aerospace_cmd(&[
         "list-windows", "--workspace", workspace,
-        "--format", "%{app-bundle-id}",
+        "--format", "%{app-name}|%{app-bundle-id}",
     ]).unwrap_or_default();
 
     output.lines().filter(|line| {
-        let bid = line.trim();
-        !bid.is_empty()
+        let parts: Vec<&str> = line.split('|').collect();
+        if parts.len() != 2 { return false; }
+        let app_name = parts[0].trim();
+        let bid = parts[1].trim();
+        !app_name.is_empty()
             && !hidden.contains(&bid.to_string())
-            && !ALWAYS_FLOATING.contains(&bid)
+            && !state.is_floating_app(app_name)
     }).count()
 }
 
-/// Retile all visible (non-hidden, non-ALWAYS_FLOATING) windows on a workspace.
+/// Retile all visible (non-hidden, non-floating) windows on a workspace.
 /// Sets is_retiling flag to prevent focus_changed feedback loop.
-fn retile_all_visible(workspace: &str, state: &Arc<Mutex<HelperState>>) {
+fn retile_all_visible(workspace: &str, state_arc: &Arc<Mutex<HelperState>>) {
     // Set the retile guard
     {
-        let mut s = state.lock().unwrap();
+        let mut s = state_arc.lock().unwrap();
         s.is_retiling = true;
     }
 
     let hidden = get_hidden_bundle_ids();
     let output = aerospace_cmd(&[
         "list-windows", "--workspace", workspace,
-        "--format", "%{window-id}|%{app-bundle-id}",
+        "--format", "%{window-id}|%{app-name}|%{app-bundle-id}",
     ]).unwrap_or_default();
+
+    let floating_apps: Vec<String>;
+    {
+        let s = state_arc.lock().unwrap();
+        floating_apps = s.floating_app_patterns.clone();
+    }
 
     for line in output.lines() {
         let parts: Vec<&str> = line.split('|').collect();
-        if parts.len() != 2 { continue; }
+        if parts.len() != 3 { continue; }
         let wid = parts[0].trim();
-        let bid = parts[1];
-        if wid.is_empty() || hidden.contains(&bid.to_string()) || ALWAYS_FLOATING.contains(&bid) {
+        let app_name = parts[1].trim();
+        let bid = parts[2].trim();
+        if wid.is_empty() || hidden.contains(&bid.to_string()) {
             continue;
         }
+        // Check floating using patterns directly (avoid re-locking in loop)
+        let is_floating = floating_apps.iter().any(|pattern| {
+            app_name.to_lowercase().contains(&pattern.to_lowercase())
+        });
+        if is_floating { continue; }
         let _ = aerospace_cmd(&["layout", "--window-id", wid, "tiling"]);
     }
 
     // Clear the retile guard
     {
-        let mut s = state.lock().unwrap();
+        let mut s = state_arc.lock().unwrap();
         s.is_retiling = false;
     }
 
     eprintln!("[helper] retiled all visible windows on ws{}", workspace);
 }
 
-fn float_hidden_windows(workspace: &str) {
+fn float_hidden_windows(workspace: &str, _state: &HelperState) {
     let hidden = get_hidden_bundle_ids();
     if hidden.is_empty() { return; }
     let output = aerospace_cmd(&[
@@ -209,11 +305,7 @@ fn float_hidden_windows(workspace: &str) {
 
 // --- Gap management via config editing ---
 
-fn set_gaps(target: &GapState, state: &mut HelperState) {
-    if *target == state.gap_state {
-        return; // Already in the right state
-    }
-
+fn apply_gaps(target: &GapState) {
     // Read the config file
     let config = match fs::read_to_string(CONFIG_PATH) {
         Ok(c) => c,
@@ -253,8 +345,6 @@ fn set_gaps(target: &GapState, state: &mut HelperState) {
     let _ = aerospace_cmd(&["reload-config"]);
 
     eprintln!("[helper] gaps set to {:?}", target);
-    state.gap_state = target.clone();
-    state.last_reload = Instant::now();
 }
 
 // --- Spawn external commands with cleanup ---
@@ -296,6 +386,27 @@ fn spawn_bash_and_reap(script: &str, state: &Arc<Mutex<HelperState>>) -> bool {
     spawn_and_reap("/bin/bash", &["-c", script], state)
 }
 
+fn spawn_and_reap_closure<F>(f: F, state: &Arc<Mutex<HelperState>>)
+where F: FnOnce() + Send + 'static {
+    {
+        let s = state.lock().unwrap();
+        if s.child_count >= MAX_CHILD_PROCS {
+            eprintln!("[helper] WARNING: child limit reached, dropping closure spawn");
+            return;
+        }
+    }
+    let state = Arc::clone(state);
+    {
+        let mut s = state.lock().unwrap();
+        s.child_count += 1;
+    }
+    thread::spawn(move || {
+        f();
+        let mut s = state.lock().unwrap();
+        s.child_count = s.child_count.saturating_sub(1);
+    });
+}
+
 // --- Event handling ---
 
 fn update_borders(state: &Arc<Mutex<HelperState>>) {
@@ -327,30 +438,98 @@ fn update_borders(state: &Arc<Mutex<HelperState>>) {
     spawn_bash_and_reap(&cmd, state);
 }
 
-fn trigger_sketchybar(workspace: &str, state: &Arc<Mutex<HelperState>>) {
-    spawn_and_reap(
-        "/opt/homebrew/bin/sketchybar",
-        &["--trigger", "aerospace_workspace_change",
-          &format!("FOCUSED_WORKSPACE={}", workspace)],
-        state,
-    );
+fn update_sketchybar(focused_workspace: &str, state_arc: &Arc<Mutex<HelperState>>) {
+    let state = state_arc.lock().unwrap();
+    let hidden = get_hidden_bundle_ids();
+
+    // Query ALL windows in one call
+    let all_windows = aerospace_cmd(&[
+        "list-windows", "--all",
+        "--format", "%{workspace}|%{app-name}|%{app-bundle-id}",
+    ]).unwrap_or_default();
+
+    // Query workspace-to-monitor mapping (only if multi-monitor)
+    let monitor_count: usize = aerospace_cmd(&["list-monitors", "--count"])
+        .and_then(|s| s.trim().parse().ok())
+        .unwrap_or(1);
+
+    let ws_monitors: HashMap<String, String> = if monitor_count > 1 {
+        aerospace_cmd(&["list-workspaces", "--monitor", "all", "--format", "%{workspace}|%{monitor-id}"])
+            .unwrap_or_default()
+            .lines()
+            .filter_map(|line| {
+                let parts: Vec<&str> = line.split('|').collect();
+                if parts.len() == 2 { Some((parts[0].to_string(), parts[1].to_string())) } else { None }
+            })
+            .collect()
+    } else {
+        HashMap::new()
+    };
+
+    // Build icon strips per workspace
+    let mut ws_icons: HashMap<String, Vec<String>> = HashMap::new();
+    for line in all_windows.lines() {
+        let parts: Vec<&str> = line.split('|').collect();
+        if parts.len() != 3 { continue; }
+        let ws = parts[0].trim();
+        let app_name = parts[1].trim();
+        let bid = parts[2].trim();
+        if app_name.is_empty() { continue; }
+        if hidden.contains(&bid.to_string()) { continue; }
+        if state.is_floating_app(app_name) { continue; }
+        let icon = state.get_icon(app_name).to_string();
+        ws_icons.entry(ws.to_string()).or_default().push(icon);
+    }
+
+    drop(state); // Release lock before spawning
+
+    // Build batched sketchybar command args
+    let mut args: Vec<String> = Vec::new();
+    for sid in 1..=9 {
+        let sid_str = sid.to_string();
+        let icon_strip = ws_icons.get(&sid_str)
+            .map(|icons| icons.join(" "))
+            .unwrap_or_default();
+        let is_focused = sid_str == focused_workspace;
+        let bg_color = if is_focused { "0xff313244" } else { "0x00000000" };
+        let highlight = if is_focused { "on" } else { "off" };
+
+        args.extend([
+            "--set".to_string(), format!("space.{}", sid),
+            format!("label={}", icon_strip),
+            format!("icon.highlight={}", highlight),
+            format!("label.highlight={}", highlight),
+            format!("background.color={}", bg_color),
+        ]);
+
+        if monitor_count > 1 {
+            if let Some(mid) = ws_monitors.get(&sid_str) {
+                args.push(format!("associated_display={}", mid));
+            }
+        } else {
+            args.push("associated_display=1".to_string());
+        }
+    }
+
+    let args_refs: Vec<&str> = args.iter().map(|s| s.as_str()).collect();
+    spawn_and_reap("/opt/homebrew/bin/sketchybar", &args_refs, state_arc);
 }
 
-fn handle_gaps(workspace: &str, state: &mut HelperState) {
+fn handle_gaps(workspace: &str, state: &mut HelperState, state_arc: &Arc<Mutex<HelperState>>) {
     if !is_on_g9(workspace) {
         return; // MBP always gets 15px via per-monitor syntax; don't touch G9 gaps
     }
 
-    float_hidden_windows(workspace);
-    let count = count_visible_windows(workspace);
+    float_hidden_windows(workspace, state);
+    let count = count_visible_windows(workspace, state);
 
     eprintln!("[helper] ws{}: {} visible windows, gaps={:?}", workspace, count, state.gap_state);
 
-    if count <= 1 {
-        set_gaps(&GapState::Centered, state);
-    } else {
-        set_gaps(&GapState::Normal, state);
-    }
+    let target = if count <= 1 { GapState::Centered } else { GapState::Normal };
+    if target == state.gap_state { return; }
+    state.gap_state = target.clone();
+    let target_clone = target;
+    spawn_and_reap_closure(move || { apply_gaps(&target_clone); }, state_arc);
 }
 
 fn handle_event(raw_event: &str, state_arc: &Arc<Mutex<HelperState>>) {
@@ -377,10 +556,10 @@ fn handle_event(raw_event: &str, state_arc: &Arc<Mutex<HelperState>>) {
 
     match event.as_str() {
         "workspace_changed" => {
-            trigger_sketchybar(&workspace, state_arc);
+            update_sketchybar(&workspace, state_arc);
             update_borders(state_arc);
             let mut s = state_arc.lock().unwrap();
-            handle_gaps(&workspace, &mut s);
+            handle_gaps(&workspace, &mut s, state_arc);
         }
         "focus_changed" => {
             // If we're in the middle of a retile, ignore focus changes to break the loop
@@ -393,7 +572,7 @@ fn handle_event(raw_event: &str, state_arc: &Arc<Mutex<HelperState>>) {
             }
             update_borders(state_arc);
             let mut s = state_arc.lock().unwrap();
-            handle_gaps(&workspace, &mut s);
+            handle_gaps(&workspace, &mut s, state_arc);
         }
         "app_visibility_changed" => {
             // Fired by NSWorkspace observer when an app is hidden/unhidden/quit/launched
@@ -421,7 +600,7 @@ fn handle_event(raw_event: &str, state_arc: &Arc<Mutex<HelperState>>) {
                 {
                     let mut s = state_arc.lock().unwrap();
                     prev_gaps = s.gap_state.clone();
-                    handle_gaps(&g9_ws, &mut s);
+                    handle_gaps(&g9_ws, &mut s, state_arc);
                 }
 
                 let needs_retile;
@@ -438,7 +617,7 @@ fn handle_event(raw_event: &str, state_arc: &Arc<Mutex<HelperState>>) {
                         retile_all_visible(&ws, &state_clone);
                     });
                 }
-                trigger_sketchybar(&g9_ws, state_arc);
+                update_sketchybar(&g9_ws, state_arc);
             }
         }
         "retile" => {
@@ -507,7 +686,7 @@ fn main() {
     }
 
     let _ = fs::remove_file(SOCKET_PATH);
-    eprintln!("aerospace-helper v0.6 starting (pid {})", std::process::id());
+    eprintln!("aerospace-helper v0.7 starting (pid {})", std::process::id());
 
     // Register signal handlers for cleanup
     unsafe {
@@ -517,6 +696,47 @@ fn main() {
 
     let state = Arc::new(Mutex::new(HelperState::new()));
     update_borders(&state);
+
+    // File watcher thread for config hot-reload
+    let state_watcher = Arc::clone(&state);
+    thread::spawn(move || {
+        let (tx, rx) = std::sync::mpsc::channel();
+        let mut watcher = notify::recommended_watcher(move |res: Result<Event, _>| {
+            if let Ok(event) = res { let _ = tx.send(event); }
+        }).expect("Failed to create file watcher");
+
+        watcher.watch(Path::new(CONFIG_PATH), RecursiveMode::NonRecursive).ok();
+        watcher.watch(Path::new(ICON_MAP_PATH), RecursiveMode::NonRecursive).ok();
+        eprintln!("[helper] file watcher started");
+
+        let mut last_reload = Instant::now();
+        loop {
+            match rx.recv_timeout(Duration::from_secs(5)) {
+                Ok(event) => {
+                    if !matches!(event.kind, EventKind::Modify(_) | EventKind::Create(_)) { continue; }
+                    if Instant::now().duration_since(last_reload) < Duration::from_millis(500) { continue; }
+                    thread::sleep(Duration::from_millis(500));
+                    while rx.try_recv().is_ok() {} // Drain
+                    last_reload = Instant::now();
+
+                    let mut s = state_watcher.lock().unwrap();
+                    for path in &event.paths {
+                        let p = path.to_str().unwrap_or("");
+                        if p.contains("aerospace.toml") {
+                            s.floating_app_patterns = load_floating_patterns();
+                            eprintln!("[helper] reloaded {} floating patterns", s.floating_app_patterns.len());
+                        }
+                        if p.contains("icon_map.toml") {
+                            s.icon_map = load_icon_map();
+                            eprintln!("[helper] reloaded {} icon mappings", s.icon_map.len());
+                        }
+                    }
+                }
+                Err(std::sync::mpsc::RecvTimeoutError::Timeout) => continue,
+                Err(_) => break,
+            }
+        }
+    });
 
     // Socket listener on a background thread
     let state_socket = Arc::clone(&state);
