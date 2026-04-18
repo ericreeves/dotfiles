@@ -117,6 +117,7 @@ struct HelperState {
     child_count: usize,
     floating_app_patterns: Vec<String>,
     icon_map: HashMap<String, String>,
+    sketchybar_items: HashMap<String, Vec<String>>,  // workspace -> dynamic item names
 }
 
 impl HelperState {
@@ -133,6 +134,7 @@ impl HelperState {
             child_count: 0,
             floating_app_patterns,
             icon_map,
+            sketchybar_items: HashMap::new(),
         }
     }
 
@@ -441,17 +443,17 @@ fn update_borders(state: &Arc<Mutex<HelperState>>) {
 
 fn update_sketchybar(focused_workspace: &str, state_arc: &Arc<Mutex<HelperState>>) {
     // Snapshot what we need from state, then drop the lock immediately
-    let (floating_patterns, icon_map) = {
+    let (floating_patterns, icon_map, prev_items) = {
         let state = state_arc.lock().unwrap();
-        (state.floating_app_patterns.clone(), state.icon_map.clone())
+        (state.floating_app_patterns.clone(), state.icon_map.clone(), state.sketchybar_items.clone())
     };
 
     let hidden = get_hidden_bundle_ids();
 
-    // Query ALL windows in one call (no lock held)
+    // Query ALL windows with layout and container info
     let all_windows = aerospace_cmd(&[
         "list-windows", "--all",
-        "--format", "%{workspace}|%{app-name}|%{app-bundle-id}",
+        "--format", "%{workspace}|%{app-name}|%{app-bundle-id}|%{window-layout}|%{window-parent-container-id}",
     ]).unwrap_or_default();
 
     // Query workspace-to-monitor mapping (only if multi-monitor)
@@ -483,35 +485,78 @@ fn update_sketchybar(focused_workspace: &str, state_arc: &Arc<Mutex<HelperState>
             .unwrap_or(":default:")
     };
 
-    // Build icon strips per workspace
-    let mut ws_icons: HashMap<String, Vec<String>> = HashMap::new();
+    // Parse windows into per-workspace ordered lists
+    struct WindowInfo {
+        app_name: String,
+        layout: String,
+        container_id: String,
+    }
+    let mut ws_windows: HashMap<String, Vec<WindowInfo>> = HashMap::new();
     for line in all_windows.lines() {
         let parts: Vec<&str> = line.split('|').collect();
-        if parts.len() != 3 { continue; }
+        if parts.len() != 5 { continue; }
         let ws = parts[0].trim();
         let app_name = parts[1].trim();
         let bid = parts[2].trim();
+        let layout = parts[3].trim();
+        let container_id = parts[4].trim();
         if app_name.is_empty() { continue; }
         if hidden.contains(&bid.to_string()) { continue; }
         if is_floating(app_name) { continue; }
-        let icon = get_icon(app_name).to_string();
-        ws_icons.entry(ws.to_string()).or_default().push(icon);
+        ws_windows.entry(ws.to_string()).or_default().push(WindowInfo {
+            app_name: app_name.to_string(),
+            layout: layout.to_string(),
+            container_id: container_id.to_string(),
+        });
+    }
+
+    // Build groups per workspace, preserving tree order
+    struct IconGroup {
+        icons: Vec<String>,
+        is_accordion: bool,
+    }
+    let mut ws_groups: HashMap<String, Vec<IconGroup>> = HashMap::new();
+    for (ws, windows) in &ws_windows {
+        let mut groups: Vec<IconGroup> = Vec::new();
+        let mut seen_containers: std::collections::HashSet<String> = std::collections::HashSet::new();
+        for win in windows {
+            let is_accordion = win.layout.contains("accordion");
+            if is_accordion {
+                if seen_containers.contains(&win.container_id) {
+                    continue; // Already emitted this accordion group
+                }
+                seen_containers.insert(win.container_id.clone());
+                // Collect ALL windows with this container_id
+                let group_icons: Vec<String> = windows.iter()
+                    .filter(|w| w.container_id == win.container_id)
+                    .map(|w| get_icon(&w.app_name).to_string())
+                    .collect();
+                groups.push(IconGroup { icons: group_icons, is_accordion: true });
+            } else {
+                groups.push(IconGroup {
+                    icons: vec![get_icon(&win.app_name).to_string()],
+                    is_accordion: false,
+                });
+            }
+        }
+        ws_groups.insert(ws.clone(), groups);
     }
 
     // Build batched sketchybar command args
     let mut args: Vec<String> = Vec::new();
+    let mut new_items: HashMap<String, Vec<String>> = HashMap::new();
+
     for sid in 1..=9 {
         let sid_str = sid.to_string();
-        let icon_strip = ws_icons.get(&sid_str)
-            .map(|icons| icons.join(" "))
-            .unwrap_or_default();
         let is_focused = sid_str == focused_workspace;
         let bg_color = if is_focused { "0xff313244" } else { "0x00000000" };
         let highlight = if is_focused { "on" } else { "off" };
+        let label_color = if is_focused { "0xffcdd6f4" } else { "0xff6c7086" };
 
+        // Update the static space.{sid} item — clear label, set highlight
         args.extend([
             "--set".to_string(), format!("space.{}", sid),
-            format!("label={}", icon_strip),
+            "label=".to_string(),
             format!("icon.highlight={}", highlight),
             format!("label.highlight={}", highlight),
             format!("background.color={}", bg_color),
@@ -524,6 +569,74 @@ fn update_sketchybar(focused_workspace: &str, state_arc: &Arc<Mutex<HelperState>
         } else {
             args.push("associated_display=1".to_string());
         }
+
+        // Create dynamic items for each icon group
+        let groups = ws_groups.get(&sid_str);
+        let mut item_names: Vec<String> = Vec::new();
+        if let Some(groups) = groups {
+            for (idx, group) in groups.iter().enumerate() {
+                let item_name = format!("ws{}.g{}", sid, idx);
+                let label = group.icons.join(" ");
+
+                // Add item and set properties
+                args.extend([
+                    "--add".to_string(), "item".to_string(), item_name.clone(), "center".to_string(),
+                    "--set".to_string(), item_name.clone(),
+                    format!("label={}", label),
+                    format!("label.color={}", label_color),
+                    "label.font=sketchybar-app-font:Regular:16.0".to_string(),
+                    "icon.drawing=off".to_string(),
+                    "label.padding_left=4".to_string(),
+                    "label.padding_right=4".to_string(),
+                ]);
+
+                if group.is_accordion {
+                    args.extend([
+                        "background.drawing=on".to_string(),
+                        "background.color=0x26a6e3a1".to_string(),
+                        "background.corner_radius=8".to_string(),
+                        "background.border_color=0x59a6e3a1".to_string(),
+                        "background.border_width=1".to_string(),
+                        "background.height=22".to_string(),
+                    ]);
+                } else {
+                    args.push("background.drawing=off".to_string());
+                }
+
+                if monitor_count > 1 {
+                    if let Some(mid) = ws_monitors.get(&sid_str) {
+                        args.push(format!("associated_display={}", mid));
+                    }
+                } else {
+                    args.push("associated_display=1".to_string());
+                }
+
+                // Position after the space.{sid} item
+                args.extend([
+                    "--move".to_string(), item_name.clone(),
+                    "after".to_string(), format!("space.{}", sid),
+                ]);
+
+                item_names.push(item_name);
+            }
+        }
+        new_items.insert(sid_str, item_names);
+    }
+
+    // Remove stale items from previous update
+    for (ws, old_names) in &prev_items {
+        let current_names = new_items.get(ws).cloned().unwrap_or_default();
+        for name in old_names {
+            if !current_names.contains(name) {
+                args.extend(["--remove".to_string(), name.clone()]);
+            }
+        }
+    }
+
+    // Store new item names in state
+    {
+        let mut state = state_arc.lock().unwrap();
+        state.sketchybar_items = new_items;
     }
 
     let args_refs: Vec<&str> = args.iter().map(|s| s.as_str()).collect();
