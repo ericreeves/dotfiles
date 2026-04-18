@@ -15,60 +15,53 @@ PROCS=(AeroSpace sketchybar borders aerospace-helper aeroswitch)
 AEROSPACE_BIN="/Applications/AeroSpace.app/Contents/MacOS/AeroSpace"
 SKETCHYBAR_BIN="/opt/homebrew/bin/sketchybar"
 
-INSTALL_DEPS=0
-
 usage() {
-  echo "Usage: $(basename "$0") [--install-deps] {start|stop|restart|status}"
+  echo "Usage: $(basename "$0") {start|stop|restart|status}"
   exit 1
 }
 
-check_deps() {
-  local missing=()
-  local install_cmds=()
-
-  if [[ ! -x "$AEROSPACE_BIN" ]]; then
-    missing+=("AeroSpace")
-    install_cmds+=("brew install --cask nikitabobko/tap/aerospace")
+check_edge() {
+  if brew list --cask aerospace-edge &>/dev/null; then
+    return
   fi
-  if [[ ! -x "$SKETCHYBAR_BIN" ]]; then
-    missing+=("sketchybar")
-    install_cmds+=("brew tap FelixKratz/formulae" "brew install sketchybar")
-  fi
-  if ! command -v borders &>/dev/null; then
-    missing+=("borders")
-    install_cmds+=("brew tap FelixKratz/formulae" "brew install borders")
-  fi
-  if ! command -v aeroswitch &>/dev/null; then
-    missing+=("aeroswitch")
-    install_cmds+=("brew tap darksworm/aeroswitch" "brew install darksworm/tap/aeroswitch")
-  fi
-  if ! brew list --cask font-sketchybar-app-font &>/dev/null; then
-    missing+=("sketchybar app font")
-    install_cmds+=("brew install --cask font-sketchybar-app-font")
-  fi
-
-  [[ ${#missing[@]} -eq 0 ]] && return 0
-
-  echo "Missing dependencies:"
-  for dep in "${missing[@]}"; do
-    echo "  - $dep"
-  done
-
-  if [[ $INSTALL_DEPS -eq 0 ]]; then
+  if brew list --cask aerospace &>/dev/null; then
+    echo "You're running the official aerospace cask, not aerospace-edge."
+    echo "To switch to the nightly edge build:"
     echo ""
-    read -rp "Install all? [y/N] " answer
-    if [[ "$answer" != [yY] ]]; then
-      exit 1
+    echo "  brew uninstall aerospace"
+    echo "  brew tap ericreeves/aerospace-edge"
+    echo "  brew install aerospace-edge"
+    echo ""
+    read -rp "Switch now? [y/N] " answer
+    if [[ "$answer" =~ ^[Yy] ]]; then
+      brew uninstall aerospace
+      brew tap ericreeves/aerospace-edge 2>/dev/null || true
+      brew install aerospace-edge
     fi
   fi
+}
 
-  echo ""
-  for cmd in "${install_cmds[@]}"; do
-    echo "» $cmd"
-    eval "$cmd"
-  done
-  echo ""
-  echo "All dependencies installed."
+check_deps() {
+  local missing=0
+  if [[ ! -x "$AEROSPACE_BIN" ]]; then
+    echo "AeroSpace not found. Install with:"
+    echo "  brew tap ericreeves/aerospace-edge && brew install aerospace-edge"
+    missing=1
+  fi
+  if [[ ! -x "$SKETCHYBAR_BIN" ]]; then
+    echo "sketchybar not found. Install with:"
+    echo "  brew tap FelixKratz/formulae; brew install sketchybar"
+    missing=1
+  fi
+  if ! brew list --cask font-sketchybar-app-font &>/dev/null; then
+    echo "sketchybar app font not found. Install with:"
+    echo "  brew install --cask font-sketchybar-app-font"
+    missing=1
+  fi
+  if [[ $missing -eq 1 ]]; then
+    exit 1
+  fi
+  check_edge
 }
 
 force_kill() {
@@ -129,13 +122,6 @@ do_status() {
     fi
   done
 }
-
-while [[ $# -gt 0 && "$1" == --* ]]; do
-  case "$1" in
-    --install-deps) INSTALL_DEPS=1; shift ;;
-    *) usage ;;
-  esac
-done
 
 [[ $# -eq 1 ]] || usage
 
