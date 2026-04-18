@@ -450,10 +450,15 @@ fn update_sketchybar(focused_workspace: &str, state_arc: &Arc<Mutex<HelperState>
 
     let hidden = get_hidden_bundle_ids();
 
-    // Query ALL windows with layout and container info
+    // Query ALL windows with layout, container, and tree index
     let all_windows = aerospace_cmd(&[
         "list-windows", "--all",
-        "--format", "%{workspace}|%{app-name}|%{app-bundle-id}|%{window-layout}|%{window-parent-container-id}",
+        "--format", "%{workspace}|%{app-name}|%{app-bundle-id}|%{window-layout}|%{window-parent-container-id}|%{window-tree-index}",
+    ]).unwrap_or_default();
+
+    // Query focused window's app name to highlight its icon
+    let focused_app = aerospace_cmd(&[
+        "list-windows", "--focused", "--format", "%{app-name}",
     ]).unwrap_or_default();
 
     // Query workspace-to-monitor mapping (only if multi-monitor)
@@ -490,16 +495,18 @@ fn update_sketchybar(focused_workspace: &str, state_arc: &Arc<Mutex<HelperState>
         app_name: String,
         layout: String,
         container_id: String,
+        tree_index: i32,
     }
     let mut ws_windows: HashMap<String, Vec<WindowInfo>> = HashMap::new();
     for line in all_windows.lines() {
         let parts: Vec<&str> = line.split('|').collect();
-        if parts.len() != 5 { continue; }
+        if parts.len() != 6 { continue; }
         let ws = parts[0].trim();
         let app_name = parts[1].trim();
         let bid = parts[2].trim();
         let layout = parts[3].trim();
         let container_id = parts[4].trim();
+        let tree_index: i32 = parts[5].trim().parse().unwrap_or(999);
         if app_name.is_empty() { continue; }
         if hidden.contains(&bid.to_string()) { continue; }
         if is_floating(app_name) { continue; }
@@ -507,13 +514,20 @@ fn update_sketchybar(focused_workspace: &str, state_arc: &Arc<Mutex<HelperState>
             app_name: app_name.to_string(),
             layout: layout.to_string(),
             container_id: container_id.to_string(),
+            tree_index,
         });
+    }
+
+    // Sort each workspace's windows by tree index (visual order)
+    for windows in ws_windows.values_mut() {
+        windows.sort_by_key(|w| w.tree_index);
     }
 
     // Build groups per workspace, preserving tree order
     struct IconGroup {
         icons: Vec<String>,
         is_accordion: bool,
+        has_focused: bool,
     }
     let mut ws_groups: HashMap<String, Vec<IconGroup>> = HashMap::new();
     for (ws, windows) in &ws_windows {
@@ -527,15 +541,20 @@ fn update_sketchybar(focused_workspace: &str, state_arc: &Arc<Mutex<HelperState>
                 }
                 seen_containers.insert(win.container_id.clone());
                 // Collect ALL windows with this container_id
-                let group_icons: Vec<String> = windows.iter()
+                let container_windows: Vec<&WindowInfo> = windows.iter()
                     .filter(|w| w.container_id == win.container_id)
+                    .collect();
+                let has_focused = container_windows.iter().any(|w| w.app_name == focused_app);
+                let group_icons: Vec<String> = container_windows.iter()
                     .map(|w| get_icon(&w.app_name).to_string())
                     .collect();
-                groups.push(IconGroup { icons: group_icons, is_accordion: true });
+                groups.push(IconGroup { icons: group_icons, is_accordion: true, has_focused });
             } else {
+                let has_focused = win.app_name == focused_app;
                 groups.push(IconGroup {
                     icons: vec![get_icon(&win.app_name).to_string()],
                     is_accordion: false,
+                    has_focused,
                 });
             }
         }
@@ -554,12 +573,16 @@ fn update_sketchybar(focused_workspace: &str, state_arc: &Arc<Mutex<HelperState>
         let label_color = if is_focused { "0xffcdd6f4" } else { "0xff6c7086" };
 
         // Update the static space.{sid} item — clear label, set highlight
+        // Background now comes from the bracket, so disable it on the item itself
         args.extend([
             "--set".to_string(), format!("space.{}", sid),
             "label=".to_string(),
             format!("icon.highlight={}", highlight),
             format!("label.highlight={}", highlight),
-            format!("background.color={}", bg_color),
+            "background.drawing=off".to_string(),
+            "icon.padding_right=5".to_string(),
+            "label.padding_left=0".to_string(),
+            "label.padding_right=0".to_string(),
         ]);
 
         if monitor_count > 1 {
@@ -579,14 +602,17 @@ fn update_sketchybar(focused_workspace: &str, state_arc: &Arc<Mutex<HelperState>
             for (idx, group) in groups.iter().enumerate() {
                 let item_name = format!("ws{}.g{}", sid, idx);
                 let label = group.icons.join(" ");
+                // Focused item gets bright color, others get dim
+                let item_color = if group.has_focused { "0xffcdd6f4" } else { "0xff6c7086" };
 
                 // Add item and set properties
                 args.extend([
                     "--add".to_string(), "item".to_string(), item_name.clone(), "center".to_string(),
                     "--set".to_string(), item_name.clone(),
                     format!("label={}", label),
-                    format!("label.color={}", label_color),
-                    "label.font=sketchybar-app-font:Regular:16.0".to_string(),
+                    format!("label.color={}", item_color),
+                    "label.font=sketchybar-app-font:Regular:13.0".to_string(),
+                    "label.y_offset=0".to_string(),
                     "icon.drawing=off".to_string(),
                     "label.padding_left=4".to_string(),
                     "label.padding_right=4".to_string(),
@@ -595,11 +621,12 @@ fn update_sketchybar(focused_workspace: &str, state_arc: &Arc<Mutex<HelperState>
                 if group.is_accordion {
                     args.extend([
                         "background.drawing=on".to_string(),
-                        "background.color=0x26a6e3a1".to_string(),
+                        "background.color=0xff45475a".to_string(),
                         "background.corner_radius=8".to_string(),
-                        "background.border_color=0x59a6e3a1".to_string(),
-                        "background.border_width=1".to_string(),
-                        "background.height=22".to_string(),
+                        "background.border_width=0".to_string(),
+                        "background.height=26".to_string(),
+                        "background.padding_left=2".to_string(),
+                        "background.padding_right=2".to_string(),
                     ]);
                 } else {
                     args.push("background.drawing=off".to_string());
@@ -623,6 +650,34 @@ fn update_sketchybar(focused_workspace: &str, state_arc: &Arc<Mutex<HelperState>
                 item_names.push(item_name);
             }
         }
+        // Create bracket around workspace number + all icon items
+        let bracket_name = format!("ws{}.bracket", sid);
+        if !item_names.is_empty() {
+            let mut bracket_members: Vec<String> = vec![format!("space.{}", sid)];
+            bracket_members.extend(item_names.iter().cloned());
+            args.push("--add".to_string());
+            args.push("bracket".to_string());
+            args.push(bracket_name.clone());
+            args.extend(bracket_members);
+            args.extend([
+                "--set".to_string(), bracket_name.clone(),
+                format!("background.color={}", bg_color),
+                "background.corner_radius=8".to_string(),
+                "background.height=26".to_string(),
+                "background.drawing=on".to_string(),
+            ]);
+        } else {
+            // No icons — just show workspace number with its own background
+            args.extend([
+                "--set".to_string(), format!("space.{}", sid),
+                "background.drawing=on".to_string(),
+                format!("background.color={}", bg_color),
+            ]);
+            // Remove bracket if it existed
+            args.extend(["--remove".to_string(), bracket_name.clone()]);
+        }
+
+        item_names.push(bracket_name);
         new_items.insert(sid_str, item_names);
     }
 
@@ -761,8 +816,8 @@ fn handle_event(raw_event: &str, state_arc: &Arc<Mutex<HelperState>>, ws_tx: &mp
                 }
             }
             update_borders(state_arc);
-            // Gap management not needed for focus_changed — window count doesn't change
-            // within the same workspace. workspace_changed and app_visibility_changed handle gaps.
+            // Update sketchybar to highlight the focused window's group
+            update_sketchybar(&workspace, state_arc);
         }
         "app_visibility_changed" => {
             // Fired by NSWorkspace observer when an app is hidden/unhidden/quit/launched
